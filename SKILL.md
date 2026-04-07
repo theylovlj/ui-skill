@@ -46,7 +46,7 @@ Screenshot it with Playwright. Look at it. Ask yourself one question:
 
 **"If someone said AI made this, would you believe them?"**
 
-If yes — work through this checklist and identify every specific failure:
+Work through this checklist on every build — then ask the gut-check question at the end:
 
 - [ ] Visual hierarchy: can you squint and still identify the 1st and 2nd most important elements?
 - [ ] Spacing rhythm: does spacing vary intentionally, or is everything equally spaced?
@@ -58,11 +58,13 @@ If yes — work through this checklist and identify every specific failure:
 - [ ] Loading state: skeleton screen (not spinner) for content-shaped UI?
 - [ ] Error state: specific message, not "Something went wrong"?
 - [ ] Mobile: tested at 375px? touch targets 44px+? no hover-only interactions?
-- [ ] Anti-slop check: re-read `reference/anti-slop.md` and `components/[component].md` "What AI gets wrong" section
+- [ ] Anti-slop check: re-read `reference/anti-slop.md` and the `components/` file matching the primary component you built — check "What AI gets wrong"
+
+If every item above passes — answer the gut-check: **"If someone said AI made this, would you believe them?"** If still yes, go back and find what you missed.
 
 ## 4. FIX
 
-Fix every failure from the checklist. No exceptions. Screenshot again, re-run the checklist. Loop until every item passes and the answer to the question is **no**.
+Fix every failure from the checklist. No exceptions. Screenshot again, re-run the full checklist. Loop until every item passes.
 
 ## 5. SHIP
 
