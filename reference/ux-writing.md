@@ -102,6 +102,18 @@ Most confirmation dialogs are design failures—consider undo instead. When you 
 
 Show format with placeholders, not instructions. For non-obvious fields, explain why you're asking.
 
+## What AI Gets Wrong on UX Writing
+
+- "OK", "Submit", "Yes/No" buttons (vague — always name the specific action)
+- "Something went wrong" errors (useless — say what happened and how to fix it)
+- "No items found" empty states (missed onboarding opportunity — acknowledge, explain, act)
+- Varying terminology (delete/remove/trash used interchangeably — pick one and stick to it)
+- Restating the heading in the body copy directly below it (redundant — say it once)
+- Placeholder text as the only instruction for a field (disappears on type)
+- Humor in error messages (users are frustrated — be empathetic and helpful, not cute)
+- Technical jargon without explanation ("403 Forbidden" → "You don't have access to this page")
+- Passive voice for errors ("An error was encountered" → "We couldn't save your changes")
+
 ---
 
 **Avoid**: Jargon without explanation. Blaming users ("You made an error" → "This field is required"). Vague errors ("Something went wrong"). Varying terminology for variety. Humor for errors.

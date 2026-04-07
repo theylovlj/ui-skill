@@ -109,6 +109,18 @@ DevTools device emulation is useful for layout but misses:
 
 **Test on at least**: One real iPhone, one real Android, a tablet if relevant. Cheap Android phones reveal performance issues you'll never see on simulators.
 
+## What AI Gets Wrong on Responsive Design
+
+- Desktop-first thinking (mobile is an afterthought, not the foundation)
+- Using screen width as a proxy for input method (use `pointer` and `hover` media queries)
+- Ignoring safe areas on modern phones (notch, home indicator — use `env()`)
+- Hover effects that don't work on touch (touch users can't hover — causes broken states)
+- Touch targets below 44px on mobile (fine on desktop, unusable on small screens)
+- Duplicated mobile layout code instead of responsive adaptation
+- Missing `viewport-fit=cover` in the meta tag (content hidden behind notch)
+- Testing only in DevTools device emulation (misses real touch behavior and font rendering)
+- Images without `srcset` (serves full-res desktop images to mobile on slow connections)
+
 ---
 
 **Avoid**: Desktop-first design. Device detection instead of feature detection. Separate mobile/desktop codebases. Ignoring tablet and landscape. Assuming all mobile devices are powerful.

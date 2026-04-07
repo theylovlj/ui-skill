@@ -128,6 +128,19 @@ Beyond contrast ratios (which are well-documented), consider:
 - **Minimum 16px body text**: Smaller than this strains eyes and fails WCAG on mobile.
 - **Adequate touch targets**: Text links need padding or line-height that creates 44px+ tap targets.
 
+## What AI Gets Wrong on Typography
+
+- Uses Inter, Roboto, or Space Grotesk (invisible defaults, generic AI fonts)
+- Too many font sizes too close together (14/15/16/18px — muddy hierarchy)
+- Identical font weight everywhere (everything is `font-weight: 400`)
+- Heading size barely larger than body — no hierarchy through size
+- Doesn't use `tabular-nums` for data in tables and dashboards
+- Ignores `font-display: swap` causing layout flash (FOUT)
+- Uses `px` for body font size (breaks user zoom preferences — use `rem`)
+- Pairs two similar sans-serif fonts (visual tension without contrast)
+- Missing line-height increase for light text on dark backgrounds
+- Letter-spacing on body text (only appropriate for uppercase labels/captions)
+
 ---
 
 **Avoid**: More than 2-3 font families per project. Skipping fallback font definitions. Ignoring font loading performance (FOUT/FOIT). Using decorative fonts for body text.

@@ -94,6 +94,18 @@ This is not optional. Vestibular disorders affect ~35% of adults over 40.
 
 Don't use `will-change` preemptively—only when animation is imminent (`:hover`, `.animating`). For scroll-triggered animations, use Intersection Observer instead of scroll events; unobserve after animating once. Create motion tokens for consistency (durations, easings, common transitions).
 
+## What AI Gets Wrong on Motion
+
+- Animating everything (motion fatigue — animation loses meaning when it's everywhere)
+- Using `ease` or `ease-in-out` as a default (imprecise compromise curves)
+- Bounce/elastic easing (dated 2015-era feel, draws attention to animation not content)
+- Animating `width`, `height`, `top`, `left` instead of `transform` (causes layout recalculation)
+- No `prefers-reduced-motion` support (affects ~35% of adults over 40)
+- Loading animations that are purely decorative (never hide slow loading behind pretty spinners)
+- Stagger delays that are too long (10 items × 100ms = 1000ms of waiting for content)
+- Identical 300ms duration for all animations (micro-interactions need 100ms, entrances need 400ms)
+- `will-change: transform` on everything preemptively (wastes GPU memory)
+
 ---
 
 **Avoid**: Animating everything (animation fatigue is real). Using >500ms for UI feedback. Ignoring `prefers-reduced-motion`. Using animation to hide slow loading.

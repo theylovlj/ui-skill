@@ -127,6 +127,19 @@ Use two layers: primitive tokens (`--blue-500`) and semantic tokens (`--color-pr
 
 Heavy use of transparency (rgba, hsla) usually means an incomplete palette. Alpha creates unpredictable contrast, performance overhead, and inconsistency. Define explicit overlay colors for each context instead. Exception: focus rings and interactive states where see-through is needed.
 
+## What AI Gets Wrong on Color
+
+- Purple/blue gradients on white backgrounds (the #1 AI tell in 2024-2025)
+- Pure black (#000) backgrounds and pure white (#fff) — tint toward brand hue
+- Gray text on colored backgrounds (always fails contrast and looks dead — use a tinted shade)
+- Gradient text for emphasis (looks AI-generated, use weight or size contrast instead)
+- Too many accent colors (accent works because it's rare — using 3 accents kills all of them)
+- HSL instead of OKLCH (perceptually uneven — equal HSL steps don't look equal)
+- Dark mode = inverted light mode colors (dark mode needs different design decisions)
+- Semantic colors (success/error) used as decoration rather than meaning
+- Forgetting placeholder text contrast must be 4.5:1 (most styled placeholders fail)
+- Alpha transparency overused (heavy rgba usage usually means an incomplete palette)
+
 ---
 
 **Avoid**: Relying on color alone to convey information. Creating palettes without clear roles for each color. Using pure black (#000) for large areas. Skipping color blindness testing (8% of men affected).

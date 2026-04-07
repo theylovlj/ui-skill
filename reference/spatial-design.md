@@ -95,6 +95,19 @@ Buttons can look small but need large touch targets (44px minimum). Use padding 
 
 Create semantic z-index scales (dropdown → sticky → modal-backdrop → modal → toast → tooltip) instead of arbitrary numbers. For shadows, create a consistent elevation scale (sm → md → lg → xl). **Key insight**: Shadows should be subtle—if you can clearly see it, it's probably too strong.
 
+## What AI Gets Wrong on Spatial Design
+
+- Equal spacing everywhere (no rhythm — everything breathes the same amount)
+- Identical card grids with no variation in size, weight, or emphasis
+- Nesting cards inside cards (cards within cards create visual noise)
+- Centering everything (asymmetry feels designed, center-everything feels default)
+- Using `margin` between siblings instead of `gap` (margin collapse causes bugs)
+- Ignoring optical alignment (text looks indented due to letterform whitespace — use negative margin)
+- No visual hierarchy — all elements compete at equal weight
+- Cards for everything when spacing and type would group it better
+- Same padding on mobile as desktop (mobile needs tighter or adapted spacing)
+- Arbitrary spacing values outside the 4pt scale (creates subtle visual noise)
+
 ---
 
 **Avoid**: Arbitrary spacing values outside your scale. Making all spacing equal (variety creates hierarchy). Creating hierarchy through size alone - combine size, weight, color, and space.

@@ -190,6 +190,18 @@ Swipe-to-delete and similar gestures are invisible. Hint at their existence:
 
 Don't rely on gestures as the only way to perform actions.
 
+## What AI Gets Wrong on Interaction Design
+
+- Removing focus outlines without replacement (`outline: none` — accessibility violation)
+- Designing hover states but forgetting focus states (keyboard users only see focus)
+- Missing interactive states — especially disabled, loading, and error
+- `position: absolute` inside overflow containers for dropdowns (gets clipped)
+- Confirmation dialogs for actions that could use undo instead
+- Modals for things that should be inline or in a drawer
+- No keyboard navigation for custom components (menus, tabs, sliders, date pickers)
+- Touch targets under 44px (links in paragraphs, small icon buttons)
+- Placeholder text as the only form label (disappears when the user starts typing)
+
 ---
 
 **Avoid**: Removing focus indicators without alternatives. Using placeholder text as labels. Touch targets <44x44px. Generic error messages. Custom controls without ARIA/keyboard support.
