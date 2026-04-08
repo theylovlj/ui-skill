@@ -110,6 +110,40 @@ These are the most recognizable template signals in 2025. Each one is common eno
 - 3 plans at `$9 / $29 / $99` with a `Most Popular` badge on the middle — unresearched default pricing UI
 - Every heading bold, every subheading `text-muted`, every section with the same `py-24` padding
 
+- **Cards that change size based on content** — Cards in a row should NEVER change height based on how much text is inside them. Use `items-stretch` on the grid, `flex flex-col` on each card, and `mt-auto` on the bottom element (button, attribution). This is the #1 layout bug in AI-generated sites. If one card has 2 lines and another has 5 lines, the buttons must still align.
+- **Featured element with dead space beside it** — A "featured" testimonial or card that only spans 60-70% of the row, leaving a dead void next to it. Either make it full-width or add a supporting element (rating, stat, graphic) to fill the space. NEVER leave empty space beside a focal element.
+- **Dropdowns that clip inside their parent** — Dropdowns and select menus MUST be allowed to overflow their parent container (they need to be visible!). Use `overflow-visible` on the card/parent, NOT `overflow-hidden`. The dropdown itself should use `position: absolute` + `z-50` to float above other content. This is the ONE exception to the "no overflow" rule — dropdowns are supposed to break out of their container.
+
+---
+
+## More AI Tells (from 2024-2025 research)
+
+### Animation
+- Same `fade-in-up` on every single element — real sites vary animation direction and timing
+- Bouncy/elastic easing everywhere — real objects don't bounce when they stop
+- Every element has the same entrance delay — real sites stagger intentionally with varied delays
+- Animations that play on every scroll, not just first view — use `once: true`
+
+### Shadows & Depth
+- Tailwind's default `shadow-lg` on everything — real sites use varied shadow depths
+- Pure black shadows (`rgba(0,0,0,0.1)`) — real shadows are tinted toward the background hue
+- Same shadow on every card — featured cards should have deeper shadows than secondary ones
+
+### Border Radius
+- Same `rounded-2xl` on every element — mix radiuses intentionally (buttons: full, cards: 2xl, inputs: lg)
+- Over-rounding small elements — a 32px button with 24px radius looks like a pill; use proportional radius
+
+### Responsive
+- Desktop looks great, mobile is broken — always test at 375px width
+- Content overflows horizontally on mobile — add `overflow-x-hidden` on body or main
+- Grid doesn't collapse — every `lg:grid-cols-3` needs a `grid-cols-1` default
+
+### States
+- No hover state on interactive elements — every button/link/card needs a visible hover change
+- No focus-visible ring for keyboard users — add `focus-visible:ring-2 focus-visible:ring-offset-2`
+- No loading state — buttons should show a spinner or "..." when actions are pending
+- No empty state — "No items" should teach the user what to do, not just be blank
+
 ---
 
 ## Per-Component AI Tells

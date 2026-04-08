@@ -103,6 +103,7 @@ This is the #1 layout bug. When you have 2+ cards side by side:
   - **BANNED defaults:** warm cream/editorial, plain dark mode with cyan/teal accents, centered minimal with serif italic, white background with teal buttons. These are what Claude ALWAYS picks. Choose something else.
   - If no strong cues from the user, pick from: styles 5, 8, 10, 14, 17, 21, 23, 29, 32, 34
 - **MUST READ `reference/anti-slop.md`** — internalize the banned patterns before you write a single line.
+- **MUST READ `reference/dead-space.md`** — the owner HATES dead space. Every pixel must earn its place. Know the 16 detection patterns and their fixes.
 - **MUST READ `reference/background-catalog.md`** for any landing page — select a background from the catalog and copy the WebP file from `assets/backgrounds/` into the project's public directory.
 - Consult `reference/design-decisions.md` for your identified site type.
 - If the site needs interactivity, consult `reference/advanced-interactivity.md`.
@@ -139,6 +140,7 @@ If ANY of these sections is just a heading with no content below it — you are 
 
 **Reference files:**
 - [Anti-slop rules](reference/anti-slop.md) — the banned patterns list
+- [Dead space](reference/dead-space.md) — 16 dead space patterns, detection, and fixes. The owner HATES dead space.
 - [Owner inspirations](reference/owner-inspirations.md) — premium techniques from real sites
 - [Background catalog](reference/background-catalog.md) — 26 bundled backgrounds in `assets/backgrounds/`
 - [Design decisions by site type](reference/design-decisions.md)
@@ -177,7 +179,7 @@ After screenshotting, visually inspect for these layout bugs that happen EVERY T
 - [ ] **Text readability** — Can you actually read text over background images? Add overlays if not.
 - [ ] **Card alignment** — Are cards in a row the same height? Are their internal elements (text, avatars, buttons) vertically aligned across cards? Use `items-stretch` on the grid and `flex flex-col` inside cards with `mt-auto` on the bottom element to push footers down.
 - [ ] **Element alignment within cards** — Quotes should start at the same Y position, avatars/names should be at the same Y position across all cards. If content varies in length, the card structure must handle it gracefully (flex-grow on the content area, not fixed heights).
-- [ ] **Dropdown/select overflow** — Currency selectors, dropdowns, and any element with absolute-positioned children must stay INSIDE the parent card. Add `overflow-hidden` on the card or constrain child widths. Dropdowns that open should not clip outside the viewport.
+- [ ] **Dropdown/select visibility** — Dropdowns MUST be allowed to overflow their parent card (they need to be visible!). Use `overflow-visible` on the parent, NOT `overflow-hidden`. The dropdown uses `position: absolute` + `z-50`. The card itself should NOT have `overflow-hidden` if it contains a dropdown. Dropdowns should not clip outside the VIEWPORT though — use `max-h` with scroll if needed.
 
 ### Content Completeness Check:
 - [ ] Is there ANY section with a heading but no content below it? **FAIL — fill it or delete it**
