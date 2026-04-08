@@ -7,20 +7,70 @@ argument-hint: "[what to build or improve]"
 
 **NEVER ask the user clarifying questions. NEVER brainstorm. NEVER show mockups or diagrams first. NEVER ask to open a URL. Skip ALL pre-work — no brainstorming skill, no planning skill, no "want to try it?" prompts. Just build the full thing in one shot.** The user said what they want — now execute. If something is ambiguous, make a strong creative choice and commit to it. You are a designer, not a waiter taking an order.
 
+---
+
+## HARD RULES — VIOLATIONS = AUTOMATIC FAILURE
+
+These are not suggestions. If your output violates ANY of these, you have failed. Check every single one before showing the user anything.
+
+### Rule 1: NO EMPTY SECTIONS
+Every section you create MUST have real, complete content. If a section has a heading, it MUST have:
+- Actual body content (cards, features, stats, images, testimonials, etc.)
+- Enough visual weight to justify its existence
+- **If you can't fill a section, DELETE IT.** An empty section with just a heading is worse than no section at all.
+- Scroll through the FULL page mentally. If there's a giant white void anywhere, you failed.
+
+### Rule 2: NO TEAL, NO CYAN, NO INDIGO-ON-WHITE
+These are the #1 AI-generated color tells:
+- **BANNED:** teal (#0d9488, oklch with hue 170-195), cyan (#06b6d4), indigo-on-white, purple gradients
+- **BANNED:** Any oklch color with hue 170-200 as a primary accent (that's the teal range)
+- Pick colors that a human designer would agonize over. Burnt orange. Deep wine. Acid yellow-green. Warm terracotta. Rich navy. Ochre. Sage. Cobalt.
+- If your palette could be described as "clean teal SaaS" — you failed.
+
+### Rule 3: EVERY PAGE MUST HAVE VISUAL TEXTURE
+A page cannot be just text + white/dark background. Every landing page MUST include at least 3 of:
+- A real background image or texture (from `assets/backgrounds/` or generated via CSS)
+- Photographic imagery (picsum.photos with descriptive seeds)
+- A section with a contrasting background color (not just white→slightly-off-white)
+- Decorative elements (grain overlay, dot patterns, geometric shapes, gradient blurs)
+- A visual break between sections (not just padding — actual visual differentiation)
+- Illustrations, icons with personality, or data visualizations
+
+### Rule 4: NO IDENTICAL CARD GRIDS
+If you have 3+ items to display, they CANNOT all be the same component repeated:
+- Vary card sizes (one large featured, two small)
+- Use a bento grid instead of uniform columns
+- Mix media types (one card with an image, one with a stat, one with a quote)
+- Alternate layout direction (one card horizontal, next vertical)
+
+### Rule 5: EVERY SECTION MUST EARN ITS SPACE
+Before adding a section, ask: "What visual story does this section tell?" If the answer is "it displays some text with an icon," that's not enough. Each section needs a distinct visual treatment — different background, different layout, different energy than the section before it.
+
+### Rule 6: NO SAFE LAYOUTS
+- The hero CANNOT be "left text + right widget/image" unless the widget is genuinely complex and interactive
+- At least one section must break the grid (full-bleed image, overlapping elements, asymmetric split)
+- Footer must have real content and visual identity, not just links floating in a dark box
+
+### Rule 7: COPY MUST BE SPECIFIC
+- No "Built for speed. Priced for scale." — that says nothing
+- No "The future of X" — meaningless
+- Write copy as if you're a specific human at a specific company. Name real features, real numbers, real outcomes
+- Headlines should be surprising or opinionated, not corporate filler
+
+---
+
 ## 1. THINK (silently — do not output this to the user)
 
 - Read the existing code. Identify the **site/app type** and match any existing design language.
 - If Context7 is available: pull docs for every library you'll touch.
-- **Consult `reference/owner-inspirations.md`** — this contains patterns from real sites the owner loves. Look for techniques that fit your current build (floating cards, odometer animations, halftone masking, mega typography, light-to-dark arcs, etc.). Pull at least one premium technique from this file into every build.
-- **Select an aesthetic style.** Consult `reference/aesthetic-styles.md` — there are 34 styles. You MUST actually read the file and pick a specific numbered style. DO NOT default to warm cream editorial, minimal serif, or any "safe" palette. Use the following process:
-  1. Read the user's prompt for personality cues (dark? playful? techy? luxury? chaotic?)
-  2. Match those cues to a specific style number from the catalog
-  3. If no strong cues exist, pick something BOLD and unexpected — styles 5, 8, 10, 14, 17, 21, 23, 29, 32, 34 are all strong choices that avoid the generic trap
-  4. **BANNED defaults:** Do not pick warm cream/editorial (styles that look like a design agency portfolio), do not pick plain dark mode with cyan accents, do not pick centered minimal with serif italic. These are the styles Claude always gravitates to — pick something else.
-  5. State which style number you chose in your silent thinking so you commit to it
+- **MUST READ `reference/owner-inspirations.md`** — this contains patterns from real sites the owner loves. You MUST pull at least 2 premium techniques from this file into every build. Examples: floating card compositions, odometer animations, halftone masking, watercolor textures, mega typography nav, light-to-dark scroll arcs, website-as-floating-card, selective skeuomorphism, cross-fade transitions.
+- **MUST READ `reference/aesthetic-styles.md`** — 34 styles. Pick a specific numbered style. State the number in your thinking.
+  - **BANNED defaults:** warm cream/editorial, plain dark mode with cyan/teal accents, centered minimal with serif italic, white background with teal buttons. These are what Claude ALWAYS picks. Choose something else.
+  - If no strong cues from the user, pick from: styles 5, 8, 10, 14, 17, 21, 23, 29, 32, 34
+- **MUST READ `reference/anti-slop.md`** — internalize the banned patterns before you write a single line.
+- **MUST READ `reference/background-catalog.md`** for any landing page — select a background from the catalog and copy the WebP file from `assets/backgrounds/` into the project's public directory.
 - Consult `reference/design-decisions.md` for your identified site type.
-- If the site needs interactivity, consult `reference/advanced-interactivity.md` before writing code.
-- Read `reference/anti-slop.md` — internalize the banned patterns before you write a single line.
+- If the site needs interactivity, consult `reference/advanced-interactivity.md`.
 
 ## 2. BUILD
 
@@ -28,16 +78,29 @@ Write the code. All of it. Complete, working, production-quality. For every comp
 
 **Make it look like a human designer spent days on it, not like AI generated it in 10 seconds.**
 
-Specific rules:
-- **Images** — only add them if the design genuinely needs them (hero sections, team pages, product showcases, portfolios). Don't force images into dashboards, forms, or data-heavy tools. When images ARE needed, use real photos from `https://picsum.photos/seed/[word]/[w]/[h]` or `https://i.pravatar.cc/150?img=[1-70]` for avatars. Use different seeds per image. Never use grey boxes or empty `src`.
-- **Don't preview images individually** — just pick good descriptive seed words that match the content context.
-- **Write real copy** — not "Lorem ipsum" and not generic "Welcome to our platform". Write copy that sounds like a real person at a real company wrote it. Short, punchy, specific.
-- **Don't be safe** — safe = generic = AI-looking. Make a bold choice: unusual color, asymmetric layout, distinctive type, surprising spacing. One strong opinion is worth more than ten safe defaults.
+### Content completeness checklist (MANDATORY for landing pages):
+A landing page is NOT done until it has ALL of these filled with real content:
+1. **Nav** — with personality (pill-shaped, asymmetric, sticky with scroll effect — NOT just plain text links)
+2. **Hero** — with visual depth (background image/texture, not just a flat color)
+3. **Social proof** — logos, testimonials, stats, or trust badges with real-looking data
+4. **Features/benefits** — at least 3-4, in a NON-uniform layout (bento, varied cards, or editorial)
+5. **Visual break** — a full-bleed image, gradient section, or dramatic color shift
+6. **Secondary content** — pricing, how-it-works, case study, or comparison
+7. **CTA section** — a strong closing section with personality, not just "Get started"
+8. **Footer** — with real structure, links, and visual weight
+
+If ANY of these sections is just a heading with no content below it — you are NOT done. Finish it.
+
+### Specific rules:
+- **Images** — use `https://picsum.photos/seed/[word]/[w]/[h]` with descriptive seeds, or `https://i.pravatar.cc/150?img=[1-70]` for avatars. Different seeds per image. Never grey boxes.
+- **Backgrounds** — for hero sections, copy a background from `assets/backgrounds/` into the project's public folder and use it. Reference `reference/background-catalog.md` for which category fits.
+- **Write real copy** — not lorem ipsum, not corporate fluff. Write like a real human copywriter. Short, punchy, specific, opinionated.
+- **Don't be safe** — safe = generic = AI-looking. One strong opinion > ten safe defaults.
 
 **Reference files:**
 - [Anti-slop rules](reference/anti-slop.md) — the banned patterns list
-- [Owner inspirations](reference/owner-inspirations.md) — patterns from sites the owner loves. Consult this for premium techniques (floating cards, odometer animations, halftone masking, watercolor textures, mega typography nav, light-to-dark scroll arcs, etc.)
-- [Background catalog](reference/background-catalog.md) — 26 premium backgrounds bundled in `assets/backgrounds/`. When building hero sections, pick one from the catalog by category (dark cinematic, abstract gradient, pastoral, fantasy, etc.) and copy it into the project.
+- [Owner inspirations](reference/owner-inspirations.md) — premium techniques from real sites
+- [Background catalog](reference/background-catalog.md) — 26 bundled backgrounds in `assets/backgrounds/`
 - [Design decisions by site type](reference/design-decisions.md)
 - [Aesthetic styles catalog](reference/aesthetic-styles.md)
 - [Typography](reference/typography.md)
@@ -62,21 +125,24 @@ Specific rules:
 
 ## 3. REVIEW
 
-**Get eyes on it.** Use Playwright MCP to screenshot (`mcp__playwright__browser_take_screenshot`). **NEVER call `mcp__playwright__browser_close`** — always leave the browser open so the user can see and interact with it.
+**Get eyes on it.** Use Playwright MCP to screenshot (`mcp__playwright__browser_take_screenshot`). Take a FULL PAGE screenshot. **NEVER call `mcp__playwright__browser_close`** — always leave the browser open so the user can see and interact with it.
 
-Self-check (do not output this checklist to the user):
-- Does it look like a template? If yes, you failed — go back and add personality.
-- Is the layout centered and symmetrical? Break it.
-- Are all the cards identical? Vary them.
-- Is it using a banned font? Change it.
-- Purple gradient anywhere? Remove it.
-- Could you swap the brand name and it'd look like any other site? That means it's generic — fix it.
+### Failure checklist (if ANY are true, go back to BUILD and fix):
+- [ ] Is there ANY section with a heading but no content below it? **FAIL — fill it or delete it**
+- [ ] Is the color scheme teal, cyan, or indigo-on-white? **FAIL — change the palette**
+- [ ] Is there a giant void of empty space anywhere on the page? **FAIL — add content or remove the section**
+- [ ] Are all the cards identical? **FAIL — vary them**
+- [ ] Is the layout centered and symmetrical throughout? **FAIL — break the symmetry**
+- [ ] Could you swap the brand name and it'd look like any other site? **FAIL — add personality**
+- [ ] Is the hero just text on a flat white/dark background with no visual texture? **FAIL — add depth**
+- [ ] Is the footer just links floating in a dark void? **FAIL — give it structure**
+- [ ] Are there fewer than 5 fully-built sections? **FAIL — a landing page needs density**
 
-**"If someone said AI made this, would you believe them?"** If yes, go fix it before showing the user.
+**"If someone said AI made this, would you believe them?"** If yes, go fix it.
 
 ## 4. FIX
 
-Fix every issue you found in review. Screenshot again. If it still looks AI-generated, keep iterating. Don't show the user until it's genuinely good.
+Fix every issue from the review. Screenshot FULL PAGE again. If it still looks AI-generated, keep iterating. **Do not show the user until the page is COMPLETE and FULL — no empty sections, no missing content, no generic filler.**
 
 ## 5. SHIP
 

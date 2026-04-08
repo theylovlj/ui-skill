@@ -8,7 +8,8 @@
 - NEVER use monospace as shorthand for "technical"
 - NEVER put large rounded-corner icons above every heading
 - NEVER use a second font when one family in multiple weights creates cleaner hierarchy
-- Instead: Instrument Sans, Plus Jakarta Sans, Outfit, Figtree, Urbanist, Fraunces, Bricolage Grotesque. Extreme weight contrast (200 vs 800). Size jumps of 3x+.
+- Instead: **Body:** Satoshi, Geist Sans, DM Sans, Plus Jakarta Sans, General Sans, Switzer, Figtree. **Display:** Clash Display, Syne, Cabinet Grotesk, Bricolage Grotesque, Fraunces. **Variable:** Mona Sans (GitHub). Extreme weight contrast (200 vs 800). Size jumps of 3x+.
+- **Space Grotesk exception:** Only acceptable for Neubrutalist heading layers and developer tool UIs. Still banned everywhere else.
 
 ### Color
 - NEVER purple gradients on white — the #1 AI tell in 2024-2025
@@ -26,6 +27,7 @@
 - NEVER center everything — asymmetry feels designed
 - NEVER wrap everything in cards — spacing creates grouping without borders
 - NEVER the 3-column feature grid where every card is identical weight
+- NEVER `min-h-screen` or `min-h-dvh` hero sections with sparse content — a hero with one headline and a button does NOT need a full viewport of height. Only use full-height heroes when the content fills the space (large visuals, split layouts, dense content). If the hero is just text + CTA, use natural height with generous but proportional padding (`pt-32 pb-20` or similar), NOT `min-h-screen`.
 - Instead: Varied spacing for rhythm. 4pt base. Break the grid intentionally. Container queries.
 
 ### Effects
@@ -37,13 +39,76 @@
 - NEVER the ambient purple blob gradient background
 - Instead: ease-out-quart `cubic-bezier(0.25,1,0.5,1)`. Only animate transform + opacity. One orchestrated entrance > scattered micro-interactions.
 
+### Badges & Labels
+- NEVER the "green dot + label in a rounded pill" badge — the single most overused AI marketing pattern (2024-2025). Seen on every AI product hero section. Instantly signals AI-generated.
+- NEVER use a pulsing/animated green dot to signal "live" or "active" as a decoration — it's meaningful on status indicators (a user is online), not on static marketing copy
+- Instead — four eyebrow alternatives in order of editorial quality:
+
+```css
+/* Type 2: Plain text eyebrow (most editorial, 2024 forward) */
+.eyebrow-plain {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Type 3: Left-rule (premium editorial feel) */
+.eyebrow-ruled {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.eyebrow-ruled::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+/* Type 4: Number label (feature sections, not hero) */
+.eyebrow-number {
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+```
+
 ### Content
 - NEVER repeat information or restate headings in body text
 - NEVER make every button primary — use hierarchy (one primary CTA per section max)
 - NEVER modals unless truly no alternative
 - NEVER generic empty states ("No items found")
 - NEVER "Something went wrong" as an error message
+- NEVER "AI-powered" as the headline — sell the specific outcome, not the infrastructure
+- NEVER stock photography for hero sections — use real product screenshots, 3D, or data visualization
 - Instead: Progressive disclosure. Empty states that teach. All 8 interactive states. Specific error messages.
+
+### The Generic Site Tells (the specific patterns that scream AI-generated)
+These are the most recognizable template signals in 2025. Each one is common enough to immediately mark a site as AI-generated or template-based:
+
+- **The "Claude Landing Page"** — warm cream background, serif italic accent word, centered layout, "Design Studio — Brooklyn, NY" energy. This is the #1 default AI landing page in 2025. If your output looks like a minimalist design agency site with a cream/warm palette, you failed. Pick a DIFFERENT aesthetic.
+- **The empty hero** — `min-h-screen` with one headline centered in a sea of whitespace. Content should fill its space. If the hero has 3 elements, it needs 3-elements worth of height, not a full viewport.
+- **The flat SaaS page** — white or light background with NO visual texture, no background image, no gradients, no grain, no depth. Just text floating on a blank canvas. Real SaaS landing pages ALWAYS have visual depth in the hero: gradient meshes, abstract background images, subtle patterns, or atmospheric photography. The skill bundles 26 premium backgrounds in `assets/backgrounds/` — USE THEM. Copy the WebP file into the project's public folder and set it as the hero background. There is ZERO excuse for a flat, textureless landing page.
+- **The incomplete page** — sections that have a heading ("Built for speed. Priced for scale.") with NO content below them. Just a headline floating in white space. If a section exists, it MUST have full content: cards, stats, images, testimonials, comparisons, or other real UI. If you can't fill it, DELETE THE SECTION. An empty section is worse than no section.
+- **The teal/cyan default** — teal (#0d9488), cyan (#06b6d4), or any oklch hue 170-200 as the primary accent color. This is what Claude picks EVERY TIME when building SaaS. It's instantly recognizable as AI-generated. Pick literally any other color.
+
+- `box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1)` — Tailwind's default shadow, seen on every shadcn template
+- 6-column feature grid where each cell has an emoji or generic icon above heading above text
+- Hero background: purple or indigo `radial-gradient` blob at `50% 50%` with `rgba(99,102,241,0.2)`
+- "Powered by AI", "AI-driven", "Next-gen" in the headline
+- `border-radius: 24px` on cards + `border-radius: 4px` on inputs — inconsistent radius within the same page
+- Glassmorphism over a solid gray background (requires interesting content behind glass to work)
+- Poppins or Nunito at `font-weight: 600` — the default friendly-SaaS AI font stack
+- 3 plans at `$9 / $29 / $99` with a `Most Popular` badge on the middle — unresearched default pricing UI
+- Every heading bold, every subheading `text-muted`, every section with the same `py-24` padding
 
 ---
 
