@@ -57,6 +57,19 @@ Before adding a section, ask: "What visual story does this section tell?" If the
 - Write copy as if you're a specific human at a specific company. Name real features, real numbers, real outcomes
 - Headlines should be surprising or opinionated, not corporate filler
 
+### Rule 8: FINISH WHAT YOU START
+- If you create a section, it MUST be complete with real content. No empty wrappers.
+- If you're running long, build FEWER sections but make each one COMPLETE. 5 great sections beats 8 empty shells.
+- Every `<section>` must have at least 3 visual elements inside it (heading + content + detail).
+- After writing each section, mentally check: "If I screenshot just this section, does it look complete?" If not, finish it before moving on.
+
+### Rule 9: NO LAYOUT OVERFLOW
+- All content must be visible within the viewport width. No horizontal scrollbars.
+- Floating/absolute elements must not clip outside their parent containers.
+- Widgets, cards, and images must be fully visible — not cut off at the right edge.
+- Test your grid: `grid-cols-12` on desktop must have a `grid-cols-1` fallback for mobile.
+- Use `max-w-7xl mx-auto px-6` or similar on ALL section content containers for consistent alignment.
+
 ---
 
 ## 1. THINK (silently — do not output this to the user)
@@ -132,16 +145,21 @@ If ANY of these sections is just a heading with no content below it — you are 
 
 **Get eyes on it.** Use Playwright MCP to screenshot (`mcp__playwright__browser_take_screenshot`). Take a FULL PAGE screenshot. **NEVER call `mcp__playwright__browser_close`** — always leave the browser open so the user can see and interact with it.
 
-### Failure checklist (if ANY are true, go back to BUILD and fix):
+### Layout & Alignment Check (CRITICAL — most common failure):
+After screenshotting, visually inspect for these layout bugs that happen EVERY TIME:
+- [ ] **Overflow/cutoff** — Is any element cut off at the edge of the viewport? (widgets, cards, images clipped on the right side). Fix with `overflow-hidden` on parent or constrain widths.
+- [ ] **Centering** — Are centered sections actually centered? Check `max-w-*` + `mx-auto` on all containers.
+- [ ] **Spacing consistency** — Are gaps between sections consistent? No random 500px voids.
+- [ ] **Mobile responsiveness** — Does the grid collapse properly? `lg:grid-cols-*` must have a default `grid-cols-1`.
+- [ ] **Z-index stacking** — Is the nav above everything? Are overlapping elements layered correctly?
+- [ ] **Text readability** — Can you actually read text over background images? Add overlays if not.
+
+### Content Completeness Check:
 - [ ] Is there ANY section with a heading but no content below it? **FAIL — fill it or delete it**
+- [ ] Is there a giant void of empty space (100px+ of nothing) anywhere? **FAIL — add content or remove the section**
+- [ ] Are there fewer than 5 fully-built sections with real content? **FAIL — a landing page needs density**
 - [ ] Is the color scheme teal, cyan, or indigo-on-white? **FAIL — change the palette**
-- [ ] Is there a giant void of empty space anywhere on the page? **FAIL — add content or remove the section**
-- [ ] Are all the cards identical? **FAIL — vary them**
-- [ ] Is the layout centered and symmetrical throughout? **FAIL — break the symmetry**
-- [ ] Could you swap the brand name and it'd look like any other site? **FAIL — add personality**
 - [ ] Is the hero just text on a flat white/dark background with no visual texture? **FAIL — add depth**
-- [ ] Is the footer just links floating in a dark void? **FAIL — give it structure**
-- [ ] Are there fewer than 5 fully-built sections? **FAIL — a landing page needs density**
 
 **"If someone said AI made this, would you believe them?"** If yes, go fix it.
 
