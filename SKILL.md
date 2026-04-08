@@ -74,7 +74,9 @@ Before adding a section, ask: "What visual story does this section tell?" If the
 
 ## 2. BUILD
 
-Write the code. All of it. Complete, working, production-quality. For every component, consult the matching file in `components/`. For every design decision, consult `reference/`.
+**START FROM TEMPLATES, NOT FROM SCRATCH.** Read `templates/premium-sections.md` FIRST. It contains 7 complete, production-ready React sections (hero, features, social proof, stats, CTA, footer, nav) built to the owner's taste. **Copy these templates and adapt them** — change the copy, colors, and content to match the user's request. Do NOT build sections from scratch when a template exists.
+
+This is the single most important instruction: **adapt templates, don't invent from nothing.** Building from scratch is how you get generic AI output. The templates encode premium patterns that are hard to generate on the fly.
 
 **Make it look like a human designer spent days on it, not like AI generated it in 10 seconds.**
 
@@ -96,6 +98,9 @@ If ANY of these sections is just a heading with no content below it — you are 
 - **Backgrounds** — for hero sections, copy a background from `assets/backgrounds/` into the project's public folder and use it. Reference `reference/background-catalog.md` for which category fits.
 - **Write real copy** — not lorem ipsum, not corporate fluff. Write like a real human copywriter. Short, punchy, specific, opinionated.
 - **Don't be safe** — safe = generic = AI-looking. One strong opinion > ten safe defaults.
+
+**Templates (USE THESE FIRST):**
+- [Premium sections](templates/premium-sections.md) — **THE MOST IMPORTANT FILE.** 7 complete React sections (hero, bento features, social proof, stats, CTA, footer, nav) with all styles, animations, and content. Copy and adapt these instead of building from scratch.
 
 **Reference files:**
 - [Anti-slop rules](reference/anti-slop.md) — the banned patterns list
