@@ -63,7 +63,29 @@ Before adding a section, ask: "What visual story does this section tell?" If the
 - Every `<section>` must have at least 3 visual elements inside it (heading + content + detail).
 - After writing each section, mentally check: "If I screenshot just this section, does it look complete?" If not, finish it before moving on.
 
-### Rule 9: NO LAYOUT OVERFLOW
+### Rule 9: CARDS IN A ROW MUST BE PERFECTLY ALIGNED
+This is the #1 layout bug. When you have 2+ cards side by side:
+- The grid/flex parent MUST use `items-stretch` (or Tailwind `items-stretch`) so all cards are the same height
+- Each card MUST use `flex flex-col` internally
+- The LAST element in each card (button, attribution, footer) MUST use `mt-auto` to push it to the bottom
+- This ensures buttons align across cards, avatars align across cards, quotes start at the same position
+- **Test pattern:** If card A has 2 lines of text and card B has 4 lines, the buttons should STILL be at the same Y position
+
+```jsx
+{/* CORRECT — cards align */}
+<div className="grid grid-cols-3 gap-6 items-stretch">
+  <div className="flex flex-col p-6 rounded-2xl border">
+    <p className="text-lg">"Quote text here..."</p>
+    <div className="mt-auto pt-6 flex items-center gap-3">
+      <img src="..." className="w-10 h-10 rounded-full" />
+      <div><p className="font-medium">Name</p><p className="text-sm text-muted">Role</p></div>
+    </div>
+  </div>
+  {/* ... more cards with same structure */}
+</div>
+```
+
+### Rule 10: NO LAYOUT OVERFLOW
 - All content must be visible within the viewport width. No horizontal scrollbars.
 - Floating/absolute elements must not clip outside their parent containers.
 - Widgets, cards, and images must be fully visible — not cut off at the right edge.
@@ -153,6 +175,9 @@ After screenshotting, visually inspect for these layout bugs that happen EVERY T
 - [ ] **Mobile responsiveness** — Does the grid collapse properly? `lg:grid-cols-*` must have a default `grid-cols-1`.
 - [ ] **Z-index stacking** — Is the nav above everything? Are overlapping elements layered correctly?
 - [ ] **Text readability** — Can you actually read text over background images? Add overlays if not.
+- [ ] **Card alignment** — Are cards in a row the same height? Are their internal elements (text, avatars, buttons) vertically aligned across cards? Use `items-stretch` on the grid and `flex flex-col` inside cards with `mt-auto` on the bottom element to push footers down.
+- [ ] **Element alignment within cards** — Quotes should start at the same Y position, avatars/names should be at the same Y position across all cards. If content varies in length, the card structure must handle it gracefully (flex-grow on the content area, not fixed heights).
+- [ ] **Dropdown/select overflow** — Currency selectors, dropdowns, and any element with absolute-positioned children must stay INSIDE the parent card. Add `overflow-hidden` on the card or constrain child widths. Dropdowns that open should not clip outside the viewport.
 
 ### Content Completeness Check:
 - [ ] Is there ANY section with a heading but no content below it? **FAIL — fill it or delete it**

@@ -384,9 +384,9 @@ export default function HeroCinematic({
               </button>
             </div>
 
-            {/* Floating accent card behind */}
+            {/* Floating accent card behind — NOTE: stays inside parent bounds */}
             <div
-              className="absolute -right-6 -bottom-6 -z-10 h-[200px] w-[300px] rounded-2xl"
+              className="absolute -right-3 -bottom-3 -z-10 h-[180px] w-[260px] rounded-2xl"
               style={{
                 background: "linear-gradient(135deg, oklch(0.5 0.15 30 / 0.15), oklch(0.4 0.1 280 / 0.1))",
                 border: "1px solid oklch(0.4 0.02 280 / 0.1)",
