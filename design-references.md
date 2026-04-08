@@ -100,6 +100,69 @@ const item = {
 // Animate from 0 to target value
 ```
 
+### Rolling Odometer Digits (Premium Fintech Pattern)
+Per-digit vertical slide animation — each digit rolls independently. The "$" and separators stay fixed.
+```tsx
+import { AnimatePresence, motion } from 'framer-motion'
+
+function OdometerDigit({ digit }) {
+  return (
+    <span style={{ display: 'inline-block', overflow: 'hidden', height: '1em' }}>
+      <AnimatePresence mode="popLayout">
+        <motion.span
+          key={digit}
+          initial={{ y: '-100%', opacity: 0, filter: 'blur(4px)' }}
+          animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+          exit={{ y: '100%', opacity: 0, filter: 'blur(4px)' }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          style={{ display: 'inline-block' }}
+        >
+          {digit}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  )
+}
+
+function AnimatedNumber({ value, prefix = '$' }) {
+  const digits = value.toString().split('')
+  return (
+    <span style={{ fontVariantNumeric: 'tabular-nums' }}>
+      {prefix}
+      {digits.map((d, i) => <OdometerDigit key={i} digit={d} />)}
+    </span>
+  )
+}
+```
+
+### Cross-Fade Screen Transitions (Onboarding Pattern)
+Shared-element transitions where layout stays fixed but content cross-dissolves between steps.
+```tsx
+<AnimatePresence mode="wait">
+  <motion.div
+    key={currentStep}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+  >
+    {stepContent}
+  </motion.div>
+</AnimatePresence>
+```
+
+### Card Pull/Reveal (Wallet Pattern)
+Cards slide up from a container on hover to reveal hidden details.
+```tsx
+<motion.div
+  whileHover={{ y: -80 }}
+  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+  className="cursor-pointer"
+>
+  <CardContent />
+</motion.div>
+```
+
 ## Tailwind Pro Patterns
 
 ### Gradient Borders
