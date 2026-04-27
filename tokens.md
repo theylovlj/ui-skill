@@ -2,7 +2,11 @@
 
 **Read this every build. Never invent your own tokens.**
 
-Three palette presets. Three font stacks. Three motion presets. That's it.
+Four palette presets. Three font stacks. Three motion presets. That's it.
+
+---
+
+> If on Next.js App Router (RSC), read `architecture.md` first.
 
 ---
 
@@ -52,11 +56,21 @@ Use for: SaaS landing pages, fintech, dashboards, B2B products. (This is the Kru
 
 Use for: Electric.-style luxury, cinematic landing pages, premium fintech (revenue dashboards), EV brands.
 
-**Forbidden colors** (default AI tells):
-- ❌ `#0d9488` / teal-500 (default Tailwind+Claude combo)
-- ❌ Linear gradients with `from-purple-500 to-blue-500` (the AI-slop gradient)
-- ❌ `#ffffff` for backgrounds (always off-white)
-- ❌ `#000000` for text (always slightly tinted black)
+### Palette 4 — STONE (warm-grey + cream natural-minimalism)
+
+```css
+--bg:             oklch(94% 0.005 70);    /* warm stone #ebe7df */
+--bg-elevated:    oklch(98% 0.005 70);
+--text:           oklch(20% 0.01 70);
+--text-muted:     oklch(45% 0.01 70);
+--border:         oklch(86% 0.005 70);
+--accent:         oklch(55% 0.12 30);     /* burnt sienna */
+--accent-fg:      oklch(98% 0.005 70);
+```
+
+Use for: natural-minimalism brands, wellness, agriculture, slow-craft, ceramics, food/farm.
+
+For forbidden colors (teal, purple-to-blue gradient, pure `#fff`/`#000`), see `anti-slop.md` § COLOR.
 
 ---
 
@@ -64,7 +78,7 @@ Use for: Electric.-style luxury, cinematic landing pages, premium fintech (reven
 
 Always pair a **bold grotesque sans** (body + UI + bulk of headlines) with **ONE italic-serif accent** (used for one word per headline, max).
 
-### Stack A — INTER + INSTRUMENT (default)
+### Stack A — INTER TIGHT + INSTRUMENT (default)
 
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,12 +110,19 @@ Use for developer tools, AI products, technical SaaS.
 
 Use for agencies, portfolios, fashion-adjacent brands.
 
-**Forbidden font choices:**
-- ❌ Inter (without Tight) — overused, default Vercel template
-- ❌ Roboto, Arial, Helvetica
-- ❌ Space Grotesk — the AI-defaults-here tell
-- ❌ Multiple serifs in one design
-- ❌ All-italic headlines (italic ONE WORD only)
+### Dashboard font pairings (Sans + Mono, hard rule)
+
+Dashboards use a Sans + Mono pair. Numeric data and code-like fields go in mono. Pick ONE pairing:
+
+- **Geist + Geist Mono** (default)
+- **Satoshi + JetBrains Mono**
+- **Inter Tight + IBM Plex Mono**
+
+```css
+--font-mono: 'Geist Mono', ui-monospace, monospace;
+```
+
+For banned fonts (Inter without Tight, Space Grotesk, Roboto/Arial/Helvetica, multi-serif, all-italic), see `anti-slop.md` § TYPOGRAPHY. Hard rule still applies: no serif on dashboard body text or numeric data — single italic-serif emphasis word in section headers is the only exception.
 
 ---
 
@@ -128,6 +149,38 @@ Use for agencies, portfolios, fashion-adjacent brands.
 .headline { letter-spacing: -0.02em; }   /* tight, signals confidence */
 .display  { letter-spacing: -0.04em; }   /* extra tight for display */
 ```
+
+---
+
+## TYPOGRAPHY PATTERNS
+
+### Meta labels (bracketed corner labels)
+
+Used for sub-section markers, "filed under" tags, technical metadata in corners.
+
+```css
+.meta-label-bracket {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+/* Usage: <span class="meta-label-bracket">[LINEAR]</span> */
+```
+
+### Eyebrow tags (microscopic uppercase pill above H1/H2)
+
+Every section heading gets one. The accent color goes here, not in the H1 itself.
+
+```html
+<span class="rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-medium text-[var(--accent)]">
+  Pricing
+</span>
+<h2>...</h2>
+```
+
+Spec: `rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-medium text-[var(--accent)]`
 
 ---
 
@@ -211,13 +264,18 @@ For tabs / segmented controls with sliding indicator:
 <motion.div layoutId="active-tab-pill" />  // single instance, tweens between segments
 ```
 
-### Forbidden motion
+### Liquid Glass recipe
 
-- ❌ `transition: all 200ms ease-in-out` — generic, fights with Framer Motion
-- ❌ `cubic-bezier(0.68, -0.55, 0.265, 1.55)` — bouncy ease (cheap)
-- ❌ `animate-pulse` for loading states (use skeleton instead)
-- ❌ `transform: scale(1.05)` on hover with no spring — janky
-- ❌ Animations longer than 500ms for micro-interactions
+CSS for the Liquid Glass surface (principle and usage rules in `anti-slop.md` § DECORATION):
+
+```css
+backdrop-filter: blur(20px);
+background: rgba(255, 255, 255, 0.05);
+border: 1px solid rgba(255, 255, 255, 0.1);
+box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+```
+
+For motion anti-patterns (cubic-bezier, `transition: all`, animating layout props, useState for continuous input), see `anti-slop.md` § MOTION.
 
 ---
 
@@ -248,20 +306,54 @@ For tabs / segmented controls with sliding indicator:
 
 Color-matched shadows beat neutral gray. Under product mockups, use `--shadow-glow` not `--shadow-xl`.
 
+### Premium button stack (kargul.studio 4-layer)
+
+For dark CTA pills that need to feel pressable and physical (not flat). Use sparingly — primary CTA only.
+
+```css
+--shadow-btn-premium:
+  inset 0 4px 4px 0 rgba(255, 255, 255, 0.15),
+  inset 0 2px 4px 0 rgba(1, 1, 1, 0.15),
+  0 4px 4px -3px rgba(180, 178, 189, 1);
+--shadow-btn-premium-fill:   linear-gradient(180deg, #312F37 0%, #18171C 100%);
+--shadow-btn-premium-stroke: 1px solid #18171C;
+```
+
+Apply: `background: var(--shadow-btn-premium-fill); border: var(--shadow-btn-premium-stroke); box-shadow: var(--shadow-btn-premium);`
+
+---
+
+## Z-INDEX DISCIPLINE
+
+Reserve z-indexes strictly for systemic layer contexts: sticky nav, modals, overlays, tooltips, command palettes. NEVER use `z-50` arbitrarily for "vibes".
+
+Standard stack:
+- `z-40` — dropdowns, popovers
+- `z-50` — sticky nav
+- `z-60` — tooltips
+- `z-100` — modals, dialogs, overlays
+- `z-[200]` — toasts, command palette
+
+If you find yourself adding `z-10` to a card "to make it stack right" — your layout reasoning is off. Fix the layout, don't paper over it with z-index.
+
 ---
 
 ## QUICK SUMMARY
 
 | Decision | Default |
 |---|---|
-| Background | Off-white (Palette 1, 2) or near-black (3) — NEVER `#fff` |
+| Background | Off-white (Palette 1, 2, 4) or near-black (3) — NEVER `#fff` |
 | Text | Slightly tinted black, never `#000` |
 | Accent | ONE color, used only on CTAs / status / emphasis |
 | Sans font | Inter Tight (or Geist for tech-forward) |
 | Serif font | Instrument Serif (one italic word per headline) |
+| Mono font | Geist Mono (dashboards, numeric data, meta labels) |
 | Hero size | `text-5xl md:text-6xl` |
 | Letter spacing | `tracking-tight` for headlines |
 | Section padding | `py-32 md:py-40` |
 | Card radius | `rounded-2xl` (cards) / `rounded-full` (pills) |
 | Motion | Spring presets, `layout`/`layoutId`, never cubic-bezier |
+| Animated props | `transform` + `opacity` only |
 | Stagger | 80ms between children, 100ms entrance delay |
+| Glass | Liquid Glass spec only, sticky/floating only |
+| Z-index | Reserved for systemic contexts only |

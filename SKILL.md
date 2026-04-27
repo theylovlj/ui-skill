@@ -9,6 +9,25 @@ You are about to build production-grade UI that looks like an award-winning desi
 
 ---
 
+## CONFIGURATION (override per request)
+
+- **RESTRAINT** (1-10, default 8): How aggressive the cut-everything discipline is. 1 = packed dashboard, 10 = art gallery hero.
+- **MOTION** (1-10, default 7): How much animation. 1 = static, 10 = scroll-driven cinematic. **Default 7 = motion is mandatory, not optional.**
+
+These dials override individual rules where conflicts arise. The user can override in their prompt ("with motion=8" or "low restraint").
+
+### What MOTION = 7 means in practice
+
+- Every interactive element has a hover state (use `recipes/animations.md` patterns)
+- Every section has scroll-triggered entrance animation (`fade-up`, `stagger children`, `scale-up`)
+- Every button has `:active` press feedback
+- Headlines/numbers use `pop-in` or `word-by-word` reveal
+- Tab/dropdown/menu uses one of the swap animations from `recipes/animations.md`
+- Loading states use skeleton shimmer, never static placeholder
+- A page with NO motion is a failed build — animation is the difference between "AI demo" and "premium product"
+
+---
+
 ## THE THREE RULES (non-negotiable)
 
 These came from analyzing 58 premium designs the owner manually curated. Every premium reference follows all three. Every AI-generated landing page violates them.
@@ -42,12 +61,11 @@ See `tokens.md` for exact font stacks, sizes, and weights.
 Same surface morphs between states. Never hard cuts. Never separate components mounted/unmounted.
 
 - **Framer Motion `layout` + `layoutId` is the primary tool.** One persistent surface morphs between states.
-- **Springs over easings.** Use `{ type: "spring", stiffness: 320, damping: 30 }`. Never `cubic-bezier`.
+- **Springs over easings.** Never `cubic-bezier` for primary motion. Exact spring values in `tokens.md` § MOTION PRESETS.
 - **Sub-300ms transitions.** Snappy, not slow.
 - **Wild visuals always inside a calm container.** Mesh gradient inside a white card. Halftone over a steady serif headline. Containment is what makes it feel premium.
 - **Per-element stagger** via `AnimatePresence`, never bulk swap.
-
-See `tokens.md` for spring presets.
+- **Motion floor:** every build at MOTION ≥ 5 must satisfy Step 7's minimum motion checklist.
 
 ---
 
@@ -68,6 +86,27 @@ Pick ONE primary type. Don't mix.
 | "mobile app", "iOS", "onboarding" | `mobile` | `recipes/mobile-onboarding.md` |
 
 If unsure, **stop and ask** — picking wrong page type wastes the build.
+
+### Step 1.5 — ROLL THE DICE (anti-repetition)
+
+Before writing a single line, **silently pick ONE option from each menu below**. This forces variation across builds and prevents falling into the same default composition every time.
+
+**Vibe (pick 1):**
+- Editorial Luxury — serif-led, generous whitespace, photo-driven
+- Soft Structuralism — grid-disciplined, mono-accents, brutalist-light
+- Ethereal Glass — translucent surfaces, soft glows, restrained Liquid Glass
+
+**Hero alignment (pick 1):**
+- Centered (only if vibe = Editorial Luxury, otherwise SKIP)
+- Left-aligned text with right-side asset (mockup, image, or product shot)
+- 50/50 split (text + asset on equal columns, asymmetric content density)
+
+**Decoration (pick 1):**
+- Photographic background (from `assets/backgrounds/`)
+- Scattered corner stickers (small marks at 2-3 corners, never in dead center)
+- Single contained accent (one shape, one glow, one element — bounded)
+
+You do not show this menu to the user. You just pick and proceed.
 
 ### Step 2 — READ the recipe + tokens
 
@@ -112,6 +151,42 @@ Run through `review.md` BEFORE shipping. If Playwright/browser available: take a
 
 Only after Step 4 passes every item. State which checklist items passed in your final message.
 
+### Step 6 — NO LAZY OUTPUT
+
+Premium builds are reproduced FULLY, not summarized. The following are BANNED in any code output:
+
+- `// ... rest of component`
+- `// TODO: implement`
+- `// implement here`
+- `{/* similar pattern repeated */}`
+- "for brevity..."
+- "I can provide more details on request"
+- Any ellipsis-style code skip
+- **Stripping motion code from a recipe** — `motion.div` becoming `div`, removing `AnimatePresence`, deleting `whileHover`/`whileInView`, dropping `layout`/`layoutId` props. This counts as compression and is BANNED.
+- **Omitting `recipes/animations.md` patterns** when the recipe references them. If a recipe says "use `t-fade-up` on entrance" and you ship plain divs without the class, you've stripped motion.
+
+If output approaches the token limit:
+1. Stop at a clean breakpoint (end of a component / end of a section)
+2. Output exactly: `[PAUSED — section X of Y complete. Send "continue" to resume from: <next section name>]`
+3. NEVER compress or summarize what you've already written — pause and wait
+
+When adapting a recipe, reproduce it FULLY in the output. **Including all motion.** The recipe is the floor, not a sketch to abbreviate.
+
+### Step 7 — INJECT ANIMATIONS
+
+Every interactive element + every section must have animation. Pull from `recipes/animations.md` (41 patterns).
+
+**Minimum motion floor (for any build at MOTION ≥ 5):**
+- Hero: word-by-word reveal OR fade-up + stagger entrance for headline/subtext/CTA
+- Every CTA button: hover-glow OR shine-sweep OR magnetic, AND `:active` press-down
+- Every section: scroll-triggered fade-up entrance (intersection observer)
+- Every card: hover-tilt OR spotlight-border OR lift
+- Stats / numbers: number pop-in (animations #2 or #35)
+- Loading states: skeleton shimmer (animation #26), never static placeholder
+- Tab/dropdown/menu: use the matching swap animation from animations.md
+
+**If shipping a section with NO motion:** STOP. Re-read `recipes/animations.md`. Pick a pattern. Apply it. A static section is a failed section.
+
 ---
 
 ## QUICK REFERENCE — what the recipes contain
@@ -131,27 +206,25 @@ Only after Step 4 passes every item. State which checklist items passed in your 
 | `mobile-onboarding.md` | Mobile flows | Single task per screen, vast whitespace, pill CTAs, cross-fade transitions |
 | `morphing-button.md` | Newsletter / signup CTA | Click-to-expand pill (200px → 420px) via Framer Motion `layout` |
 | `text-roll.md` | Brand-swap headline word | Vertical word-roll inside an inline pill that resizes per brand |
+| `mockups.md` | Product mockups in heroes | Device frames (BrowserFrame, iPhoneFrame, MacBookFrame, AppleWatchFrame, TabletFrame) + content primitives (LineChart, KPIStrip, Sidebar, TableRows, ChatThread, etc). NEVER fake UI with divs. |
 | `backgrounds-catalog.md` | Hero backgrounds | 26 bundled WebP backgrounds with text-overlay strategy per category |
+| `animations.md` | **EVERY BUILD** — animation library | **41 CSS animations** (transitions.dev style). Hover, scroll-entrance, ambient, loading, text effects, toggle. Pull from this for every interactive moment. |
 
 ---
 
 ## RED FLAGS — STOP and start over
 
-If you find yourself doing any of these, STOP. You are slipping into AI-generated defaults.
+If you catch yourself doing any of these CATEGORIES, stop and re-open the referenced file for specifics.
 
-- ❌ Picking a teal or purple accent color (default AI choice)
-- ❌ Writing a hero headline >8 words
-- ❌ Using `<Loader2 />` as a loading state
-- ❌ Setting background to pure `#ffffff`
-- ❌ Using "MOST POPULAR" banner on pricing
-- ❌ Putting checkmark icons next to feature list items
-- ❌ Using `cubic-bezier` for primary motion (must be spring)
-- ❌ Building a hero from scratch instead of adapting `recipes/hero-*.md`
-- ❌ Adding more sections instead of perfecting fewer
-- ❌ Centering EVERYTHING (premium has asymmetric tension)
-- ❌ Creating empty/sparse sections "for spacing"
-- ❌ Mounting/unmounting components instead of morphing one (no `layoutId`)
-- ❌ Skipping `review.md` because "it looks fine"
+- ❌ **Skipping motion** — any section/button/page with zero animation. See Step 7 minimum motion floor + `recipes/animations.md`.
+- ❌ **AI-default visuals** — teal/purple accent, pure `#fff` background, purple→blue gradients, glassmorphism on cards. See `anti-slop.md` § COLOR + DECORATION.
+- ❌ **Default components** — `<Loader2 />`, "MOST POPULAR" pricing banner, checkmark feature lists, boxy `<Accordion>`, `rounded-md` shadcn buttons. See `anti-slop.md` § COMPONENT.
+- ❌ Faking a product dashboard / app screen inline with divs + gradients (use `recipes/mockups.md` device frames + primitives instead)
+- ❌ **Lazy composition** — building hero from scratch instead of adapting `recipes/hero-*.md`, centered everything, 3-equal-card features grid, empty/sparse "spacing" sections, mounting/unmounting instead of morphing.
+- ❌ **Mobile/perf killers** — `h-screen`, animating `top/left/width/height`, `useState` for continuous input, `cubic-bezier` for primary motion. See `anti-slop.md` § MOBILE + MOTION.
+- ❌ **Generic content** — emojis in UI, hero copy >8 words / >3 lines, "Jane Doe" names, "Acme" brands, filler verbs (Elevate/Unleash/Empower), round-fake numbers, Unsplash URLs. See `anti-slop.md` § CONTENT + TYPOGRAPHY.
+- ❌ **Stripping recipe motion** — removing `motion.div`, `whileHover`, `AnimatePresence`, `layout`/`layoutId`, or `t-*` classes from a recipe to "simplify".
+- ❌ **Skipping `review.md`** because "it looks fine".
 
 **All of these mean: STOP. Re-read the relevant rule. Adapt the right recipe.**
 
@@ -177,7 +250,7 @@ Empty space is the design. Don't fill it. If the page legitimately needs more co
 
 ### "Animation feels janky."
 
-You used `cubic-bezier` or you're swapping components instead of morphing. Switch to spring + `layoutId`. See `recipes/morphing-button.md`.
+You used `cubic-bezier` or you're swapping components instead of morphing. Switch to spring + `layoutId`. See `recipes/morphing-button.md`. Also confirm you're animating ONLY `transform` and `opacity` — never `top/left/width/height`.
 
 ---
 

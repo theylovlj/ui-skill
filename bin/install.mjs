@@ -9,7 +9,7 @@ const PACKAGE_ROOT = join(__dirname, "..");
 
 const TARGET = join(homedir(), ".claude", "skills", "ui");
 
-const FILES_TO_COPY = ["SKILL.md", "tokens.md", "anti-slop.md", "review.md"];
+const FILES_TO_COPY = ["SKILL.md", "tokens.md", "anti-slop.md", "review.md", "architecture.md", "redesign.md", "image-generation.md"];
 const DIRS_TO_COPY = ["recipes", "assets"];
 
 function copyDir(src, dest) {
@@ -44,7 +44,7 @@ console.log("");
 console.log("  ╔═══════════════════════════════════════════╗");
 console.log("  ║   /ui skill installer                     ║");
 console.log("  ║   Premium UI for Claude Code              ║");
-console.log("  ║   v2.0 — rebuilt from 58 curated designs  ║");
+console.log("  ║   v2.1.0 — premium UI for Claude Code     ║");
 console.log("  ╚═══════════════════════════════════════════╝");
 console.log("");
 
@@ -55,10 +55,12 @@ if (isDryRun) {
 }
 
 if (existsSync(TARGET)) {
-  console.log("  ⚠  Existing skill at:", TARGET);
-  console.log("  ⚠  Backing up to: .ui-skill-backup-" + Date.now());
-  const backup = TARGET + "-backup-" + Date.now();
-  // Simple rename via copy + remove
+  // Backup OUTSIDE the skills folder so Claude doesn't load it as a duplicate skill
+  const backupRoot = join(homedir(), ".claude", "backups");
+  mkdirSync(backupRoot, { recursive: true });
+  const ts = new Date().toISOString().replace(/[:.]/g, "-");
+  const backup = join(backupRoot, `ui-skill-backup-${ts}`);
+  console.log("  ⚠  Existing skill found, backing up to:", backup);
   copyDir(TARGET, backup);
   rmSync(TARGET, { recursive: true, force: true });
   console.log("  ✓  Backed up");
@@ -80,12 +82,17 @@ console.log("");
 console.log("  ✓  Installed to", TARGET);
 console.log("  ✓ ", fileCount, "files");
 console.log("");
-console.log("  What's included:");
-console.log("    • SKILL.md — the procedure + 3 rules");
-console.log("    • tokens.md — color/font/motion presets (no inventing)");
-console.log("    • anti-slop.md — patterns that scream 'AI-generated'");
-console.log("    • review.md — pre-ship Playwright checklist");
-console.log("    • recipes/ — 14 ready-to-adapt React components");
+console.log("  What's included (v2.1.0):");
+console.log("    • SKILL.md — 3 rules + 7-step procedure (RESTRAINT/MOTION dials, motion-mandatory floor)");
+console.log("    • tokens.md — 4 palettes (warm/cool/dark/stone) + premium button shadows + Liquid Glass");
+console.log("    • anti-slop.md — patterns that scream 'AI-generated' (incl. Jane Doe content rules)");
+console.log("    • review.md — 16-item pre-ship Playwright checklist");
+console.log("    • architecture.md — RSC client/server boundaries (Next.js App Router)");
+console.log("    • redesign.md — companion procedure for upgrading existing UIs");
+console.log("    • image-generation.md — optional AI image-gen integration guide");
+console.log("    • recipes/ — 28 ready-to-adapt React components");
+console.log("    • recipes/animations.md — 41 CSS animation patterns (transitions.dev style)");
+console.log("    • recipes/mockups.md — device frames (BrowserFrame/iPhoneFrame/MacBookFrame/etc) + 9 content primitives");
 console.log("    • assets/backgrounds/ — 26 bundled WebP backgrounds");
 console.log("");
 console.log("  Usage in Claude Code:");

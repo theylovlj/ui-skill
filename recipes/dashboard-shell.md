@@ -157,6 +157,155 @@ function PageHeader() {
 </div>
 ```
 
+## Comparison Line Chart
+
+The signature dashboard chart for time-series with year-over-year or period-over-period context. **No legend** — the tooltip carries the labels. Past series is dotted, never dashed (dashes look like errors). Single hue; the difference is line style + tooltip pill style.
+
+```tsx
+import { motion } from "framer-motion";
+import { useMemo, useState } from "react";
+
+type Point = { label: string; current: number; past: number };
+
+export function ComparisonChart({ data, height = 240 }: { data: Point[]; height?: number }) {
+  const [hover, setHover] = useState<number | null>(null);
+  const [showPast, setShowPast] = useState(true);
+
+  const { currentPath, pastPath, points } = useMemo(() => {
+    const max = Math.max(...data.flatMap((d) => [d.current, d.past])) * 1.1;
+    const w = 100, h = 100;
+    const step = w / (data.length - 1);
+    const points = data.map((d, i) => ({
+      x: i * step,
+      yCurr: h - (d.current / max) * h,
+      yPast: h - (d.past    / max) * h,
+    }));
+    const currentPath = points.map((p, i) => `${i === 0 ? "M" : "L"}${p.x},${p.yCurr}`).join(" ");
+    const pastPath    = points.map((p, i) => `${i === 0 ? "M" : "L"}${p.x},${p.yPast}`).join(" ");
+    return { currentPath, pastPath, points };
+  }, [data]);
+
+  const active = hover !== null ? data[hover] : null;
+  const activePoint = hover !== null ? points[hover] : null;
+
+  return (
+    <div className="rounded-2xl border border-black/8 bg-[var(--bg-elevated)] p-5">
+      {/* Header w/ Curr/Past toggle */}
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <div className="text-sm font-semibold">Daily active users</div>
+          <div className="text-xs text-[var(--text-muted)]">vs previous 30 days</div>
+        </div>
+        <div className="inline-flex rounded-full border border-black/10 p-0.5 text-[11px] font-medium">
+          <button
+            onClick={() => setShowPast(false)}
+            className={`px-2.5 py-1 rounded-full transition-colors ${!showPast ? "bg-[var(--text)] text-[var(--bg)]" : "text-[var(--text-muted)]"}`}
+          >
+            Curr
+          </button>
+          <button
+            onClick={() => setShowPast(true)}
+            className={`px-2.5 py-1 rounded-full transition-colors ${showPast ? "bg-[var(--text)] text-[var(--bg)]" : "text-[var(--text-muted)]"}`}
+          >
+            Curr / Past
+          </button>
+        </div>
+      </div>
+
+      {/* SVG chart */}
+      <div
+        className="relative"
+        style={{ height }}
+        onMouseLeave={() => setHover(null)}
+      >
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 w-full h-full overflow-visible">
+          {showPast && (
+            <path
+              d={pastPath}
+              fill="none"
+              stroke="var(--accent)"
+              strokeOpacity="0.55"
+              strokeLinecap="round"
+              strokeDasharray="0.6 1.4"
+              vectorEffect="non-scaling-stroke"
+              style={{ strokeWidth: 1.5 }}
+            />
+          )}
+          <path
+            d={currentPath}
+            fill="none"
+            stroke="var(--accent)"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+            style={{ strokeWidth: 2 }}
+          />
+          {points.map((p, i) => (
+            <rect
+              key={i}
+              x={p.x - (100 / data.length) / 2}
+              y={0}
+              width={100 / data.length}
+              height={100}
+              fill="transparent"
+              onMouseEnter={() => setHover(i)}
+              style={{ cursor: "crosshair" }}
+            />
+          ))}
+          {activePoint && (
+            <>
+              <line
+                x1={activePoint.x} x2={activePoint.x}
+                y1={0} y2={100}
+                stroke="var(--text)" strokeOpacity="0.08"
+                vectorEffect="non-scaling-stroke" style={{ strokeWidth: 1 }}
+              />
+              <circle cx={activePoint.x} cy={activePoint.yCurr} r="0.6" fill="var(--accent)" />
+            </>
+          )}
+        </svg>
+
+        {/* Stacked-pill tooltip — the legend lives at the active point */}
+        {active && activePoint && (
+          <motion.div
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.15 }}
+            className="absolute -translate-x-1/2 -translate-y-full -mt-2 flex flex-col items-stretch gap-1 pointer-events-none"
+            style={{ left: `${activePoint.x}%`, top: `${activePoint.yCurr}%` }}
+          >
+            <div className="rounded-full bg-[var(--accent)] text-[var(--accent-fg)] px-2.5 py-0.5 text-[11px] font-semibold tabular-nums shadow-sm">
+              Current {active.current}
+            </div>
+            {showPast && (
+              <div className="rounded-full bg-[var(--bg-elevated)] border border-[var(--accent)]/40 text-[var(--accent)] px-2.5 py-0.5 text-[11px] font-semibold tabular-nums">
+                Past {active.past}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </div>
+
+      <div className="mt-2 flex justify-between text-[10px] text-[var(--text-muted)] font-mono">
+        <span>{data[0]?.label}</span>
+        <span>{data[Math.floor(data.length / 2)]?.label}</span>
+        <span>{data[data.length - 1]?.label}</span>
+      </div>
+    </div>
+  );
+}
+```
+
+**The tooltip IS the legend.** No separate legend block — the two stacked pills at the active point label both series in context.
+
+**Rules for this micro-pattern:**
+
+- **Past series uses the SAME hue as current** — never a different color. Difference is line style (dotted) + opacity (55%) + tooltip pill style (outlined vs filled).
+- **Dotted, not dashed.** `strokeDasharray="0.6 1.4"` — close-spaced dots. Dashes read as "broken / loading."
+- **Tooltip pills stack vertically**, current on top, past below. Never side-by-side.
+- **No data-point dots on the line** by default — only one dot at the active x.
+- **Crosshair cursor** signals interactivity; the dotted vertical guide line confirms.
+
 ## Customization rules
 
 - **Sidebar uses one accent color** — active state is dark on cream, hover is just neutral-100

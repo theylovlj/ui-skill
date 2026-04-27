@@ -6,11 +6,29 @@ Each pattern below is a default that Claude (and other LLMs) gravitate toward wh
 
 ---
 
+## MOBILE / VIEWPORT ANTI-PATTERNS
+
+### ❌ `h-screen` for full-height hero sections
+**Why it's slop:** Catastrophic iOS Safari bug. When the address bar collapses/expands, the layout JUMPS several hundred pixels mid-scroll. Looks broken.
+**Fix:** Use `min-h-[100dvh]` (dynamic viewport height) instead. Always.
+
+### ❌ Asymmetric layouts that don't collapse on mobile
+**Why it's slop:** `md:col-span-2` patterns that stay broken at <768px. Forces horizontal scroll.
+**Fix:** Every asymmetric layout MUST have explicit mobile reset to single-column (`grid-cols-1 px-4 py-8`).
+
+### ❌ Backdrop-blur on scrolling content
+See `architecture.md` § Performance for the rationale. Rule: backdrop-blur ONLY on fixed/sticky elements.
+
+### ❌ Z-index spam (`z-50`, `z-[9999]` everywhere)
+See `tokens.md` § Z-INDEX DISCIPLINE for the standard stack.
+
+---
+
 ## COLOR ANTI-PATTERNS
 
 ### ❌ Teal `#14b8a6` as primary accent
 **Why it's slop:** Default Tailwind palette + Claude's training bias = teal lands first. It immediately signals "AI made this."
-**Fix:** Use one of the 3 palette presets in `tokens.md`. Warm coral, indigo-violet, or amber.
+**Fix:** Use one of the 4 palette presets in `tokens.md`. Warm coral, indigo-violet, amber, or burnt sienna.
 
 ### ❌ `bg-gradient-to-br from-purple-500 to-blue-500`
 **Why it's slop:** The single most-recognized AI-generated gradient. Used by every cookie-cutter landing page.
@@ -48,8 +66,12 @@ Each pattern below is a default that Claude (and other LLMs) gravitate toward wh
 **Fix:** `<h1>Build something <em>beautiful</em>.</h1>` — only the emphasis word italic.
 
 ### ❌ Headline with icons next to it
-**Why it's slop:** AI defaults to "let me add a 🚀 to make it pop." Premium typography stands alone.
-**Fix:** No emoji or icons in or beside H1. Save icons for nav, buttons, feature cards.
+**Why it's slop:** AI defaults to "let me add an icon to make it pop." Premium typography stands alone.
+**Fix:** No icon (and definitely no emoji) in or beside H1. Save icons for nav, buttons, feature cards.
+
+### ❌ Emojis in product UI
+**Why it's slop:** Renders inconsistently across OS. Reads as AI-generated content. Instantly unprofessional.
+**Fix:** NEVER use emojis in code/markup/text/alt-text/headings/buttons/labels. Use Phosphor or Radix icons instead.
 
 ### ❌ `text-3xl` hero (or smaller)
 **Why it's slop:** Timid. Premium heroes are `text-5xl` to `text-6xl`.
@@ -83,6 +105,13 @@ Each pattern below is a default that Claude (and other LLMs) gravitate toward wh
 
 ## COMPONENT ANTI-PATTERNS
 
+### ❌ Faking a dashboard / app screenshot inline with divs + gradients
+**Why it's slop:** The single most-cited AI tell after `<Loader2 />`. Random rectangles labeled "Sales / Revenue / Activity" with chevron arrows and gradient backgrounds. Always looks worse than the actual product would.
+**Fix:** Three valid options (NEVER invent UI from scratch):
+1. Use a real screenshot of the product (`<img src="/dashboard.png" />`)
+2. Use a device frame + clean content primitives from `recipes/mockups.md`
+3. If product has no UI yet, use a single hero photo (no fake mockup at all)
+
 ### ❌ `<Loader2 className="animate-spin" />` for every loading state
 **Why it's slop:** The most-cited AI tell. Recognized instantly by any designer.
 **Fix:**
@@ -107,13 +136,13 @@ Each pattern below is a default that Claude (and other LLMs) gravitate toward wh
 **Why it's slop:** The most basic shadcn button pattern.
 **Fix:** `rounded-full` pill buttons. Arrow optional, but if used, it should be a small circle-arrow that animates on hover (translates a few px right).
 
-### ❌ Stock-photo `<Avatar />` placeholders with first-letter initials
-**Why it's slop:** "JD" in a colored circle is the laziest possible avatar.
-**Fix:** Use real (CC0) photos for testimonials. Use generated SVG portraits if no real photos. NEVER initials.
-
 ---
 
 ## MOTION ANTI-PATTERNS
+
+### ❌ Animating `top`, `left`, `width`, `height` (Hardware-acceleration rule)
+**Why it's slop:** Triggers layout reflow on every frame. ~5fps on mobile.
+**Fix:** Animate ONLY `transform` and `opacity`. Use `transform: translate()` instead of `top:`, `transform: scale()` instead of `width:`. The compositor handles transform/opacity on the GPU; layout properties force the main thread to recalculate every frame.
 
 ### ❌ `transition: all 0.3s ease`
 **Why it's slop:** Vague generic CSS transition fights with Framer Motion and produces janky results.
@@ -135,6 +164,9 @@ Each pattern below is a default that Claude (and other LLMs) gravitate toward wh
 **Why it's slop:** Hard cuts feel broken. Premium = morph one container.
 **Fix:** Wrap in `<AnimatePresence mode="popLayout">` and use `motion.div` with `layout`. Same surface, different content.
 
+### ❌ `useState` for cursor-tracking, magnetic, parallax, continuous-input animations
+See `architecture.md` § Continuous-input animations. Rule: use `useMotionValue` + `useTransform`, never `useState`.
+
 ---
 
 ## CONTENT ANTI-PATTERNS
@@ -142,6 +174,10 @@ Each pattern below is a default that Claude (and other LLMs) gravitate toward wh
 ### ❌ "Empower your team to..."  /  "Unlock the power of..."  /  "Revolutionize..."
 **Why it's slop:** ChatGPT marketing voice. Every AI-generated landing page.
 **Fix:** Use the actual product's verb. "Move money across borders." "Ship code faster." "Plan your week." Direct, specific, declarative.
+
+### ❌ AI marketing filler words
+Banned phrases: "Elevate", "Seamless", "Unleash", "Next-Gen", "Revolutionize", "Game-changer", "Delve", "Tapestry", "In the world of...", "Empower your team", "Unlock the power of".
+**Fix:** Use the actual product's verb. "Move money." "Ship code faster." "Plan your week."
 
 ### ❌ Hero subtext that explains the headline
 **Why it's slop:** "Move money. (Subtext: We help you move money internationally with low fees and great rates.)" Redundant.
@@ -153,15 +189,35 @@ Each pattern below is a default that Claude (and other LLMs) gravitate toward wh
 
 ### ❌ Pricing tiers named "Basic / Pro / Enterprise"
 **Why it's slop:** Default. Lazy.
-**Fix:** Name tiers based on the product or audience. "Solo / Team / Studio" for design tools. "Starter / Growth / Scale" for SaaS. Or use the value: "$9 plan / $29 plan / Custom" without names at all.
+**Fix:** Name tiers based on the product or audience. "Solo / Team / Studio" for design tools. "Starter / Growth / Scale" for SaaS.
+
+### ❌ Generic placeholder names ("John Doe", "Sarah Chan", "Jack Su")
+**Why it's slop:** Reads as a Lorem-Ipsum dump. Instantly screams template.
+**Fix:** Use creative, realistic, diverse names. "Maya Okafor", "Ezra Singh", "Lucia Marchetti", "Tomas Brandt".
+
+### ❌ Generic avatars (SVG-egg, Lucide user icon, gradient initials)
+**Why it's slop:** "JD" in a colored circle is the laziest possible avatar.
+**Fix:** Use believable photo placeholders via `https://picsum.photos/seed/{unique-id}/100/100` or styled SVG portraits. NEVER initials.
+
+### ❌ Fake suspiciously-round numbers (99.99%, 50%, 1234567)
+**Why it's slop:** Round numbers = invented. Real data has texture.
+**Fix:** Use organic data: `47.2%`, `+1 (312) 847-1928`, `$3,481`, `1,247 active users`.
+
+### ❌ Startup slop names ("Acme", "Nexus", "SmartFlow", "Flowbit", "NovaCore")
+**Why it's slop:** Pattern-matched template fillers.
+**Fix:** Invent contextual brand names that sound real. Two-syllable favored. Avoid `-ly`, `-fy`, `-hub` suffixes.
+
+### ❌ Unsplash placeholder URLs
+**Why it's slop:** Often broken (slug changes, rate limits, 404s in a week).
+**Fix:** Use `https://picsum.photos/seed/{unique-string}/{width}/{height}` (deterministic per-seed, reliable).
 
 ---
 
 ## DECORATION ANTI-PATTERNS
 
-### ❌ Glassmorphism (`backdrop-filter: blur()` semi-transparent panels)
-**Why it's slop:** Peak 2021 AI aesthetic. Now reads as "trying too hard."
-**Fix:** Use subtle backdrop blur ONLY for sticky nav. For cards, use opaque white-on-cream with soft shadow. Reserve glass effects for genuinely floating overlays.
+### ❌ Plain glassmorphism (`backdrop-filter: blur()` semi-transparent panels)
+**Why it's slop:** Peak 2021 AI aesthetic. Reads as "trying too hard" without refinement.
+**Fix:** If you need glass, use **Liquid Glass** = backdrop-blur + 1px inner border + inner shadow. See `tokens.md` Liquid Glass spec. Use ONLY for sticky nav and floating overlays — never for cards/sections.
 
 ### ❌ Random `<div>` blobs in pastel gradients as background "decoration"
 **Why it's slop:** The "Apple keynote rip-off" gradient blob. Used by every fintech bootstrap site.
@@ -189,6 +245,10 @@ Each pattern below is a default that Claude (and other LLMs) gravitate toward wh
 "hover:scale-110 will feel snappy..."           → STOP. Spring + 1.02.
 "The user said make it pop, so neon..."         → STOP. Pop = restraint + one accent.
 "Three columns of features should work..."      → STOP. Bento or split.
+"h-screen for the hero..."                      → STOP. min-h-[100dvh].
+"Just a small emoji in the heading..."          → STOP. No emojis ever.
+"useState for the parallax..."                  → STOP. useMotionValue.
+"John Doe is fine for the testimonial..."       → STOP. Real names.
 ```
 
 **All of these mean: re-read the rule, open the recipe, follow the discipline.**

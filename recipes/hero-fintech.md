@@ -190,3 +190,9 @@ If currency dropdown floats outside the card, you missed one of these.
 - Don't remove the rate header
 - Don't ship without the savings highlight
 - Don't use traditional dropdowns (no `<select>`) — use the chip pattern shown
+
+## Note on mockups
+
+This recipe is the **EXCEPTION** to the "no fake UI" rule in `recipes/mockups.md`. The right-side widget here is a **real, interactive component** — users can change the amount and see the converted total. That's the whole pitch. Real interactive UI demoing the actual product is always allowed.
+
+For *other* fintech mockups in this same page (a dashboard preview lower down, a card-product shot, etc.), use `recipes/mockups.md` device frames + primitives. **Do NOT invent additional fake fintech UIs with divs + gradients.**

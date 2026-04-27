@@ -141,6 +141,80 @@ For mobile, consider a 50% quality lower-resolution variant if you have many bac
 
 ---
 
+## CSS-only background recipes (when WebP overkill)
+
+Sometimes you don't need a 120kb photographic background — you need a clean, hand-feeling texture. Two CSS-only patterns that read as "designed-without-AI."
+
+### Stone Dotted Grid
+
+Warm-stone background with a tiny dotted overlay. Pairs with editorial / studio / "calm premium" briefs (Rivo / Kora aesthetic).
+
+```tsx
+<section
+  className="relative min-h-[90dvh]"
+  style={{
+    backgroundColor: "oklch(94% 0.005 70)",
+    backgroundImage:
+      "radial-gradient(circle, oklch(70% 0.005 70) 1px, transparent 1px)",
+    backgroundSize: "24px 24px",
+  }}
+>
+  {/* hero content */}
+</section>
+```
+
+Rules:
+- Dot opacity stays under 0.10 — any higher and it screams "graph paper"
+- Dot size 1px, grid spacing 24px — never larger
+- Never combine with another bg image
+- The dotted grid is ALL OVER the page (footer included), not just the hero
+
+### Pastel Gradient Stripes
+
+Alternating solid-pastel + gradient-pastel horizontal bands in a single hue family. Premium consumer / soft tech.
+
+```tsx
+<section
+  className="relative min-h-[90dvh]"
+  style={{
+    backgroundImage: `
+      linear-gradient(180deg,
+        oklch(92% 0.04 290) 0%,
+        oklch(92% 0.04 290) 14%,
+        oklch(98% 0.01 290) 14%,
+        oklch(92% 0.04 290) 28%,
+        oklch(92% 0.04 290) 42%,
+        oklch(98% 0.01 290) 42%,
+        oklch(92% 0.04 290) 56%,
+        oklch(92% 0.04 290) 70%,
+        oklch(98% 0.01 290) 70%,
+        oklch(92% 0.04 290) 84%,
+        oklch(92% 0.04 290) 100%
+      )
+    `,
+  }}
+>
+  {/* hero content */}
+</section>
+```
+
+Hue swap (replace the two `290` values):
+- Lavender: `290`
+- Sage: `150`
+- Peach: `40`
+- Sky: `230`
+- Butter: `90`
+
+Rules:
+- ONE hue family per page. Never mix hues across stripes (rainbow stripes = template energy).
+- Stripe heights are NOT equal — vary 14% / 14% / 14% (solid) and 14% / 14% (gradient) for visual rhythm. Equal stripes look like a barcode.
+- Lightness gap stays small (`92%` vs `98%`). Larger gap reads as "loading skeleton."
+- Headlines need `text-shadow: 0 1px 2px rgb(255 255 255 / 0.4)` if they cross a stripe boundary
+- Never combine with a photo, dotted-grid, or another bg image
+- Marketing/hero only — never dashboards or mobile screens
+
+---
+
 ## File listing
 
 ```

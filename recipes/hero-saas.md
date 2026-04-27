@@ -16,6 +16,8 @@
 4. **Dual CTA**: filled pill + outlined pill, centered
 5. **Bleeding product mockup** with soft accent glow underneath
 
+> **For the product mockup**: see `recipes/mockups.md`. If you have a real screenshot, drop it in. Otherwise use `<BrowserFrame>` containing a `<Sidebar>` + `<KPIStrip>` + `<LineChart>` for SaaS dashboards. **Do NOT invent a fake UI with divs + gradients** — that's the #1 AI tell.
+
 ## Code (React + Tailwind + Framer Motion)
 
 ```tsx

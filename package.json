@@ -1,7 +1,7 @@
 {
   "name": "@theylovlj/ui-skill",
-  "version": "2.0.0",
-  "description": "Premium /ui design skill for Claude Code — built from analysis of 58 curated premium designs. Drops AI-tell defaults; produces output that competes with award-winning sites.",
+  "version": "2.1.0",
+  "description": "Premium /ui design skill for Claude Code. 41 CSS animations, 28 recipes, device-frame mockups, motion-mandatory enforcement. Drops AI-tell defaults; competes with award-winning sites.",
   "bin": {
     "ui-skill": "bin/install.mjs"
   },
@@ -10,13 +10,17 @@
     "tokens.md",
     "anti-slop.md",
     "review.md",
+    "architecture.md",
+    "redesign.md",
+    "image-generation.md",
     "recipes/",
-    "assets/"
+    "assets/",
+    "bin/"
   ],
   "scripts": {
     "test": "node bin/install.mjs --dry-run"
   },
-  "keywords": ["claude-code", "skill", "ui", "design", "premium", "framer-motion", "tailwind", "react"],
+  "keywords": ["claude-code", "skill", "ui", "design", "premium", "framer-motion", "tailwind", "react", "animations", "mockups"],
   "author": "theylovlj",
   "license": "MIT",
   "repository": {
