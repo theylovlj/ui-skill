@@ -1,6 +1,6 @@
 {
   "name": "@theylovlj/ui-skill",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Premium /ui design skill for Claude Code. v2.4 adds the mini-overhead-pill ban, gradient-text ban, 7-state delivery rule, elevation ladder, radius-scaling rule, named-tone requirement, and ~12 more anti-slop rules from a 5-skill research sweep. 17 photoreal device mockups, seamless marquees, responsive sizing, 41 animations, 28 recipes.",
   "bin": {
     "ui-skill": "bin/install.mjs"

@@ -209,6 +209,56 @@ See `tokens.md` § Z-INDEX DISCIPLINE for the standard stack.
 
 ## COMPONENT ANTI-PATTERNS
 
+### ❌ Screen content not properly composited INSIDE the device mockup
+**Why it's slop:** The dashboard/screenshot floats next to the MacBook instead of sitting INSIDE the screen. Or it's positioned but bleeds past the bezel. Or unrelated debug UI (component state pickers, "default / hover / focus / active / loading / empty / error" rows) gets rendered on top of the screen area as if it's part of the product. All three failures look like "AI couldn't figure out the layer stack."
+
+**Fix — the MOCKUP COMPOSITING LAW:**
+
+A device mockup is TWO layers, in this exact order, in a SINGLE relative-positioned wrapper:
+
+```tsx
+<div className="relative inline-block w-full max-w-2xl">
+  {/* LAYER 1 — the screen content, positioned absolutely INSIDE the screen rectangle */}
+  <div
+    className="absolute overflow-hidden rounded-md"
+    style={{
+      // Coordinates from recipes/device-mockups-catalog.md — these are NOT optional.
+      // MacBook Pro 14: top 5.5%, left 12%, width 76%, height 82%
+      top: "5.5%", left: "12%", width: "76%", height: "82%",
+    }}
+  >
+    <YourDashboardScreenshot />   {/* fills 100% × 100% of this box */}
+  </div>
+
+  {/* LAYER 2 — the device chrome PNG, on TOP, pointer-events-none */}
+  <img
+    src="/mockups/macbook-pro-14.webp"
+    alt=""
+    aria-hidden
+    className="relative block w-full h-auto pointer-events-none select-none"
+  />
+</div>
+```
+
+**Mandatory rules:**
+1. **Use the coordinates from `recipes/device-mockups-catalog.md`** for the device you chose. Do not eyeball them. Each device has a different screen-area %.
+2. **The screen content is INSIDE the wrapper, BEHIND the chrome PNG** (z-order: chrome on top via DOM order — chrome is the LAST child so it stacks above).
+3. **`overflow: hidden` on the screen-content box** so anything that overflows the screen rect gets clipped at the bezel.
+4. **`pointer-events-none` on the chrome image** so clicks reach the screen content underneath.
+5. **The wrapper has `position: relative`** and a fixed `max-w-*` so percentages resolve correctly.
+6. **The screen content MUST be the actual product UI** — the dashboard mockup recipe (chart + sidebar + active-incident list). NEVER a "component states demo row" (default / hover / focus / etc), NEVER a placeholder, NEVER a screenshot of an unrelated page.
+7. **For phones (rounded screen corners)**: add `borderRadius: "8%"` to the screen-content box so the content respects the screen curvature.
+8. **Verify with a manual look:** before shipping, screenshot the hero and check that (a) the screen content fills the screen area edge-to-edge, (b) nothing pokes past the bezel, (c) the content is readable at hero size, (d) NO "state picker" debug UI is visible inside the screen.
+
+**Common failures and their fixes:**
+| Failure | Root cause | Fix |
+|---|---|---|
+| Dashboard shrunken in middle of screen, bezel of black around it | Forgot percentages, used `inset-0` | Use the device coordinates |
+| Dashboard pokes past the laptop edge | Forgot `overflow: hidden` on screen box | Add it |
+| "default / hover / focus" row visible at bottom of screen | Component-state preview leaked into the production hero | Render only the dashboard primitive's DEFAULT state inside the mockup. Component-state catalogues belong in Storybook, not the live page. |
+| Phone screenshot has hard square corners over rounded iPhone screen | Forgot `borderRadius: "8%"` on screen box | Add it |
+| Click goes to chrome image, not the product | Forgot `pointer-events-none` on chrome | Add it |
+
 ### ❌ Faking a dashboard / app screenshot inline with divs + gradients
 **Why it's slop:** The single most-cited AI tell after `<Loader2 />`. Random rectangles labeled "Sales / Revenue / Activity" with chevron arrows and gradient backgrounds. Always looks worse than the actual product would.
 **Fix:** Three valid options (NEVER invent UI from scratch):
@@ -289,10 +339,21 @@ See `recipes/animations.md` § Marquee for the canonical implementation.
 ### ❌ Mini overhead status-pill / version-tag bars above the headline
 **Why it's slop:** The single most-recognized "AI-generated landing page" tell of 2025-2026. The tiny pill-shaped element sitting just above an H1 with monospace caps + colored dot + version/status copy — `● V3.4 — PAGED ROUTING LIVE`, `● NEW — AGENT MODE`, `● LIVE — 2.1k SHIPPING NOW`. Every Claude/v0/Lovable hero defaults to this. Owner flagged this as "literally the most sloppiest thing... the worst AI slop." It is decoration pretending to be product news.
 
-**This applies ONLY to the MINI overhead pill** (small status-bar element with a thin line of monospace text floating directly above the headline). Real header sections, real announcement banners, real nav bars are FINE. The ban is the tiny one.
+**SCOPE — read carefully. This ban removes ONE element. It does NOT shrink the rest of the hero.**
 
-**Fix:**
-- **Default = NO overhead pill.** The headline starts the page. Nothing above it but nav.
+The banned element: a small pill-shaped tag (rounded-full, ~24-32px tall, ~150-300px wide) sitting above the H1, containing monospace caps text + a colored dot. Examples: `● V3.4 — PAGED ROUTING LIVE`, `● NEW — AGENT MODE`, `● LIVE`.
+
+**What is NOT banned (and is still REQUIRED in a hero):**
+- ✅ The H1 headline itself
+- ✅ A subhead paragraph BELOW the headline (1-2 sentences explaining what the product does — this is mandatory, not optional)
+- ✅ The dual CTA (primary + secondary button) below the subhead — MANDATORY
+- ✅ A real announcement bar across the very top of the page (above nav) if there's actual news to announce
+- ✅ The nav bar
+- ✅ Real header sections elsewhere on the page
+- ✅ A trust strip / stat row below the CTAs
+
+**Fix for the banned mini-pill specifically:**
+- **Remove the pill.** Do NOT remove the subhead, CTAs, or anything else. The hero still has: H1 → subhead paragraph → dual CTA → optional stat row. You are deleting ONE small element above the H1, not minimizing the whole composition.
 - **If you genuinely have news** (a real launch, a real version, a real changelog item the visitor would care about), use it as a clickable announcement bar at the very top of the page (above nav OR as the first nav item) — NOT as a decorative pill stacked over the H1.
 - **Never use these copy patterns:** `V{n.n} — {ALL CAPS THING}`, `● LIVE`, `● NEW`, `NOW SHIPPING`, `JUST LAUNCHED`, `INTRODUCING {X}` in monospace caps with a colored dot.
 - **Never pair monospace caps + colored dot + tiny pill shape** as a hero overhead. That trio IS the AI tell.
