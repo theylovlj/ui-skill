@@ -44,7 +44,7 @@ console.log("");
 console.log("  ╔═══════════════════════════════════════════╗");
 console.log("  ║   /ui skill installer                     ║");
 console.log("  ║   Premium UI for Claude Code              ║");
-console.log("  ║   v2.3.0 — 17 photoreal device mockups       ║");
+console.log("  ║   v2.4.0 — anti-slop sweep + mini-pill ban       ║");
 console.log("  ╚═══════════════════════════════════════════╝");
 console.log("");
 

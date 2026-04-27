@@ -56,6 +56,52 @@ Hard rejection list — if any of these are in the output, it's slop. Mirrored i
 
 ---
 
+### ❌ Gradient-text headlines (`bg-clip-text text-transparent`)
+**Why it's slop:** The universal v0 / Lovable / Bolt tell. Every AI-generated SaaS hero has a purple→pink or indigo→cyan gradient sliced through the H1. Reads as "I let the model pick the color."
+**Fix:** Solid color headlines only. Use the palette accent for ONE emphasis word (italic serif), not a gradient across the whole line.
+
+### ❌ Shared-shadow disease (`shadow-lg` on every elevated element)
+**Why it's slop:** Cards, buttons, modals, dropdowns, tooltips all wearing the same `shadow-lg`. Flat hierarchy disguised as depth.
+**Fix:** A 5-step elevation ladder. Resting cards = `shadow-sm` (or none + bg shift). Buttons = the two-part button shadow from `tokens.md`. Hovered cards = `shadow-md`. Floating panels (popover, dropdown) = `shadow-xl`. Modals = `shadow-2xl` + backdrop. Shadow scales with z-depth, never shared by default.
+
+### ❌ Radius monoculture (`rounded-2xl` on everything)
+**Why it's slop:** Chips, buttons, cards, modals, inputs all sharing the same corner radius. The shadcn-default-untouched look.
+**Fix:** Radius scales with element size. Chips/pills = `rounded-full`. Buttons = `rounded-full` or `rounded-lg`. Inputs = `rounded-md`. Cards = `rounded-2xl`. Modals/sheets = `rounded-3xl`. Different sizes deserve different curvature.
+
+### ❌ Default-state-only ship (no empty / loading / error / overflow states)
+**Why it's slop:** The deepest non-human tell. Real designers ship the 7 component states; AI ships only the happy path with mock data.
+**Fix:** Every list, table, card-grid, dashboard panel, and form MUST have: default, hover, active/pressed, focus-visible, loading (skeleton), empty (with CTA), error (with recovery). Block delivery without all 7.
+
+### ❌ Tone-of-nothing brief ("modern, clean, minimal")
+**Why it's slop:** "Clean" is not a brief — it's the absence of one. AI defaults to washed-out neutral when no tone is named.
+**Fix:** Pick ONE named tone before building: editorial, brutalist, luxury, retro-futuristic, organic, playful, industrial, technical, soft-feminine, sharp-masculine, monochrome-print. Every decision (type, color, motion, density) should be defensible from that tone.
+
+### ❌ Equal-weight 3-card feature trio
+**Why it's slop:** Three cards, identical size, identical weight, identical art direction. Schoger's rule: emphasize by de-emphasizing.
+**Fix:** Promote ONE card to 2x size with full art, demote the other two to text-only or thumbnail. Visual hierarchy beats parity.
+
+### ❌ Trust-signal slop bundle (avatar stacks + "10x faster" + grayscale logo bar)
+**Why it's slop:** The unsourced 99.9% / 50K+ / 10x trio with a `grayscale opacity-40` "Trusted by" logo bar above an avatar pile. Every metric round, every logo grayscale, every avatar generated.
+**Fix:** Use REAL specific numbers (`8,431`, not `10,000+`). Source the claim ("Per 2026 Q1 telemetry"). If you don't have real logos with permission, omit the band. Avatars must be real photos with real names — never gradient-initial circles.
+
+### ❌ Default Tailwind palette unmodified (`indigo-500`, `slate-50`, etc.)
+**Why it's slop:** Using `bg-indigo-500` / `text-slate-900` straight out of Tailwind = no design decisions made.
+**Fix:** Define palette tokens in `tailwind.config` from one of the 4 `tokens.md` palettes. Reference brand tokens (`bg-accent`, `text-ink`), never raw Tailwind hue scales in JSX.
+
+### ❌ Missing `prefers-reduced-motion` handling
+**Why it's slop:** Ships motion that ignores user accessibility settings. Real designers respect the OS preference; AI never adds the media query.
+**Fix:** Every keyframe and Framer Motion transition must check the `useReducedMotion()` hook (Framer) or wrap CSS in `@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }`.
+
+### ❌ Linear easing + single global transition duration
+**Why it's slop:** `transition-all duration-300 ease-linear` everywhere. Kowalski's rule: never linear, durations scale with element size, exits 20% faster than entrances.
+**Fix:** Small elements (chips, icons) = 120-160ms. Buttons/cards = 180-240ms. Panels/modals = 240-320ms. Page-scale transitions = 400-500ms ceiling. Easing = `ease-out-quint` `[0.16, 1, 0.3, 1]` for entrances, springs for interactive. Exits = entrance duration × 0.8.
+
+### ❌ Headline cadence templates ("Ship faster. Build better. Scale smarter.")
+**Why it's slop:** Triple-verb staccato is the ChatGPT marketing voice. Same goes for "The all-in-one platform for X", "Built for modern teams", "Powered by AI" as a feature.
+**Fix:** Write the headline as a single declarative sentence about what the product DOES for one specific person. "Plan your week without the spreadsheet." "Send invoices in three clicks." Specific verb + specific object.
+
+---
+
 ## MOBILE / VIEWPORT ANTI-PATTERNS
 
 ### ❌ `h-screen` for full-height hero sections
@@ -240,6 +286,20 @@ If you wrote a chip and can't explain in one sentence what unique product truth 
 
 See `recipes/animations.md` § Marquee for the canonical implementation.
 
+### ❌ Mini overhead status-pill / version-tag bars above the headline
+**Why it's slop:** The single most-recognized "AI-generated landing page" tell of 2025-2026. The tiny pill-shaped element sitting just above an H1 with monospace caps + colored dot + version/status copy — `● V3.4 — PAGED ROUTING LIVE`, `● NEW — AGENT MODE`, `● LIVE — 2.1k SHIPPING NOW`. Every Claude/v0/Lovable hero defaults to this. Owner flagged this as "literally the most sloppiest thing... the worst AI slop." It is decoration pretending to be product news.
+
+**This applies ONLY to the MINI overhead pill** (small status-bar element with a thin line of monospace text floating directly above the headline). Real header sections, real announcement banners, real nav bars are FINE. The ban is the tiny one.
+
+**Fix:**
+- **Default = NO overhead pill.** The headline starts the page. Nothing above it but nav.
+- **If you genuinely have news** (a real launch, a real version, a real changelog item the visitor would care about), use it as a clickable announcement bar at the very top of the page (above nav OR as the first nav item) — NOT as a decorative pill stacked over the H1.
+- **Never use these copy patterns:** `V{n.n} — {ALL CAPS THING}`, `● LIVE`, `● NEW`, `NOW SHIPPING`, `JUST LAUNCHED`, `INTRODUCING {X}` in monospace caps with a colored dot.
+- **Never pair monospace caps + colored dot + tiny pill shape** as a hero overhead. That trio IS the AI tell.
+- **Never stack two overhead elements** (eyebrow tag + status pill) — pick one or, better, neither.
+
+If the only purpose of the overhead pill is to "make the hero feel more complete" — DELETE IT. Whitespace above the headline is the design.
+
 ### ❌ `<Loader2 className="animate-spin" />` for every loading state
 **Why it's slop:** The most-cited AI tell. Recognized instantly by any designer.
 **Fix:**
@@ -381,6 +441,12 @@ Banned phrases: "Elevate", "Seamless", "Unleash", "Next-Gen", "Revolutionize", "
 "Just a small emoji in the heading..."          → STOP. No emojis ever.
 "useState for the parallax..."                  → STOP. useMotionValue.
 "John Doe is fine for the testimonial..."       → STOP. Real names.
+"A little ● V3.4 LIVE pill above the H1..."     → STOP. Worst AI tell. Delete.
+"bg-clip-text gradient on the headline..."      → STOP. Solid color.
+"Three equal feature cards..."                  → STOP. Promote one, demote two.
+"shadow-lg on every card..."                    → STOP. Elevation ladder.
+"rounded-2xl on chips and modals both..."       → STOP. Radius scales w/ size.
+"Just the happy path for now..."                → STOP. 7 states or no ship.
 ```
 
 **All of these mean: re-read the rule, open the recipe, follow the discipline.**
