@@ -44,7 +44,7 @@ console.log("");
 console.log("  ╔═══════════════════════════════════════════╗");
 console.log("  ║   /ui skill installer                     ║");
 console.log("  ║   Premium UI for Claude Code              ║");
-console.log("  ║   v2.2.0 — visual-thinking + safe zones   ║");
+console.log("  ║   v2.2.1 — marquee + responsive + chips    ║");
 console.log("  ╚═══════════════════════════════════════════╝");
 console.log("");
 

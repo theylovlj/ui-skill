@@ -187,6 +187,59 @@ Floating decorative elements (stickers, note cards, badges, pills, accent shapes
 
 **Verification (in `review.md` step):** at every section, run a Playwright `boundingBox()` overlap check between every `position: absolute` element and every `<h1>`, `<h2>`, `[data-stat]`, and `button` inside the section. Any intersection → flag and re-position.
 
+### ❌ Decorative stat-chip / metric-pill / "live status" floating cards around a mockup
+**Why it's slop:** The "P99 LATENCY · LIVE / 42ms ▼ 8.2%" floating chip pattern. Looks impressive at first glance — until you realize every AI-generated SaaS hero has 2-4 of them dotted around the product mockup, all communicating fake-real-time stats nobody asked for. Pure decoration that screams "I'm trying to look like Linear/Vercel."
+
+**Fix — the FLOATING-CHIP RULE:**
+
+- **Hero default = ZERO floating chips.** The product mockup speaks for itself. The dual CTA + headline + subtext do the selling.
+- **Allowed: ONE chip MAX**, and only if it surfaces a critical product value the user CAN'T see otherwise (e.g. "Scanning… 247 services connected" because you literally couldn't tell that from the dashboard alone).
+- **Banned: stat chips that DUPLICATE info already visible** ("P99 latency 42ms" when the dashboard mockup already shows latency).
+- **Banned: stacks of 2-3 chips around the mockup** at varying corners. That's the literal AI tell.
+- **Banned: fake "LIVE" / "ONLINE" / "SYNCING" status badges** that imply real-time data without actually doing anything.
+- **Banned: chips with arrows + percentages** (`▼ 8.2%`, `▲ 12%`) unless they reflect actual product data the user is asking about.
+
+If you wrote a chip and can't explain in one sentence what unique product truth it reveals — DELETE IT.
+
+### ❌ Marquees / infinite-scroll bands with visible loop seam ("N-shaped" loop)
+**Why it's slop:** The single most-recognized "broken animation" AI tell. The loop point is visible inside the viewport — you can see logos / text mid-loop fading out and restarting. Owner literally sent a screenshot of this failure with "Outlier" appearing twice in the visible band.
+
+**Fix — the SEAMLESS LOOP RULES:**
+
+1. **Duplicate the content INSIDE the marquee track.** The animation translates `-50%` (not `-100%`), and the track contains TWO copies of the items. So as the first set scrolls off-screen, the second set is already there to take its place — invisible loop point.
+   ```jsx
+   <div className="t-marquee-track">
+     {items.map(...)}
+     {items.map(...)}  {/* DUPLICATE — required for seamless loop */}
+   </div>
+   ```
+   ```css
+   @keyframes scroll {
+     from { transform: translateX(0); }
+     to   { transform: translateX(-50%); }  /* NOT -100% */
+   }
+   ```
+
+2. **Edge mask gradient** that fully fades the leftmost and rightmost ~80px to the section background:
+   ```css
+   .t-marquee-container {
+     mask-image: linear-gradient(90deg, transparent 0%, black 80px, black calc(100% - 80px), transparent 100%);
+   }
+   ```
+   Without this mask, the entry/exit of items is visible — looks janky.
+
+3. **Use `transform: translateX()` only** — never animate `left` or `margin-left` (layout reflow per frame, kills mobile fps).
+
+4. **Speed:** 30-60 seconds for ONE full loop is the readable range. Faster = nausea, slower = nobody notices the motion.
+
+5. **Pause on hover (optional)** if items are clickable — but never pause an ambient logo wall.
+
+6. **No fewer than 8 items per copy** — if you have 4 logos, duplicate to 8 inside ONE copy, then the track has 16 total. Too few items = the seam is unavoidable.
+
+7. **Width math:** the track must be wider than 200% of the visible container so there's always content to scroll into view. `width: max-content` + duplicated items handles this automatically.
+
+See `recipes/animations.md` § Marquee for the canonical implementation.
+
 ### ❌ `<Loader2 className="animate-spin" />` for every loading state
 **Why it's slop:** The most-cited AI tell. Recognized instantly by any designer.
 **Fix:**

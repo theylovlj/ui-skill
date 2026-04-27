@@ -345,6 +345,146 @@ Use the standard Tailwind scale. Never invent gaps like `gap-[13px]`.
 
 ---
 
+## RESPONSIVE / FLUID SIZING
+
+**Build the desktop view first, then enforce mobile collapse explicitly.** Mobile is NOT "the desktop view at smaller width" — it's a different composition.
+
+### Breakpoint stack (Tailwind defaults — DON'T deviate)
+
+```
+sm:   640px   small phones / large phones landscape
+md:   768px   tablets / iPad portrait
+lg:   1024px  small laptops / iPad landscape
+xl:   1280px  desktops
+2xl:  1536px  large desktops
+```
+
+**Test at exactly these viewports** with Playwright `browser_resize`:
+- **375px** — iPhone SE / 14 (the worst-case narrow modern phone)
+- **390px** — iPhone 14 Pro
+- **768px** — iPad portrait (md: breakpoint enters)
+- **1024px** — iPad landscape / small laptop (lg: enters)
+- **1280px** — standard desktop (xl: enters)
+
+If any of those break, the page isn't shipped.
+
+### Fluid type with `clamp()` for hero scale
+
+The hero headline MUST scale fluidly between phones and desktops. Pure Tailwind text-XL classes jump in steps — premium uses fluid math.
+
+```css
+/* Hero headline — clamp(min, fluid, max) */
+font-size: clamp(2.25rem, 5vw + 1rem, 5rem);
+/* 36px on tiny phones → 80px on wide desktops, smooth in between */
+
+/* H2 section heading */
+font-size: clamp(1.875rem, 3vw + 0.5rem, 3rem);
+/* 30px → 48px */
+
+/* Body */
+font-size: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
+/* 16px → 18px */
+```
+
+In Tailwind via arbitrary values: `text-[clamp(2.25rem,5vw+1rem,5rem)]`.
+
+### Hero scaling formula
+
+When fluid clamp() isn't a fit (e.g. you want clean Tailwind classes):
+
+| Element | mobile | tablet (md:) | desktop (lg:) | wide (xl:) |
+|---|---|---|---|---|
+| Hero H1 | `text-4xl` (36px) | `text-5xl` (48px) | `text-6xl` (60px) | `text-7xl` (72px) |
+| Section H2 | `text-3xl` | `text-4xl` | `text-5xl` | `text-5xl` |
+| Body | `text-base` | `text-base` | `text-lg` | `text-lg` |
+| Section padding-y | `py-16` | `py-24` | `py-32` | `py-40` |
+| Container px | `px-5` | `px-8` | `px-12` | `px-12` |
+
+Tailwind: `text-4xl md:text-5xl lg:text-6xl xl:text-7xl`
+
+### Mobile collapse contracts (HARD RULES)
+
+- **Asymmetric grids MUST collapse to single-column.** Use `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` — NEVER `md:grid-cols-3` alone (breaks below 768px).
+- **Bento grids MUST become a single stack on mobile.** All `col-span-X` overrides reset to `col-span-1` below `md:`.
+- **Side-by-side hero (text + image) MUST stack vertically on mobile.** Text always above image on mobile (selling-first), regardless of which side it sits on at desktop.
+- **Tab interfaces stay horizontal until <640px**, then become a horizontal scroll strip OR collapse to a `<select>` dropdown.
+
+### Touch targets (mobile)
+
+Minimum `44x44px` for any tappable element on touch devices (Apple HIG / WCAG 2.5.5):
+
+```css
+button, a[role="button"], input[type="checkbox"], .clickable {
+  min-width: 44px;
+  min-height: 44px;
+}
+```
+
+In Tailwind: `min-h-11 min-w-11` (11 × 4px = 44px).
+
+CTAs / nav items / icon buttons should comfortably exceed this — `h-12` (48px) or `h-14` (56px) is the premium target.
+
+### Viewport units — use `dvh` not `vh`
+
+- `100vh` is BROKEN on iOS Safari (jumps when address bar collapses/expands).
+- Use `100dvh` (dynamic viewport height) instead — always. See `anti-slop.md` § MOBILE.
+
+### Responsive containers
+
+```tsx
+{/* Desktop wide content with tight phone padding */}
+<div className="max-w-7xl mx-auto px-5 md:px-8 lg:px-12">
+  ...
+</div>
+
+{/* Hero copy column — narrower max-w + center */}
+<div className="max-w-3xl mx-auto px-5 md:px-8">
+  ...
+</div>
+```
+
+### Image sizing (responsive)
+
+Use `<img>` with `srcSet` for fluid scaling:
+```tsx
+<img
+  src="/hero.webp"
+  srcSet="/hero-640.webp 640w, /hero-1280.webp 1280w, /hero-1920.webp 1920w"
+  sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 800px"
+  alt=""
+  loading="eager"
+  fetchPriority="high"
+/>
+```
+
+For Next.js: use `next/image` with explicit `sizes` prop.
+
+### Mobile-only / desktop-only with Tailwind
+
+```html
+<!-- Hide on mobile, show on tablet+ -->
+<div className="hidden md:block">...</div>
+
+<!-- Show on mobile, hide on tablet+ -->
+<div className="block md:hidden">...</div>
+
+<!-- Different content per breakpoint (use sparingly) -->
+<h1 className="md:hidden">Mobile headline</h1>
+<h1 className="hidden md:block">Longer desktop headline with more nuance</h1>
+```
+
+Don't abuse this — keep ONE source of truth where possible.
+
+### Common responsive failures
+
+- **Text overflows on narrow phones** → use `break-words` or shrink font-size at `sm:` breakpoint
+- **Image overflows container** → add `max-w-full h-auto`
+- **Fixed-width components** (`w-[480px]`) → use `w-full max-w-[480px]` instead
+- **Touch targets too small** → enforce `min-h-11 min-w-11`
+- **Hover states broken on mobile** → use `active:` pseudo-class for press feedback, never rely on `hover:` for primary affordance
+
+---
+
 ## MOTION PRESETS
 
 Always import from this set. Never write `cubic-bezier()` manually for primary motion.

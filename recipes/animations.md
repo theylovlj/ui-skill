@@ -1220,47 +1220,83 @@ document.querySelectorAll('.t-draw path').forEach(p => {
 
 ## 25. Marquee (infinite horizontal scroll)
 
-**When to use:** Logo tickers, social proof bands, "trusted by" rows, scrolling testimonials. Duplicated content + `transform: translateX` = seamless loop.
+**When to use:** Logo tickers, social proof bands, "trusted by" rows, scrolling testimonials.
+
+### THE THREE MANDATORY RULES (skip any one and the loop visibly seams)
+
+The owner has tested: AI gets this wrong constantly. The fix is non-negotiable:
+
+1. **DUPLICATE THE CONTENT** inside the track. The animation translates `-50%`, NOT `-100%`. The track holds two identical sets of items back-to-back. As copy 1 scrolls off-screen left, copy 2 takes its place — invisible loop.
+2. **EDGE MASK IN PIXELS, NOT PERCENT.** Use `linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%)`. A 10% mask is too narrow on wide viewports; a fixed 80px keeps the fade strong regardless of width.
+3. **AT LEAST 8 ITEMS PER COPY.** If you have 5 logos, repeat them within ONE copy until you have 10, then duplicate the whole thing. Too few items per copy = the seam is unavoidable because the track isn't wide enough to hide it.
+
+### Code (canonical seamless implementation)
 
 ```css
 :root {
-  --marquee-dur: 30s;
+  --marquee-dur: 40s;     /* 30-60s range; <30s feels frantic, >60s feels dead */
   --marquee-gap: 48px;
 }
 
 .t-marquee {
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
-          mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  width: 100%;
+  /* Pixel-based edge mask — strong fade no matter how wide */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
 }
 .t-marquee-track {
   display: flex;
   gap: var(--marquee-gap);
-  width: max-content;
+  width: max-content;            /* track is wider than container — required */
   animation: t-marquee-scroll var(--marquee-dur) linear infinite;
   will-change: transform;
 }
-.t-marquee:hover .t-marquee-track { animation-play-state: paused; }
 
 @keyframes t-marquee-scroll {
   from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  to   { transform: translateX(-50%); }   /* -50% NOT -100% */
 }
+
+/* Pause on hover — only if items are clickable. Don't use for ambient logo walls. */
+/* .t-marquee:hover .t-marquee-track { animation-play-state: paused; } */
 
 @media (prefers-reduced-motion: reduce) {
   .t-marquee-track { animation: none !important; }
 }
 ```
 
-```html
-<div class="t-marquee">
-  <div class="t-marquee-track">
-    <!-- Render the list TWICE back-to-back so the -50% loop is seamless -->
-    <span>Logo A</span><span>Logo B</span><span>Logo C</span>
-    <span>Logo A</span><span>Logo B</span><span>Logo C</span>
+```jsx
+const items = ["Outlier", "Cadence", "Filo", "Helio", "Quanta", "Rivet", "Northstar", "Brick & Bell"];
+
+<div className="t-marquee">
+  <div className="t-marquee-track">
+    {/* Copy 1 */}
+    {items.map((it) => <span key={`a-${it}`}>{it}</span>)}
+    {/* Copy 2 — REQUIRED. Same content, in order. Hide from screen readers. */}
+    <span aria-hidden="true" style={{ display: "contents" }}>
+      {items.map((it) => <span key={`b-${it}`}>{it}</span>)}
+    </span>
   </div>
 </div>
 ```
+
+### How to verify it's seamless
+
+1. Open the page in browser, scrub time to ~5 seconds before a loop completes.
+2. Watch the rightmost edge: items should slide IN from off-screen smoothly. If you see items APPEAR mid-band or fade-in inside the visible area → broken.
+3. Scrub to mid-loop. The leftmost visible item should match the (N+1)-th item if everything's tiled correctly.
+4. The mask gradient should fully fade items leaving the band — you should never see a half-cut item at the visible edge.
+
+### Common failures that produce the "N-shape" (visible seam)
+
+- ❌ Single copy of items in track + animating `-100%` → there's nothing on the right when items scroll off, leaving a gap
+- ❌ Mask in `%` (e.g. `transparent 0%, #000 5%, ...`) → on wide viewports, 5% is too narrow to hide entry/exit
+- ❌ Animating `left:` or `margin-left:` → triggers layout reflow per frame, AND the animation goes from 0 to large pixel value visibly resetting at end
+- ❌ Track width set to a fixed value → if items don't fill it, the loop point is exposed
+- ❌ Too few items per copy (3-4 items, container is wide) → the seam is wider than the items
+
+If you see ANY of these in your code → fix before shipping.
 
 ---
 

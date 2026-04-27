@@ -234,6 +234,9 @@ If you catch yourself doing any of these CATEGORIES, stop and re-open the refere
 - ❌ **Generic content** — emojis in UI, hero copy >8 words / >3 lines, "Jane Doe" names, "Acme" brands, filler verbs (Elevate/Unleash/Empower), round-fake numbers, Unsplash URLs. See `anti-slop.md` § CONTENT + TYPOGRAPHY.
 - ❌ **Stripping recipe motion** — removing `motion.div`, `whileHover`, `AnimatePresence`, `layout`/`layoutId`, or `t-*` classes from a recipe to "simplify".
 - ❌ **Floating decoration overlapping focal content** — sticker/note/badge `position: absolute` on top of H1/H2/big-number/CTA. See `anti-slop.md` § COMPONENT for SAFE-ZONE rule.
+- ❌ **Decorative stat-chip / metric-pill floats around mockups** — "P99 LATENCY · LIVE / 42ms" type chips dotted around the hero. Default = ZERO chips. Max 1 if it surfaces unique product info. See `anti-slop.md` § COMPONENT FLOATING-CHIP RULE.
+- ❌ **Marquee with visible loop seam (N-shape)** — items appear/restart mid-band. Track must duplicate content + animate `-50%` + use pixel-based edge mask. See `recipes/animations.md` § 25 Marquee + `anti-slop.md` § COMPONENT.
+- ❌ **Skipping responsive breakpoints** — desktop-only build that breaks at 375px / 390px / 768px. Test at all 5 breakpoints with Playwright `browser_resize`. See `tokens.md` § RESPONSIVE / FLUID SIZING.
 - ❌ **Skipping `review.md`** because "it looks fine".
 - ❌ **Skipping the `visual-thinking.md` Question Gate** (output ships visibly worse — flat depth, inconsistent light, no expensive moment).
 
