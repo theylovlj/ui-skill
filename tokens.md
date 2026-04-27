@@ -402,6 +402,59 @@ When fluid clamp() isn't a fit (e.g. you want clean Tailwind classes):
 
 Tailwind: `text-4xl md:text-5xl lg:text-6xl xl:text-7xl`
 
+### LARGE-SCREEN SCALE-UP (the "27-inch monitor" rule)
+
+**The problem:** A page built with `max-w-7xl` (1280px) looks like a tiny island floating in the middle of a 1920px / 2560px / 4K monitor. The hero composition that felt right on a 14" laptop becomes a postage stamp on a 27" iMac.
+
+**The rule:** Above `xl:` (1280px), the page MUST keep growing — type, mockup, padding, and container width all scale up so a big monitor sees the SAME visual composition as a laptop, just larger. NEVER cap the design at 1280px and let the monitor swallow it.
+
+**Implementation — apply ALL of these on every hero:**
+
+1. **Use `clamp()` for the hero headline** with a wider top end:
+   ```css
+   font-size: clamp(2.25rem, 4.5vw + 1rem, 7rem);
+   /* 36px on phones → 112px on a 27" monitor, smooth in between */
+   ```
+
+2. **Container max-width scales past `xl:`:**
+   ```tsx
+   {/* OLD — caps at 1280px, looks tiny on big screens */}
+   <div className="max-w-7xl mx-auto">
+
+   {/* NEW — keeps growing on 2xl: and 3xl: */}
+   <div className="max-w-7xl 2xl:max-w-[1500px] [@media(min-width:1920px)]:max-w-[1760px] mx-auto">
+   ```
+
+   Or in fluid math:
+   ```tsx
+   <div className="mx-auto px-5 md:px-8 lg:px-12 w-[min(92vw,1760px)]">
+   ```
+
+3. **Hero mockup scales with viewport** — never a fixed `max-w-2xl` on the device wrapper. Use:
+   ```tsx
+   <div className="relative w-full max-w-[clamp(28rem,42vw,52rem)]">
+     {/* mockup chrome + screen content */}
+   </div>
+   ```
+   On 1280px desktop: ~538px wide. On 1920px monitor: ~806px. On 2560px: ~832px (capped). Same proportion of the column, never a tiny island.
+
+4. **Section padding grows past `xl:`:**
+   ```tsx
+   className="py-16 md:py-24 lg:py-32 xl:py-40 2xl:py-48"
+   ```
+
+5. **Body / subhead grows too** (subtle but matters):
+   ```css
+   font-size: clamp(1rem, 0.4vw + 0.875rem, 1.25rem);
+   /* 16px → 20px */
+   ```
+
+6. **Test at 1920×1080 AND 2560×1440** with Playwright `browser_resize`. If the design feels small or floats in negative space at 1920px+, the scale-up is broken.
+
+**Anti-pattern:** `max-w-7xl` followed by no further scaling. That's the AI default and it always looks tiny on a real monitor.
+
+**Mental model:** The user's screen size should change how BIG the design is, not how MUCH design fits on it. A laptop and a monitor see the same layout — one's just zoomed in.
+
 ### Mobile collapse contracts (HARD RULES)
 
 - **Asymmetric grids MUST collapse to single-column.** Use `grid-cols-1 md:grid-cols-2 lg:grid-cols-3` — NEVER `md:grid-cols-3` alone (breaks below 768px).
