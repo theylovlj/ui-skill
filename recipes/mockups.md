@@ -1,12 +1,22 @@
 # recipes/mockups.md — Device Frames + Mockup Primitives
 
-**This recipe replaces the #1 worst AI default: fake dashboards built with divs and gradients.** When a hero needs a product mockup, you have THREE valid options:
+**This recipe replaces the #1 worst AI default: fake dashboards built with divs and gradients.** When a hero needs a product mockup, you have FOUR valid options, **in priority order**:
 
-1. **Real screenshot** — `<img src="/dashboard.png" />` of the actual product. Always best.
-2. **Device frame + minimal real content** — wrap a small, thoughtful UI snippet in a frame from this recipe. The chrome does the heavy lifting.
-3. **Decorative abstract** — only if the product is conceptual (no UI yet). Use one of the SVG primitives, never freeform divs.
+1. **🥇 Bundled real-device PNG** — drop in a photoreal mockup from `assets/mockups/`. **DEFAULT CHOICE — see `recipes/device-mockups-catalog.md`.** 17 photoreal mockups bundled (iPhone 16 Pro, MacBook Pro/Air, iPad Air, Apple Watch, iMac, Pixel 9, Dell XPS) — all CC0 licensed, transparent WebP, ~14KB each.
+2. **Real screenshot** of the actual product (`<img src="/dashboard.png" />`). Always best when the user provides one.
+3. **Device frame + minimal real content** — wrap a small UI snippet in an SVG frame from this recipe. Use when you need **theme-aware (light/dark) chrome** that real PNGs can't provide.
+4. **Decorative abstract** — only if the product is conceptual (no UI yet). Use one of the SVG primitives below, never freeform divs.
 
-**BANNED:** Inventing a fake dashboard inline with `<div>`s + gradients + fake charts + fake stat cards labeled "Sales / Revenue / Activity". This is the laziest, most AI-tell pattern in the playbook. The frames in this file are the guardrail.
+**BANNED:** Inventing a fake dashboard inline with `<div>`s + gradients + fake charts + fake stat cards labeled "Sales / Revenue / Activity". This is the laziest, most AI-tell pattern in the playbook. Both the bundled PNGs (option 1) and SVG frames (option 3) are the guardrail.
+
+> **Default decision flow:**
+> - Phone mockup needed? → `assets/mockups/iphone-16-pro-black.webp`
+> - Laptop mockup needed? → `assets/mockups/macbook-pro-14.webp`
+> - Tablet? → `assets/mockups/ipad-air-13-landscape-space-gray.webp`
+> - Desktop? → `assets/mockups/imac-24-silver.webp`
+> - Watch? → `assets/mockups/apple-watch-44mm.webp`
+>
+> See `recipes/device-mockups-catalog.md` for the full catalog with screen-area coordinates for placing screenshot content INSIDE each device.
 
 ---
 

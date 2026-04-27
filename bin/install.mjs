@@ -44,7 +44,7 @@ console.log("");
 console.log("  ╔═══════════════════════════════════════════╗");
 console.log("  ║   /ui skill installer                     ║");
 console.log("  ║   Premium UI for Claude Code              ║");
-console.log("  ║   v2.2.1 — marquee + responsive + chips    ║");
+console.log("  ║   v2.3.0 — 17 photoreal device mockups       ║");
 console.log("  ╚═══════════════════════════════════════════╝");
 console.log("");
 

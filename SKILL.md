@@ -214,7 +214,8 @@ Every interactive element + every section must have animation. Pull from `recipe
 | `mobile-onboarding.md` | Mobile flows | Single task per screen, vast whitespace, pill CTAs, cross-fade transitions |
 | `morphing-button.md` | Newsletter / signup CTA | Click-to-expand pill (200px → 420px) via Framer Motion `layout` |
 | `text-roll.md` | Brand-swap headline word | Vertical word-roll inside an inline pill that resizes per brand |
-| `mockups.md` | Product mockups in heroes | Device frames (BrowserFrame, iPhoneFrame, MacBookFrame, AppleWatchFrame, TabletFrame) + content primitives (LineChart, KPIStrip, Sidebar, TableRows, ChatThread, etc). NEVER fake UI with divs. |
+| `mockups.md` | Product mockups in heroes (overview + decision tree) | Priority: bundled PNG > real screenshot > SVG frame > primitive |
+| `device-mockups-catalog.md` | **DEFAULT for product mockups** — 17 photoreal device PNGs | iPhone 16 Pro, MacBook Pro/Air, iPad Air, Apple Watch, iMac, Pixel 9, Dell XPS. Transparent WebP, ~14KB each. With screen-area coordinates. |
 | `backgrounds-catalog.md` | Hero backgrounds | 26 bundled WebP backgrounds with text-overlay strategy per category |
 | `animations.md` | **EVERY BUILD** — animation library | **41 CSS animations** (transitions.dev style). Hover, scroll-entrance, ambient, loading, text effects, toggle. Pull from this for every interactive moment. |
 | `visual-thinking.md` | EVERY BUILD — Step 1.6 forced reasoning | 5-phase Question Gate (composition / light / depth / materiality / polish), banned defaults, two-part shadow law, key-light inset, grain overlay, vignette, expensive-moment list, optical alignment notes, three pre-flight tests |

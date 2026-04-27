@@ -1,7 +1,7 @@
 {
   "name": "@theylovlj/ui-skill",
-  "version": "2.2.1",
-  "description": "Premium /ui design skill for Claude Code. Visual-thinking framework, seamless marquees, responsive sizing, 41 animations, 28 recipes, device-frame mockups, decoration safe-zone. Drops AI-tell defaults; competes with award-winning sites.",
+  "version": "2.3.0",
+  "description": "Premium /ui design skill for Claude Code. Visual-thinking framework, 17 photoreal device mockups, seamless marquees, responsive sizing, 41 animations, 28 recipes, device-frame mockups, decoration safe-zone. Drops AI-tell defaults; competes with award-winning sites.",
   "bin": {
     "ui-skill": "bin/install.mjs"
   },
