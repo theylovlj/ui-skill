@@ -6,6 +6,56 @@ Each pattern below is a default that Claude (and other LLMs) gravitate toward wh
 
 ---
 
+## THE GSTACK BANNED-DEFAULT BLACKLIST
+
+Hard rejection list — if any of these are in the output, it's slop. Mirrored in `visual-thinking.md`.
+
+### ❌ Purple/violet/indigo gradient backgrounds
+**Why it's slop:** The AI-defaults-here color. Every cookie-cutter LLM landing page lands here.
+**Fix:** No purple/violet/indigo as the bg gradient. Use one of the 4 palette presets in `tokens.md`. If you need depth, use a soft single-hue radial OR a warm-cool split (`tokens.md` § ATMOSPHERE).
+
+### ❌ Blue→purple color schemes
+**Why it's slop:** The default Tailwind+ChatGPT palette. Reads as "I picked the first two colors I thought of."
+**Fix:** ONE accent color from the four palettes. Neutral text + neutral bg + ONE accent.
+
+### ❌ 3-column feature grid with icon-in-circle + bold title + 2-line desc
+**Why it's slop:** The cardinal sin. Single most-recognized AI tell on the internet. The literal Bootstrap 4 SaaS template.
+**Fix:** Bento grid (`recipes/features-bento.md`) with mixed sizes. Or a sticky 3-step (`recipes/features-3step.md`). Or asymmetric split with one full-bleed feature + two small stacked.
+
+### ❌ Emoji used as design elements
+**Why it's slop:** Emojis are CONTENT, never decoration. Renders inconsistently across OS, instantly screams template.
+**Fix:** Phosphor or Radix icons. Or no icon at all — typography does the work.
+
+### ❌ Cookie-cutter section rhythm (hero → 3-features → testimonials → pricing → CTA)
+**Why it's slop:** Literal Vercel Geist template structure. Every AI landing page from 2023-2026.
+**Fix:** Vary the rhythm — Hero → Trust logos → Story → Demo → Pricing → FAQ → Footer, OR Hero → How-it-works → Features → Testimonials → Pricing → Footer. Mix it up section by section.
+
+### ❌ Default font stacks (Inter regular, Roboto, Arial, system) without intent
+**Why it's slop:** Picked the font because it's free, not because it serves the work.
+**Fix:** One of the three named pairings in `tokens.md` § FONT STACKS. Inter Tight + Instrument Serif, Geist + PP Editorial, or Uncut Sans + Reply.
+
+### ❌ Decorative blobs / SVG dividers as filler
+**Why it's slop:** Used to hide that there's no content in the section.
+**Fix:** If a section needs a divider, the section itself is wrong — either commit to real content or remove. Use bundled WebP backgrounds in `assets/backgrounds/` instead of SVG blob filler.
+
+### ❌ Glassmorphism + neon glow + blurred orbs combo
+**Why it's slop:** Peak 2021 AI aesthetic. Reads as "trying too hard."
+**Fix:** Liquid Glass spec only (`tokens.md`). Glass for sticky nav and floating overlays, never for cards/sections. No orb stack.
+
+### ❌ Monospace everywhere (the hackathon look)
+**Why it's slop:** Mono is for code, data, labels — not body. Mono everywhere = "I learned dev tools yesterday."
+**Fix:** Sans for body and headlines. Mono only for: code blocks, numeric data in dashboards, meta labels in corners, eyebrow kickers.
+
+### ❌ Generic SaaS card grid as first impression
+**Why it's slop:** Three identical rounded-2xl shadcn cards on white. Below-the-fold pattern shoved into the hero.
+**Fix:** Hero is for ONE focal moment — headline + product visual + dual CTA. Save the card grid for after the fold.
+
+### ❌ Beautiful imagery with weak brand presence
+**Why it's slop:** The photo overpowers the brand and the page becomes a stock-photo gallery. Visitor remembers the photo, not you.
+**Fix:** Brand wordmark / accent / type sits ON or IN the image. Photo serves the brand, not the other way around.
+
+---
+
 ## MOBILE / VIEWPORT ANTI-PATTERNS
 
 ### ❌ `h-screen` for full-height hero sections
@@ -44,6 +94,10 @@ See `tokens.md` § Z-INDEX DISCIPLINE for the standard stack.
 
 ### ❌ More than 3 colors total in the design
 **Fix:** ONE accent + neutral text + neutral background. That's it. Photography and gradients introduce other colors *in images*, not as flat fills.
+
+### ❌ Pure neutral grays (`gray-500`, `slate-500`, `zinc-500`)
+**Why it's slop:** Pure neutral grays are lifeless. Premium designs tint grays toward the brand hue at low chroma, so the gray belongs to the palette instead of fighting it.
+**Fix:** Use an HSL/OKLCH ramp where neutrals share the brand's hue at chroma 0.005-0.015. On a warm-coral-accent build, gray text becomes `oklch(45% 0.01 30)` — slightly warm. On a cool-indigo build, `oklch(45% 0.015 250)` — slightly cool. Same lightness, different micro-warmth.
 
 ---
 
@@ -97,6 +151,10 @@ See `tokens.md` § Z-INDEX DISCIPLINE for the standard stack.
 **Why it's slop:** AI generated the structure but ran out of content. Maximum dead-space crime.
 **Fix:** Every section must have meaningful content density. If you don't have content for a section, REMOVE the section. Don't ship a hollow shell.
 
+### ❌ Linear spacing scale (4 / 8 / 12 / 16 / 20 / 24 in equal steps)
+**Why it's slop:** Linear scales feel mechanical — every gap looks like the previous gap plus 4. Premium designs use NON-LINEAR scales where the gaps grow.
+**Fix:** Use the non-linear scale: `4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128`. Notice the jumps — 16→24 (1.5x), 24→32 (1.33x), 32→48 (1.5x), 48→64 (1.33x), 64→96 (1.5x). The growth produces visual rhythm; linear produces monotone.
+
 ### ❌ Footer with 5 columns of mostly-empty link lists
 **Why it's slop:** Default footer with placeholder columns ("Product / Company / Resources / Legal / Social") and 1-2 real links per column.
 **Fix:** Either fewer, denser columns, OR an editorial-style footer with the giant ghost wordmark + sparse, real links.
@@ -111,6 +169,23 @@ See `tokens.md` § Z-INDEX DISCIPLINE for the standard stack.
 1. Use a real screenshot of the product (`<img src="/dashboard.png" />`)
 2. Use a device frame + clean content primitives from `recipes/mockups.md`
 3. If product has no UI yet, use a single hero photo (no fake mockup at all)
+
+### ❌ Floating decoration cards that overlap text, numbers, or CTAs
+**Why it's slop:** The classic AI tell where a "playful" sticker/note/badge gets `position: absolute` placed without checking what's underneath. Result: the float lands on top of a stat number, a CTA button, or H1 — and it looks like a layout bug, not a deliberate composition. Owner saw this exact failure on a Vellum hero where a floating "notes/main" card sat on top of the "8,412" stat.
+
+**Fix — the SAFE-ZONE rule:**
+
+Floating decorative elements (stickers, note cards, badges, pills, accent shapes) are only allowed in the **margin safe zone** of the section, NEVER inside the focal content area.
+
+- **Section anatomy:** every section has (a) a focal content rectangle (where text + CTAs live, max-w-4xl roughly centered) and (b) a margin safe zone (the space outside that focal rectangle but inside the section padding).
+- **Decorations live ONLY in the safe zone.** Top-left corner, top-right corner, bottom-left corner, bottom-right corner. Or hugging the left/right edge mid-section. NEVER in the horizontal middle band where text lives.
+- **Set explicit z-index ONLY on the focal content** (`z-10`) and leave decorations at default (`z-0`). If a decoration must sit at a higher z to be visible, it shouldn't be there in the first place.
+- **Bounding-box check:** before placing any `absolute` decoration, mentally compute its bounding box. If that box intersects the bounding box of any H1, H2, big-number stat, or CTA button → move it. No exceptions.
+- **Max 4 floating decorations per section.** More than 4 is clutter, not composition.
+- **Asymmetric placement:** never place 2 decorations symmetrically (e.g. one top-left + one top-right at the same y). Vary y-offset and rotation per decoration.
+- **Always rotate decorations** by `±6deg` to `±15deg` so they don't read as accidental UI.
+
+**Verification (in `review.md` step):** at every section, run a Playwright `boundingBox()` overlap check between every `position: absolute` element and every `<h1>`, `<h2>`, `[data-stat]`, and `button` inside the section. Any intersection → flag and re-position.
 
 ### ❌ `<Loader2 className="animate-spin" />` for every loading state
 **Why it's slop:** The most-cited AI tell. Recognized instantly by any designer.
@@ -131,6 +206,10 @@ See `tokens.md` § Z-INDEX DISCIPLINE for the standard stack.
 ### ❌ Modal accordions for FAQ (`<Accordion>` from shadcn defaults)
 **Why it's slop:** Boxy borders, default chevron rotation, no design opinion.
 **Fix:** Thin pill rows with hover hint, expanding inline. See `recipes/faq-pillrows.md`.
+
+### ❌ Borders as the primary visual divider
+**Why it's slop:** A 1px border around every card is the laziest divider. Refactoring UI rule: borders are the LAST resort. The default LLM move is `border border-gray-200` everywhere.
+**Fix:** Banish borders. Use SHADOW (the two-part stack from `tokens.md` § ATMOSPHERE), SPACE (extra gap between groups), or BG CONTRAST (slight bg-color shift between sections) instead. Borders allowed only for: input fields, accent strips on active tabs, hairline dividers between table rows.
 
 ### ❌ Buttons with `rounded-md` and a chevron `<ArrowRight />`
 **Why it's slop:** The most basic shadcn button pattern.

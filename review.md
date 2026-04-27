@@ -19,7 +19,7 @@ If you cannot reach the running site, **state this explicitly** in the final mes
 
 ---
 
-## STEP B — The 16 checks
+## STEP B — The 20 checks
 
 Verify one, mark, then next. **Mobile-test:** use Playwright `browser_resize` at 375px — confirm asymmetric layouts collapse to single-column.
 
@@ -69,7 +69,39 @@ Scan rendered page for any emoji in headings, buttons, labels, alt text.
 Verify: no `John Doe`/`Sarah Chan`, no `Acme`/`Nexus`, no filler verbs (`Elevate`/`Unleash`/`Empower`), no `99.99%`/`50%` round-fakes, no `unsplash.com` URLs.
 
 ### ✅ 16. Animation uses transform + opacity only — see `anti-slop.md` § MOBILE
+
+### ✅ 17. NO floating decoration overlaps text/numbers/CTAs (SAFE-ZONE rule)
+Every `position: absolute` or `position: fixed` decorative element (sticker, note card, badge, accent shape) must NOT intersect any `<h1>`, `<h2>`, big-number stat, or CTA button bounding box. See `anti-slop.md` § COMPONENT for the full SAFE-ZONE rule.
+
+**Playwright verification:**
+```js
+const decorations = await page.$$('[data-decoration], section [class*="absolute"]');
+const focal = await page.$$('h1, h2, button, [data-stat]');
+for (const d of decorations) {
+  const dBox = await d.boundingBox();
+  if (!dBox) continue;
+  for (const f of focal) {
+    const fBox = await f.boundingBox();
+    if (!fBox) continue;
+    const overlap = !(dBox.x + dBox.width < fBox.x ||
+                     fBox.x + fBox.width < dBox.x ||
+                     dBox.y + dBox.height < fBox.y ||
+                     fBox.y + fBox.height < dBox.y);
+    if (overlap) flag(`Decoration overlaps focal element`);
+  }
+}
+```
+If any overlap is flagged → re-position the decoration into the section's margin safe zone (corners or edge-hugging mid-section), never inside the focal content rectangle.
 Verify: `grep -rE "animate.*top|animate.*left|animate.*width|animate.*height" src/` returns zero.
+
+### ✅ 18. SQUINT TEST passes
+Apply 5-10px blur mentally (or via DevTools `filter: blur(8px)`). Does the focal element still dominate the composition? If everything is mush, hierarchy fails. Re-check Rule 2 (typography is the design) and `visual-thinking.md` Phase 1.
+
+### ✅ 19. GREYSCALE TEST passes
+Mentally desaturate the page. Does the visual hierarchy survive on VALUE contrast alone? If color is the only thing carrying hierarchy, the design is fragile. Premium designs work in greyscale. Add value contrast (darker bg behind important sections, lighter cards on darker bg, etc).
+
+### ✅ 20. ONE expensive moment is named
+The page has ONE detail that telegraphs "custom-built" vs "template". State which one in your final message. If you can't name one — re-read `visual-thinking.md` § THE EXPENSIVE MOMENT and add one before shipping.
 
 ---
 
@@ -106,7 +138,7 @@ Either animating layout props (use `transform`), backdrop-blur on scroll content
 
 ## STEP D — Final sign-off
 
-In your final message, list the 16 checks and their status:
+In your final message, list the 20 checks and their status:
 
 ```
 Review:
@@ -126,6 +158,10 @@ Review:
 ✅ No emojis in any rendered UI
 ✅ Content passes Jane Doe check
 ✅ All animations use transform + opacity
+✅ No floating decoration overlaps focal content (SAFE-ZONE)
+✅ Squint test passes — focal still dominates at 8px blur
+✅ Greyscale test passes — hierarchy survives on value alone
+✅ Expensive moment named: <state which one detail telegraphs custom-built>
 ```
 
 If any check fails, **fix it before shipping**. Do not ship with a known violation.

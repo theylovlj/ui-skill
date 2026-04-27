@@ -108,6 +108,14 @@ Before writing a single line, **silently pick ONE option from each menu below**.
 
 You do not show this menu to the user. You just pick and proceed.
 
+### Step 1.6 — DESIGN PLAN PREAMBLE (forces visual thinking)
+
+Before writing a single line of code, READ `visual-thinking.md` and silently answer its 5-phase Question Gate (Composition, Light, Depth, Materiality, Polish) in your `<thinking>` block.
+
+The owner has tested: every build that skipped this step shipped with floating decorations overlapping content, inconsistent light direction, no depth layering, and no "expensive moment". Answering these questions before code is what separates "good attempt" from "Awwwards-tier".
+
+**You do NOT show this thinking to the user.** It's an internal plan. But it MUST happen, and the answers MUST drive the code that follows.
+
 ### Step 2 — READ the recipe + tokens
 
 ```
@@ -209,6 +217,7 @@ Every interactive element + every section must have animation. Pull from `recipe
 | `mockups.md` | Product mockups in heroes | Device frames (BrowserFrame, iPhoneFrame, MacBookFrame, AppleWatchFrame, TabletFrame) + content primitives (LineChart, KPIStrip, Sidebar, TableRows, ChatThread, etc). NEVER fake UI with divs. |
 | `backgrounds-catalog.md` | Hero backgrounds | 26 bundled WebP backgrounds with text-overlay strategy per category |
 | `animations.md` | **EVERY BUILD** — animation library | **41 CSS animations** (transitions.dev style). Hover, scroll-entrance, ambient, loading, text effects, toggle. Pull from this for every interactive moment. |
+| `visual-thinking.md` | EVERY BUILD — Step 1.6 forced reasoning | 5-phase Question Gate (composition / light / depth / materiality / polish), banned defaults, two-part shadow law, key-light inset, grain overlay, vignette, expensive-moment list, optical alignment notes, three pre-flight tests |
 
 ---
 
@@ -224,7 +233,9 @@ If you catch yourself doing any of these CATEGORIES, stop and re-open the refere
 - ❌ **Mobile/perf killers** — `h-screen`, animating `top/left/width/height`, `useState` for continuous input, `cubic-bezier` for primary motion. See `anti-slop.md` § MOBILE + MOTION.
 - ❌ **Generic content** — emojis in UI, hero copy >8 words / >3 lines, "Jane Doe" names, "Acme" brands, filler verbs (Elevate/Unleash/Empower), round-fake numbers, Unsplash URLs. See `anti-slop.md` § CONTENT + TYPOGRAPHY.
 - ❌ **Stripping recipe motion** — removing `motion.div`, `whileHover`, `AnimatePresence`, `layout`/`layoutId`, or `t-*` classes from a recipe to "simplify".
+- ❌ **Floating decoration overlapping focal content** — sticker/note/badge `position: absolute` on top of H1/H2/big-number/CTA. See `anti-slop.md` § COMPONENT for SAFE-ZONE rule.
 - ❌ **Skipping `review.md`** because "it looks fine".
+- ❌ **Skipping the `visual-thinking.md` Question Gate** (output ships visibly worse — flat depth, inconsistent light, no expensive moment).
 
 **All of these mean: STOP. Re-read the relevant rule. Adapt the right recipe.**
 

@@ -9,7 +9,7 @@ const PACKAGE_ROOT = join(__dirname, "..");
 
 const TARGET = join(homedir(), ".claude", "skills", "ui");
 
-const FILES_TO_COPY = ["SKILL.md", "tokens.md", "anti-slop.md", "review.md", "architecture.md", "redesign.md", "image-generation.md"];
+const FILES_TO_COPY = ["SKILL.md", "tokens.md", "anti-slop.md", "review.md", "architecture.md", "redesign.md", "image-generation.md", "visual-thinking.md"];
 const DIRS_TO_COPY = ["recipes", "assets"];
 
 function copyDir(src, dest) {
@@ -44,7 +44,7 @@ console.log("");
 console.log("  ╔═══════════════════════════════════════════╗");
 console.log("  ║   /ui skill installer                     ║");
 console.log("  ║   Premium UI for Claude Code              ║");
-console.log("  ║   v2.1.0 — premium UI for Claude Code     ║");
+console.log("  ║   v2.2.0 — visual-thinking + safe zones   ║");
 console.log("  ╚═══════════════════════════════════════════╝");
 console.log("");
 

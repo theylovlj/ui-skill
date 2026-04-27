@@ -1,7 +1,7 @@
 {
   "name": "@theylovlj/ui-skill",
-  "version": "2.1.0",
-  "description": "Premium /ui design skill for Claude Code. 41 CSS animations, 28 recipes, device-frame mockups, motion-mandatory enforcement. Drops AI-tell defaults; competes with award-winning sites.",
+  "version": "2.2.0",
+  "description": "Premium /ui design skill for Claude Code. Visual-thinking framework, 41 animations, 28 recipes, device-frame mockups, decoration safe-zone. Drops AI-tell defaults; competes with award-winning sites.",
   "bin": {
     "ui-skill": "bin/install.mjs"
   },
@@ -13,6 +13,7 @@
     "architecture.md",
     "redesign.md",
     "image-generation.md",
+    "visual-thinking.md",
     "recipes/",
     "assets/",
     "bin/"
@@ -20,7 +21,7 @@
   "scripts": {
     "test": "node bin/install.mjs --dry-run"
   },
-  "keywords": ["claude-code", "skill", "ui", "design", "premium", "framer-motion", "tailwind", "react", "animations", "mockups"],
+  "keywords": ["claude-code", "skill", "ui", "design", "premium", "framer-motion", "tailwind", "react", "animations", "mockups", "visual-thinking"],
   "author": "theylovlj",
   "license": "MIT",
   "repository": {

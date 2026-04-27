@@ -74,6 +74,91 @@ For forbidden colors (teal, purple-to-blue gradient, pure `#fff`/`#000`), see `a
 
 ---
 
+## ATMOSPHERE & SURFACE DETAIL
+
+The single biggest gap between AI-generated and Awwwards-tier output. Every elevated surface, every hero, every dark-mode card uses these. See `visual-thinking.md` Phase 2 (Light) for the reasoning.
+
+### Two-part shadow system
+
+Every elevated card needs BOTH a tight contact shadow AND a wide ambient shadow. Single-layer shadows look CGI-fake.
+
+```css
+--shadow-card-contact:  0 1px 2px 0 rgb(0 0 0 / 0.06);           /* anchors element to surface */
+--shadow-card-ambient:  0 20px 40px -12px rgb(0 0 0 / 0.10);     /* ground shadow with directional offset */
+--shadow-card-stacked:
+  0 1px 2px 0 rgb(0 0 0 / 0.06),
+  0 20px 40px -12px rgb(0 0 0 / 0.10);
+```
+
+Apply: `box-shadow: var(--shadow-card-stacked);` — never use `--shadow-md` alone for an elevated card.
+
+For dark mode, tint shadows toward the bg hue, never pure black:
+
+```css
+--shadow-card-stacked-dark:
+  0 1px 2px 0 oklch(0.06 0.02 250 / 0.5),
+  0 20px 40px -12px oklch(0.06 0.02 250 / 0.4);
+```
+
+### Key-light inset highlight
+
+The "MacOS Big Sur key light" — 1px inset top highlight at white/8%. Most-cited premium tell on raised dark surfaces. Stack ABOVE the two-part shadow.
+
+```css
+--shadow-key-light-inset: inset 0 1px 0 rgb(255 255 255 / 0.08);
+
+/* Combined: */
+box-shadow:
+  var(--shadow-key-light-inset),
+  var(--shadow-card-stacked);
+```
+
+Pairs with a top-left light source so the highlight reads as a real caught edge.
+
+### Grain overlay class
+
+SVG turbulence noise at 4-8% opacity, fixed and pointer-events-none, mix-blend-mode overlay. Site-wide subtle texture. Single biggest "expensive" tell.
+
+```css
+.grain-overlay::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' /></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/></svg>");
+  mix-blend-mode: overlay;
+}
+```
+
+Apply once on `<body>` or root layout. Test 4 / 6 / 8% — pick the lowest where grain just barely registers.
+
+### Atmospheric vignette
+
+Subtle radial darkening at corners — focuses the eye, mimics camera lens fall-off. Heroes only.
+
+```css
+--bg-vignette: radial-gradient(ellipse at center, transparent 40%, rgb(0 0 0 / 0.4) 100%);
+```
+
+Layer ABOVE hero content with `pointer-events: none`.
+
+### Warm-cool split background
+
+Cross-page subliminal depth. Hero bg goes cool bottom-left → warm top-right (or inverse). Reads as physical 3D space.
+
+```css
+--bg-split-gradient: linear-gradient(
+  to top right,
+  oklch(0.16 0.02 250) 0%,    /* cool side */
+  oklch(0.18 0.02 30) 100%    /* warm side */
+);
+```
+
+Subtle is the point — if anyone notices it directly, it's too strong.
+
+---
+
 ## FONT STACKS — pick ONE per build
 
 Always pair a **bold grotesque sans** (body + UI + bulk of headlines) with **ONE italic-serif accent** (used for one word per headline, max).
@@ -184,6 +269,62 @@ Spec: `rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-medium
 
 ---
 
+## TYPOGRAPHY DETAIL (editorial-tier moves)
+
+These are the moves that separate "good type" from "Awwwards-tier type". Apply to display headlines and editorial sections. See `visual-thinking.md` for when to invoke them.
+
+### Negative tracking on display
+
+Display headlines must use NEGATIVE letter-spacing. Default tracking looks loose at scale.
+
+```css
+.display-headline {
+  font-size: clamp(3rem, 6vw, 6rem);
+  letter-spacing: -0.04em;   /* MANDATORY for display */
+  font-weight: 700;
+  line-height: 0.95;          /* tight leading on big type */
+}
+```
+
+Mid-weights (32-48px) at `-0.02em`. Body at default. Most templates miss this.
+
+### Mono eyebrow + serif headline (editorial-tier pairing)
+
+The single most-cited "premium" type pairing. Mono uppercase microscopic eyebrow above a serif (or italic-serif accent) headline.
+
+```html
+<div class="space-y-3">
+  <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+    Vol. 04 — Field Notes
+  </span>
+  <h1 class="font-serif text-6xl italic leading-[0.95] tracking-[-0.04em]">
+    The shape of <em>memory</em>.
+  </h1>
+</div>
+```
+
+The contrast — mono technical kicker + serif human headline — does the work. Use for editorial sites, agency portfolios, premium long-form.
+
+### Drop cap
+
+For long-form intros and editorial spreads. The first letter of the first paragraph drops 3 lines.
+
+```css
+.drop-cap::first-letter {
+  float: left;
+  font-family: var(--font-serif);
+  font-size: 4.5em;
+  line-height: 0.85;
+  padding: 0.05em 0.1em 0 0;
+  font-weight: 600;
+  color: var(--text);
+}
+```
+
+Use sparingly — once per editorial article, never on marketing sections.
+
+---
+
 ## SPACING SCALE
 
 Use the standard Tailwind scale. Never invent gaps like `gap-[13px]`.
@@ -211,6 +352,10 @@ Always import from this set. Never write `cubic-bezier()` manually for primary m
 ### Spring presets (Framer Motion)
 
 ```ts
+// BASE — the canonical "premium spring" (Awwwards SOTD default).
+// Use this for nearly every interaction unless you have a reason not to.
+export const SPRING_BASE = { type: "spring", stiffness: 200, damping: 30 };
+
 // Snappy — for buttons, hover, small UI
 export const SPRING_SNAPPY = { type: "spring", stiffness: 400, damping: 28, mass: 0.8 };
 
