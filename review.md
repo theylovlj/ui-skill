@@ -19,7 +19,7 @@ If you cannot reach the running site, **state this explicitly** in the final mes
 
 ---
 
-## STEP B — The 20 checks
+## STEP B — The 39 checks
 
 Verify one, mark, then next. **Mobile-test:** use Playwright `browser_resize` at 375px — confirm asymmetric layouts collapse to single-column.
 
@@ -100,7 +100,103 @@ Apply 5-10px blur mentally (or via DevTools `filter: blur(8px)`). Does the focal
 ### ✅ 19. GREYSCALE TEST passes
 Mentally desaturate the page. Does the visual hierarchy survive on VALUE contrast alone? If color is the only thing carrying hierarchy, the design is fragile. Premium designs work in greyscale. Add value contrast (darker bg behind important sections, lighter cards on darker bg, etc).
 
-### ✅ 20. ONE expensive moment is named
+### ✅ 20. NO mini overhead status-pill above the H1
+The `● V3.4 — PAGED ROUTING LIVE` style mini pill (small status-pill with monospace caps + colored dot) directly above the H1 is BANNED — single most-recognized AI tell of 2026. Verify: no element with monospace caps + colored dot sitting between nav and H1 in the hero. Real announcement bars at top-of-page (above nav) are FINE — only the mini-pill-above-H1 is banned. See `anti-slop.md` § THE GSTACK BLACKLIST.
+
+### ✅ 21. NO state-picker / Storybook controls inside hero mockup
+Hero mockup must show the populated DEFAULT state with realistic data (real incident IDs, services, timestamps). Verify: no row of `default | hover | focus | active | loading | empty | error` pills visible inside the screen, no `loading` skeleton state showing, no Storybook-style state-switcher UI. See `anti-slop.md` § HERO PRODUCT-RENDER LAW.
+
+### ✅ 22. Mockup screen content composited INSIDE chrome
+The dashboard inside the device must use the catalog coordinates (e.g. MacBook Pro 14 = top 5.5%, left 12%, width 76%, height 82%), with `overflow:hidden` on screen-content box and `pointer-events-none` on chrome img. Verify: no bezel showing around the dashboard, content fills screen area edge-to-edge, no clicks on the chrome image. See `recipes/device-mockups-catalog.md` and `anti-slop.md` § MOCKUP COMPOSITING LAW.
+
+### ✅ 23. NO tiny-island sections (content-fill ≥ 75% when bg is contrasting)
+For every section with a non-default background color (testimonial, CTA, stat row): measure content-width vs section-width. If section has contrasting bg AND content-fill ratio < 75% → broken. Fix: widen content (≥960px), drop the bg, or switch to a grid that fills.
+
+**Playwright verification:**
+```js
+const sections = await page.$$('section');
+for (const s of sections) {
+  const sBox = await s.boundingBox();
+  const bg = await s.evaluate(el => getComputedStyle(el).backgroundColor);
+  if (bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') continue;
+  const inner = await s.$('[class*="max-w"]');
+  const iBox = inner ? await inner.boundingBox() : null;
+  if (!iBox) continue;
+  const ratio = iBox.width / sBox.width;
+  if (ratio < 0.6) flag(`Tiny island in section: ${ratio.toFixed(2)} fill ratio`);
+}
+```
+
+### ✅ 24. Hero column split is asymmetric (5/12 + 7/12, NOT 50/50)
+Verify the hero uses `lg:col-span-5` + `lg:col-span-7` (or 7+5 / 4+8), NOT `lg:grid-cols-2` with both halves equal. See `spacing.md` § 5 HERO COMPOSITION.
+
+### ✅ 25. Hero padding is asymmetric (`pt-32 pb-20`, NOT `py-32`)
+Verify the hero section uses different top/bottom padding. `py-XX` on the hero = Bootstrapy. The default is `pt-32 pb-20` (content sits high in viewport). See `spacing.md` § 5.
+
+### ✅ 26. Hero H1 sits in upper third (28-38% from top), NOT centered
+Inspect H1 vertical position in hero. Vertically-centered H1 feels low. Anchor at upper third with `pt-32 pb-40` style asymmetric padding.
+
+### ✅ 27. Type sizes within the 8 locked sizes
+Verify: NO `text-[18px]` / `text-3.5xl` / arbitrary `text-[40px]`. Only the 8: display 96 / hero 72 / h1 48 / h2 32 / h3 24 / body-lg 20 / body 16 / caption 13. See `spacing.md` § 3.
+
+### ✅ 28. Negative tracking on display/hero
+Big type (>= 48px) needs `tracking-[-0.04em]` (display) / `tracking-[-0.035em]` (hero) / `tracking-tight` (h1). Without it, hero feels spread out and amateur. THE SINGLE BIGGEST PREMIUM-FEEL MULTIPLIER. See `spacing.md` § 3.
+
+### ✅ 29. Body line-height ≤ 1.6
+Verify: body text uses `leading-relaxed` (1.625) MAX, ideally `leading-[1.55]`. NEVER `leading-loose` (1.75) — that's prose default for markdown, not landing pages. See `spacing.md` § 3.
+
+### ✅ 30. Dashboard mockup uses APP density (not marketing density)
+Inside any hero mockup containing a dashboard:
+- Body text: 12-13px (NOT 16px)
+- Row height: 28-32px (NOT 56-72px)
+- Card padding: 12-16px (NOT 24-32px)
+- Borders: 1px at 6-10% opacity (NOT 1px solid gray-300)
+- NO drop shadows on cards (use borders)
+- Numeric columns: tabular-nums / monospaced
+See `spacing.md` § 6 DASHBOARD DENSITY.
+
+### ✅ 31. Status badges use tinted-bg + tinted-text on same hue
+Verify: NO `bg-red-500 text-white` style solid-color status badges. Use `bg-red-950 text-red-400 border-red-900` (tinted bg + tinted text + tinted border, all same hue). 18-22px tall, 10-11px UPPERCASE, weight 600. See `spacing.md` § 6.
+
+### ✅ 32. Container scales up past 1280px on big monitors
+Verify hero/section container uses `max-w-7xl 2xl:max-w-[1500px] [@media(min-width:1920px)]:max-w-[1760px]` — without this, design floats as a tiny island on a 27" monitor. Test at 1920px + 2560px viewport. See `tokens.md` § LARGE-SCREEN SCALE-UP.
+
+### ✅ 33. NO void-below-parallax bug
+For every section using parallax / sticky / pinned scroll: verify NO empty gap between section bottom and next section top.
+
+**Playwright void-below detector:**
+```js
+const sections = Array.from(document.querySelectorAll("section"));
+for (const s of sections) {
+  const rect = s.getBoundingClientRect();
+  const next = s.nextElementSibling?.getBoundingClientRect();
+  const gap = next ? next.top - rect.bottom : 0;
+  if (gap > 100) flag(`Void below ${s.className.slice(0,30)}: ${gap}px`);
+}
+```
+If void detected → either (a) wrap parallax content in `overflow:hidden` bounded container, (b) ensure pinned-section parent height = pinned + scroll-distance, or (c) switch to sticky-pin crossfade. See `scroll.md` § 1 LAYOUT-COLLAPSE BUG.
+
+### ✅ 34. `useScroll` ALWAYS has `target: ref` (when element-relative)
+Verify: every `useScroll({ ... })` call either has `target: someRef` OR is intentionally window-relative (progress bar). Without `target`, scroll tracks window when the model thinks it's element-relative. Single biggest scroll bug.
+
+```bash
+grep -rE "useScroll\(\s*\{" src/ | grep -v "target:"
+# should return only intentional window-scroll uses
+```
+
+### ✅ 35. NO `useMotionValueEvent` for derived UI values
+`useMotionValueEvent` triggers React re-renders every scroll frame (silent 60fps re-render storm). Use `useTransform` for derived UI. `useMotionValueEvent` is ONLY OK for canvas drawing or external side-effects.
+
+### ✅ 36. `100svh` on hero pins (NOT `100vh`)
+Verify any hero with `position: sticky` or pinned scroll uses `min-h-[100svh]` or `h-[100svh]`. `100vh` causes iOS Safari address-bar jitter on pinned content.
+
+### ✅ 37. `prefers-reduced-motion` respected
+Verify: every parallax / scroll-driven animation has either `useReducedMotion()` hook check, OR a CSS `@media (prefers-reduced-motion: reduce)` block disabling the animation. Aceternity UI ships ZERO of these — we ship them by default.
+
+### ✅ 38. Parallax + scroll-driven motion DISABLED on touch
+Verify: `(hover: none) and (pointer: coarse)` media query disables parallax/scroll-driven motion on phones. Parallax on touch = vestibular nausea + perf hit.
+
+### ✅ 39. ONE expensive moment is named
 The page has ONE detail that telegraphs "custom-built" vs "template". State which one in your final message. If you can't name one — re-read `visual-thinking.md` § THE EXPENSIVE MOMENT and add one before shipping.
 
 ---
