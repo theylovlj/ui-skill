@@ -402,6 +402,39 @@ When fluid clamp() isn't a fit (e.g. you want clean Tailwind classes):
 
 Tailwind: `text-4xl md:text-5xl lg:text-6xl xl:text-7xl`
 
+### HERO SIZING & SPACING LAW (the "fits the viewport" rule)
+
+**The recurring failure:** Hero feels small. Mockup is too tiny. Type is too small. Dashboard content inside the mockup is sparse with huge padding. Big pink/empty negative-space halo around everything. The page reads as "AI didn't know how big anything should be."
+
+**Concrete target sizes — use these unless you have a reason to deviate:**
+
+| Element | Mobile (375px) | Desktop (1280px) | Wide (1920px+) |
+|---|---|---|---|
+| Hero H1 | 36-44px | 64-80px | 88-112px |
+| Hero subhead | 16px | 18-20px | 20-22px |
+| Mockup width (in 2-col hero) | 100% of column, max 92vw | 540-640px (~50% of viewport) | 720-840px |
+| Mockup width (centered hero) | 100% of column, max 92vw | 880-1040px | 1100-1280px |
+| Hero column max-width | full | 580-640px each side | 700-800px each side |
+| Hero vertical padding (top + bottom) | py-12 to py-16 | py-24 to py-32 | py-32 to py-48 |
+| Gap between hero columns | n/a (stacked) | gap-8 to gap-12 | gap-16 to gap-20 |
+| Negative-space halo around mockup | minimal | minimal | minimal |
+
+**Hard rules:**
+
+1. **The hero MUST fill the viewport vertically and horizontally.** No floating-island compositions surrounded by empty bg color. Use `min-h-[100dvh]` and a full-width container.
+
+2. **The mockup MUST be the visual anchor at desktop sizes.** Minimum 540px wide at 1280px viewport, 720px at 1920px. If the mockup is smaller than the H1's line-height-times-3, it's too small.
+
+3. **The dashboard content INSIDE the mockup must look DENSE and POPULATED.** A real production dashboard has 6-12 data rows visible, multiple panels, a chart, sidebar nav, status indicators. If the dashboard inside the mockup looks empty or has 2-3 huge cards with massive padding, it reads as a placeholder. Aim for the visual density of Linear / Vercel / Datadog.
+
+4. **Text inside the mockup needs to be READABLE at hero size.** Sidebar nav labels at 12-13px, panel headings at 14-15px, body data at 11-12px. NOT 8-9px (illegible) and NOT 18-20px (looks like a wireframe).
+
+5. **No "two-column hero with a tiny island in each column."** The mockup column should be ~50% of the viewport at desktop, the text column the other ~50% with the H1 hitting at 80%+ of the column width.
+
+6. **Asymmetric whitespace, not symmetric padding.** Push the H1 toward the LEFT edge of its column (not centered). Push the mockup toward the RIGHT edge. Negative space is on the OUTSIDE, not all four sides equally.
+
+**Sizing self-check before shipping:** Take the screenshot. If the design feels like a small island floating in the page, RESIZE EVERYTHING UP by 25-40%. Hero almost always needs to be bigger than the first instinct.
+
 ### LARGE-SCREEN SCALE-UP (the "27-inch monitor" rule)
 
 **The problem:** A page built with `max-w-7xl` (1280px) looks like a tiny island floating in the middle of a 1920px / 2560px / 4K monitor. The hero composition that felt right on a 14" laptop becomes a postage stamp on a 27" iMac.

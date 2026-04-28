@@ -209,6 +209,34 @@ See `tokens.md` § Z-INDEX DISCIPLINE for the standard stack.
 
 ## COMPONENT ANTI-PATTERNS
 
+### ❌ Storybook / state-picker / "default hover focus active loading empty error" row inside a hero mockup
+**Why it's slop:** The single most embarrassing AI tell in 2026. The hero MacBook contains a dev-only component-state previewer — a row of pills labeled `default | hover | focus | active | loading | empty | error` at the bottom of the dashboard, and the screen shows whatever state is "selected" (often `loading` = empty skeleton). This is dev tooling leaking into production. No real product shipped a state picker as part of its dashboard. Visitors see "loading" and assume the product is broken or empty.
+
+**Two specific failures this rule covers:**
+1. The literal state-picker row visible inside the hero screen — DELETE the picker entirely from the hero render.
+2. The hero showing the `loading` / `empty` / `error` state of the dashboard — the hero MUST show the **populated, happy-path, real-data DEFAULT state**. Visitors need to see what "good" looks like.
+
+**Fix — the HERO PRODUCT-RENDER LAW:**
+
+- The hero mockup shows the product's **populated default state with realistic data**. Real incident IDs, real service names, real timestamps, a real chart with a real spike, a real on-call person.
+- **NEVER render a component-state picker, debug toolbar, Storybook controls, dev-mode panel, or "select state" UI inside the hero.** Those exist in Storybook / a separate `/components` route, never in the live page.
+- **NEVER hero-render the loading, empty, or error state.** Loading = visitors think it's broken. Empty = visitors think there's no product. Error = visitors leave.
+- If the prompt says "7 component states on the dashboard primitive," that means: build the primitive so it CAN render 7 states (in Storybook / dev), and render the **populated default state in the hero**. It does NOT mean "show all 7 states stacked inside the hero MacBook."
+- The dashboard primitive should be defined as a component with a `state` prop (`'default' | 'loading' | 'empty' | 'error'`). The hero passes `state="default"`. Storybook stories cover the rest.
+
+```tsx
+// CORRECT
+<Mockup device="macbook-pro-14">
+  <IncidentDashboard state="default" data={realisticMockData} />
+</Mockup>
+
+// WRONG — DO NOT SHIP
+<Mockup device="macbook-pro-14">
+  <IncidentDashboard />
+  <StatePickerRow />  {/* never in hero */}
+</Mockup>
+```
+
 ### ❌ Screen content not properly composited INSIDE the device mockup
 **Why it's slop:** The dashboard/screenshot floats next to the MacBook instead of sitting INSIDE the screen. Or it's positioned but bleeds past the bezel. Or unrelated debug UI (component state pickers, "default / hover / focus / active / loading / empty / error" rows) gets rendered on top of the screen area as if it's part of the product. All three failures look like "AI couldn't figure out the layer stack."
 
