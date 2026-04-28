@@ -56,6 +56,57 @@ Build production-grade UI that looks like an award-winning designer made it. Ada
 
 See `tokens.md` for fonts. See `spacing.md` § 3 for the 8 locked sizes.
 
+### Rule 5 — USE BUNDLED MOCKUPS, NEVER INVENT
+
+**Mockups are the most-fucked-up part of every AI build. Stop inventing them.**
+
+When the user mentions a device (iPhone / MacBook / iPad / Pixel / iMac / Apple Watch / Dell XPS / Windows laptop):
+
+1. **Use the bundled WebP from `assets/mockups/`.** 17 photoreal CC0 device chromes are pre-shipped. Never render device chrome with divs/gradients/SVG.
+2. **Read `recipes/device-mockups-catalog.md`** for the exact file name + screen-area coordinates.
+3. **Read `recipes/mockup-library.md`** for pre-built screen-content primitives (incident dashboard / fintech dashboard / iOS home / SaaS dashboard / music player / messaging). Drop one INTO the chrome at the catalog coordinates.
+4. **NEVER:**
+   - Render the device chrome with CSS (`<div class="bg-black rounded-3xl">` style fake phone frames)
+   - Render screen content with sparse 2-3 cards and massive padding (that's marketing density imported into the app shell)
+   - Show state-picker rows (`default | hover | focus | active | loading | empty | error`) inside the screen
+   - Show the loading / empty / error state as the hero — the hero shows POPULATED default state with realistic data
+   - Float chips/badges/pills outside the chrome (`● synced`, `● live`, etc. — banned)
+
+**The compositing code (memorize):**
+
+```jsx
+<div className="relative inline-block w-full max-w-[clamp(28rem,42vw,52rem)]">
+  <div
+    className="absolute overflow-hidden rounded-md"
+    style={{ /* COPY FROM device-mockups-catalog.md FOR YOUR DEVICE */
+      top: "5.5%", left: "12%", width: "76%", height: "82%",
+    }}
+  >
+    <YourScreenContent />  {/* from recipes/mockup-library.md */}
+  </div>
+  <img
+    src="/mockups/macbook-pro-14.webp"
+    alt=""
+    aria-hidden
+    className="relative block w-full h-auto pointer-events-none select-none"
+  />
+</div>
+```
+
+**Quick device pick:**
+
+| Product type | Device | File |
+|---|---|---|
+| SaaS / dev tools / dashboards | MacBook Pro 14 | `macbook-pro-14.webp` |
+| Cinematic / agency / premium | MacBook Pro 16 | `macbook-pro-16.webp` |
+| Consumer SaaS / lifestyle | MacBook Air 15 | `macbook-air-15.webp` |
+| Mobile app | iPhone 16 Pro Black | `iphone-16-pro-black.webp` |
+| iPad apps / wide app screens | iPad Air 13 landscape | `ipad-air-13-landscape-space-gray.webp` |
+| Apple Watch app | Apple Watch 44mm | `apple-watch-44mm.webp` |
+| Android-positioned brands | Pixel 9 Pro | `pixel-9-pro-obsidian.webp` |
+| Windows-positioned products | Dell XPS 14 | `dell-xps-14-graphite.webp` |
+| Premium desktop / video / creator | iMac 24 | `imac-24-silver.webp` |
+
 ### Rule 4 — MOTION VIA SHARED ELEMENTS
 
 - **Framer Motion `layout` + `layoutId`** is primary. One persistent surface morphs.
@@ -87,13 +138,25 @@ Pick ONE from each:
 - **Hero alignment:** Centered (Editorial only) / Left text + right asset / 5/7 split
 - **Decoration:** None / Single hero glow / Bundled WebP bg
 
-### Step 3 — READ the rule files
+### Step 3 — READ the rule files (in this exact order)
 
 ```
-Read tokens.md         # palette, fonts, motion presets
-Read spacing.md        # the complete sizing/spacing/composition law
-Read scroll.md         # if any scroll/parallax/sticky motion
-Read anti-slop.md      # patterns to NEVER use
+Read tokens.md                          # palette, fonts, motion presets
+Read spacing.md                         # the complete sizing/spacing/composition law
+Read anti-slop.md                       # patterns to NEVER use
+Read scroll.md                          # if any scroll/parallax/sticky motion
+
+# IF the build needs a device mockup (iPhone/MacBook/iPad/etc):
+Read recipes/device-mockups-catalog.md  # 17 bundled chromes + screen-area coordinates
+Read recipes/mockup-library.md          # 6 pre-built screen primitives — drop INTO chrome
+
+# IF the build needs real logos / App Store / Google Play / brand SVGs:
+Read recipes/asset-sourcing.md          # legit sources + curl patterns
+
+# IF the build needs the cool morphing nav (shrinks on scroll):
+Read recipes/sticky-nav.md
+
+# Hero + sections:
 Read recipes/{hero}.md
 Read recipes/{features}.md
 Read recipes/{pricing|faq|footer}.md as needed

@@ -39,7 +39,31 @@
 
 ---
 
-## THE FLOATING-CHIP FAMILY (delete every chip outside the mockup)
+## THE FLOATING-CHIP FAMILY (delete every chip outside the mockup OR floating in the hero column)
+
+**THE RULE — read this 3 times.** ANY rounded pill containing "● [text]" sitting anywhere in the hero — beside the mockup, below it, in the headline column, between subhead and CTA, in the bottom-third trust strip — is BANNED. There are no exceptions. Every costume the model invents is the same banned shape:
+
+**Banned — full list of costumes (model keeps inventing new ones):**
+
+- ❌ `● No hardware required` (marketing reassurance pill)
+- ❌ `● No credit card required` / `● Free forever` / `● 14-day trial` reassurance pills
+- ❌ `● root cause inferred — payments-redis pool` (editorial chip)
+- ❌ `● P99 LATENCY · LIVE / 42ms ▼ 8.2%` (stat chip)
+- ❌ `● auto-scaling enabled` / `● synced` / `● live` / `● real-time` flags
+- ❌ `● SOC 2 Type II` / `● HIPAA-ready` / `● EU residency` (compliance pills as floating chips — put them in the footer, not the hero)
+- ❌ `● indexed — 12,847 events` / `● 247 services connected` (status pills)
+- ❌ `✓ deployed` / `✓ caught` / `✓ verified` (verification badges)
+- ❌ Pills with `→` or `↗` for "click for more" hints
+- ❌ Pills with checkmarks, dots, or any leading icon + caps text in pill shape
+
+**Ban applies regardless of:** size (tiny or large), placement (top, bottom, left, right of hero), color (muted neutral or accent), copy (technical or marketing), shape (pill, badge, chip, tag).
+
+**The shape that's banned:** small rounded-full container, ~24-36px tall, contains a colored dot OR icon + 1-3 words of text. If you wrote one — DELETE IT.
+
+**Where reassurance copy actually goes:**
+- Compliance / trust signals → footer or a dedicated trust strip far below the fold
+- "No credit card required" → INLINE under the CTA, plain small text, NO pill: `<p className="text-sm text-stone-500 mt-3">No credit card required.</p>`
+- Stat / live status → INSIDE the dashboard mockup as part of the dashboard
 
 **Ban: ANY pill/chip/badge floating outside the mockup chrome.** All variants banned:
 
