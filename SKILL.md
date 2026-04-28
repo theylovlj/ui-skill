@@ -1,314 +1,164 @@
 ---
 name: ui
-description: Use when the user asks to build a landing page, hero section, marketing site, dashboard, mobile app screen, pricing page, or any frontend they want to feel premium and not look AI-generated. Triggers on phrases like "build me a UI", "design a landing page", "make a hero", "make this look premium", "create a dashboard", "build a marketing site", or when output needs to compete with award-winning sites (Awwwards, SiteInspire, SEESAW caliber).
+description: Use when the user asks to build a landing page, hero, marketing site, dashboard, mobile app screen, pricing page, or any frontend they want premium and not AI-generated. Triggers on "build me a UI", "design a landing page", "make a hero", "make this look premium", "create a dashboard", "build a marketing site", or when output needs to compete with Awwwards-tier sites.
 ---
 
-# /ui — Premium UI Build
+# /ui — Premium UI Build (v3.0)
 
-You are about to build production-grade UI that looks like an award-winning designer made it, not an AI. This skill enforces three rules and gives you ready-to-adapt component blocks. **You do not invent layouts from scratch — you adapt blocks from `recipes/` and apply the rules.**
-
----
-
-## CONFIGURATION (override per request)
-
-- **RESTRAINT** (1-10, default 8): How aggressive the cut-everything discipline is. 1 = packed dashboard, 10 = art gallery hero.
-- **MOTION** (1-10, default 7): How much animation. 1 = static, 10 = scroll-driven cinematic. **Default 7 = motion is mandatory, not optional.**
-
-These dials override individual rules where conflicts arise. The user can override in their prompt ("with motion=8" or "low restraint").
-
-### What MOTION = 7 means in practice
-
-- Every interactive element has a hover state (use `recipes/animations.md` patterns)
-- Every section has scroll-triggered entrance animation (`fade-up`, `stagger children`, `scale-up`)
-- Every button has `:active` press feedback
-- Headlines/numbers use `pop-in` or `word-by-word` reveal
-- Tab/dropdown/menu uses one of the swap animations from `recipes/animations.md`
-- Loading states use skeleton shimmer, never static placeholder
-- A page with NO motion is a failed build — animation is the difference between "AI demo" and "premium product"
+Build production-grade UI that looks like an award-winning designer made it. Adapt blocks from `recipes/`. Apply the rules. Don't invent layouts.
 
 ---
 
-## THE FOUR RULES (non-negotiable)
+## DIALS (override per request)
 
-These came from analyzing 58 premium designs the owner manually curated. Every premium reference follows all four. Every AI-generated landing page violates them.
+- **RESTRAINT** 1-10 (default 8). 1 = packed, 10 = art gallery.
+- **MOTION** 1-10 (default 7). 1 = static, 10 = scroll-cinematic. **MOTION ≥ 5 means motion is mandatory, not optional.**
 
-### Rule 1 — LESS WORDS = MORE PREMIUM (the most important rule)
+---
 
-**This is the rule that matters above all others.** Less reading = better. Less writing = better. Premium sites are NOT read — they are SCANNED. A visitor decides "is this for me?" in under 5 seconds, and they decide based on **how little they have to read**, not how much information you crammed in.
+## THE 4 RULES (non-negotiable)
 
-Hard limits — every section on the page must obey:
+### Rule 1 — LESS WORDS = MORE PREMIUM
 
-- **Hero H1: ≤ 8 words** (≤ 5 ideal). "Catch every incident before it cascades." (6 words) is the ceiling. NOT "The complete observability platform for engineering teams that catches every production incident before it cascades into an outage."
-- **Hero subhead: ≤ 20 words across ≤ 2 lines.** One sentence. NOT three.
-- **Section H2: ≤ 6 words.** "How it catches it." (4 words). NOT "Here's how Stratus catches every incident across your stack."
-- **Feature card title: ≤ 4 words.** Concrete verb-noun. "Auto-paged in 12s." NOT "Intelligent automated paging system with smart routing."
-- **Feature card body: ≤ 18 words / 1 sentence.** If you need two sentences, you need a different feature.
-- **Bullet list: ≤ 4 items.** ≤ 5 words each.
-- **Testimonial: ≤ 25 words.** One quote. Not a paragraph.
-- **CTA button: ≤ 3 words.** "Start free." "Book demo." "See it live." NOT "Get started with Stratus today, no credit card required."
-- **Eyebrow / kicker / label: ≤ 4 words.** And usually: don't even add it.
+**The most important rule. Every word is a tax on attention.**
 
-**Total page word count target:** under 600 words for a SaaS landing page (between 500-900 hits the conversion sweet spot per CXL data — see `spacing.md` § 7).
+| Element | Max words |
+|---|---|
+| Hero H1 | **8** (5 ideal) |
+| Hero subhead | 20, ≤2 lines |
+| Section H2 | 6 |
+| Feature title | 4 |
+| Feature body | 18, 1 sentence |
+| Bullet item | 5 |
+| Testimonial | 25 |
+| CTA button | 3 |
+| Eyebrow | 4 (or skip) |
 
-**Krug's law (memorize):** *"Get rid of half the words on each page, then half of what's left."* — Steve Krug, *Don't Make Me Think*. Most landing pages have 3× the copy they need.
+**Total page: 500-900 words** (B2B SaaS conversion sweet spot).
 
-**The cut test:** for every sentence on the page, ask "if I deleted this sentence, would the visitor be unable to evaluate the product?" If they could still evaluate it without that sentence — DELETE the sentence. Most sentences fail this test.
+**The cut test:** if deleting a sentence still lets the visitor evaluate the product → delete it. Most sentences fail.
 
-**The visitor doesn't owe you their time.** Every word is a tax on attention. Cut, cut, cut.
-
-> **Red flag:** if you wrote 3 sentences explaining a feature, you don't understand the feature well enough to ship it. Find the ONE sentence that names the value and delete the others.
+> "Get rid of half the words on each page, then half of what's left." — Krug
 
 ### Rule 2 — RESTRAINT IS THE SIGNAL
 
-The most consistent finding across every premium reference. AI piles on; premium designers strip away.
-
-- **Hero copy ≤ 8 words.** Subtext explains. Hero just confirms.
-- **One accent color, used sparingly.** Only on CTAs, status dots, key emphasis.
-- **Backgrounds are off-white/cream, never `#ffffff`.** Use `#fafaf7`, `#f7f5f0`, or `oklch(98% 0.005 90)`.
-- **50%+ whitespace is the luxury signal.** Empty space is a feature, not a gap.
-- **Default components are AI tells.** No `<Loader2 />`. No "MOST POPULAR" pricing banners. No symmetric centered everything.
-
-> **Red flag:** If you're adding more, you're going wrong direction. Discipline is what you cut.
+- **One accent color.** Only on CTAs, status dots, key emphasis.
+- **Off-white bg, never `#fff`.** `oklch(98% 0.005 90)` warm or `oklch(98% 0.002 250)` cool.
+- **50%+ whitespace = luxury signal.** Empty space is a feature.
+- **No AI defaults.** No `<Loader2 />`. No "MOST POPULAR". No `bg-clip-text` gradient headlines. No symmetric centered everything.
 
 ### Rule 3 — TYPOGRAPHY IS THE DESIGN
 
-Headlines are the primary visual element. Build the page around them, not vice versa.
+- **Stack:** bold grotesque sans (Inter Tight / Geist) + ONE italic-serif accent word (Instrument Serif).
+- **Hero size:** 5xl-7xl (60-90px). NEVER timid 32px.
+- **Negative tracking on big type.** Display `-0.04em`, hero `-0.035em`. Single biggest premium-feel multiplier.
+- **No icons in headlines.** Type does the work.
 
-- **Stack:** Bold grotesque sans (Inter Tight or Geist) + ONE italic-serif accent word per headline (Instrument Serif).
-- **Headline size:** 5xl to 7xl (~60-90px). No timid 32px headlines.
-- **One italic word for emphasis.** Inside the bold sans headline. Pick the word that carries meaning.
-- **Two-tone trick:** Muted-gray phrase + bold-black phrase ("Ideas to Results" / "AI-Powered Marketing.").
-- **No icons in headlines. No decorative flourishes.** The type does the work.
-
-See `tokens.md` for exact font stacks, sizes, and weights.
+See `tokens.md` for fonts. See `spacing.md` § 3 for the 8 locked sizes.
 
 ### Rule 4 — MOTION VIA SHARED ELEMENTS
 
-Same surface morphs between states. Never hard cuts. Never separate components mounted/unmounted.
-
-- **Framer Motion `layout` + `layoutId` is the primary tool.** One persistent surface morphs between states.
-- **Springs over easings.** Never `cubic-bezier` for primary motion. Exact spring values in `tokens.md` § MOTION PRESETS.
-- **Sub-300ms transitions.** Snappy, not slow.
-- **Wild visuals always inside a calm container.** Mesh gradient inside a white card. Halftone over a steady serif headline. Containment is what makes it feel premium.
-- **Per-element stagger** via `AnimatePresence`, never bulk swap.
-- **Motion floor:** every build at MOTION ≥ 5 must satisfy Step 7's minimum motion checklist.
+- **Framer Motion `layout` + `layoutId`** is primary. One persistent surface morphs.
+- **Springs over easings.** Sub-300ms. See `tokens.md` § MOTION.
+- **Animate ONLY transform + opacity.** Never width/height/top/left.
+- **`import from "motion/react"`** (renamed from framer-motion).
 
 ---
 
 ## THE PROCEDURE
 
-Follow these steps **in order**. Do not skip steps.
-
 ### Step 1 — IDENTIFY page type
 
-Pick ONE primary type. Don't mix.
-
-| User says... | Page type | Hero recipe |
+| User says | Page type | Hero recipe |
 |---|---|---|
-| "landing page", "marketing site", "SaaS site" | `saas` | `recipes/hero-saas.md` |
+| "landing", "marketing site", "SaaS" | `saas` | `recipes/hero-saas.md` |
 | "agency", "studio", "portfolio" | `agency` | `recipes/hero-agency.md` |
-| "fintech", "currency", "money", "wallet" | `fintech` | `recipes/hero-fintech.md` |
+| "fintech", "wallet", "money" | `fintech` | `recipes/hero-fintech.md` |
 | "dashboard", "analytics", "admin" | `dashboard` | `recipes/dashboard-shell.md` |
 | "mobile app", "iOS", "onboarding" | `mobile` | `recipes/mobile-onboarding.md` |
 
-If unsure, **stop and ask** — picking wrong page type wastes the build.
+If unsure, ask. Wrong page type wastes the build.
 
-### Step 1.5 — ROLL THE DICE (anti-repetition)
+### Step 2 — ROLL THE DICE (anti-repetition)
 
-Before writing a single line, **silently pick ONE option from each menu below**. This forces variation across builds and prevents falling into the same default composition every time.
+Pick ONE from each:
 
-**Vibe (pick 1):**
-- Editorial Luxury — serif-led, generous whitespace, photo-driven
-- Soft Structuralism — grid-disciplined, mono-accents, brutalist-light
-- Ethereal Glass — translucent surfaces, soft glows, restrained Liquid Glass
+- **Vibe:** Editorial Luxury / Soft Structuralism / Ethereal Glass
+- **Hero alignment:** Centered (Editorial only) / Left text + right asset / 5/7 split
+- **Decoration:** None / Single hero glow / Bundled WebP bg
 
-**Hero alignment (pick 1):**
-- Centered (only if vibe = Editorial Luxury, otherwise SKIP)
-- Left-aligned text with right-side asset (mockup, image, or product shot)
-- 50/50 split (text + asset on equal columns, asymmetric content density)
-
-**Decoration (pick 1):**
-- Photographic background (from `assets/backgrounds/`)
-- Scattered corner stickers (small marks at 2-3 corners, never in dead center)
-- Single contained accent (one shape, one glow, one element — bounded)
-
-You do not show this menu to the user. You just pick and proceed.
-
-### Step 1.6 — DESIGN PLAN PREAMBLE (forces visual thinking)
-
-Before writing a single line of code, READ `visual-thinking.md` and silently answer its 5-phase Question Gate (Composition, Light, Depth, Materiality, Polish) in your `<thinking>` block.
-
-The owner has tested: every build that skipped this step shipped with floating decorations overlapping content, inconsistent light direction, no depth layering, and no "expensive moment". Answering these questions before code is what separates "good attempt" from "Awwwards-tier".
-
-**You do NOT show this thinking to the user.** It's an internal plan. But it MUST happen, and the answers MUST drive the code that follows.
-
-### Step 2 — READ the recipe + tokens
+### Step 3 — READ the rule files
 
 ```
-Read recipes/{hero}.md          # hero block
-Read recipes/{features}.md      # one of: features-bento, features-3step, features-tabs
-Read recipes/pricing-2col.md    # if pricing needed
-Read recipes/faq-pillrows.md    # if FAQ needed
-Read recipes/footer-modern.md   # always
-Read tokens.md                  # always — don't invent colors/fonts
-Read spacing.md                 # always — the complete spacing/sizing/composition law
-Read scroll.md                  # if any scroll/parallax/sticky/pinned motion — the layout-collapse fix lives here
-Read anti-slop.md               # always — the patterns to NEVER use
+Read tokens.md         # palette, fonts, motion presets
+Read spacing.md        # the complete sizing/spacing/composition law
+Read scroll.md         # if any scroll/parallax/sticky motion
+Read anti-slop.md      # patterns to NEVER use
+Read recipes/{hero}.md
+Read recipes/{features}.md
+Read recipes/{pricing|faq|footer}.md as needed
 ```
 
-Each recipe is a complete React component you adapt. **You don't write blocks from scratch. You adapt.**
+### Step 4 — BUILD
 
-### Step 3 — BUILD by composing recipes
+Adapt recipes. Don't invent. Customize:
+- Copy (within Rule 1 word limits)
+- Palette (from `tokens.md`)
+- ONE expensive moment (name it)
 
-```jsx
-<HeroSaas {...props} />
-<FeaturesBento {...props} />
-<Pricing2Col {...props} />
-<FaqPillRows {...props} />
-<FooterModern {...props} />
-```
+### Step 5 — REVIEW
 
-Customizations allowed:
-- Copy (headline, subtext, CTA labels) — must be ≤8 word headlines
-- Accent color from tokens
-- Background image from `assets/backgrounds/` (see `recipes/backgrounds-catalog.md`)
-
-Customizations forbidden:
-- Inventing new fonts (use stack from tokens)
-- Adding more colors (one accent only)
-- Removing whitespace
-- Breaking recipe structure to "improve" it — recipes are battle-tested
-
-### Step 4 — REVIEW with checklist
-
-Run through `review.md` BEFORE shipping. If Playwright/browser available: take a screenshot, then verify against checklist. If anything fails — fix it, don't ship.
-
-### Step 5 — SHIP
-
-Only after Step 4 passes every item. State which checklist items passed in your final message.
+Run `review.md` (39 checks). Block ship if ANY fail.
 
 ### Step 6 — NO LAZY OUTPUT
 
-Premium builds are reproduced FULLY, not summarized. The following are BANNED in any code output:
-
-- `// ... rest of component`
-- `// TODO: implement`
-- `// implement here`
-- `{/* similar pattern repeated */}`
-- "for brevity..."
-- "I can provide more details on request"
-- Any ellipsis-style code skip
-- **Stripping motion code from a recipe** — `motion.div` becoming `div`, removing `AnimatePresence`, deleting `whileHover`/`whileInView`, dropping `layout`/`layoutId` props. This counts as compression and is BANNED.
-- **Omitting `recipes/animations.md` patterns** when the recipe references them. If a recipe says "use `t-fade-up` on entrance" and you ship plain divs without the class, you've stripped motion.
-
-If output approaches the token limit:
-1. Stop at a clean breakpoint (end of a component / end of a section)
-2. Output exactly: `[PAUSED — section X of Y complete. Send "continue" to resume from: <next section name>]`
-3. NEVER compress or summarize what you've already written — pause and wait
-
-When adapting a recipe, reproduce it FULLY in the output. **Including all motion.** The recipe is the floor, not a sketch to abbreviate.
-
-### Step 7 — INJECT ANIMATIONS
-
-Every interactive element + every section must have animation. Pull from `recipes/animations.md` (41 patterns).
-
-**Minimum motion floor (for any build at MOTION ≥ 5):**
-- Hero: word-by-word reveal OR fade-up + stagger entrance for headline/subtext/CTA
-- Every CTA button: hover-glow OR shine-sweep OR magnetic, AND `:active` press-down
-- Every section: scroll-triggered fade-up entrance (intersection observer)
-- Every card: hover-tilt OR spotlight-border OR lift
-- Stats / numbers: number pop-in (animations #2 or #35)
-- Loading states: skeleton shimmer (animation #26), never static placeholder
-- Tab/dropdown/menu: use the matching swap animation from animations.md
-
-**If shipping a section with NO motion:** STOP. Re-read `recipes/animations.md`. Pick a pattern. Apply it. A static section is a failed section.
+Every recipe used. Every rule applied. Name the expensive moment in your final message.
 
 ---
 
-## QUICK REFERENCE — what the recipes contain
+## RED FLAGS (stop if you catch yourself)
 
-| Recipe | When to use | Key technique |
-|---|---|---|
-| `hero-saas.md` | B2B SaaS landing | Universal hero skeleton: pill+headline+subtitle+dual-CTA+bleeding mockup |
-| `hero-agency.md` | Agency / studio | Centered editorial serif, asymmetric scattered decoration |
-| `hero-fintech.md` | Fintech / money apps | Split layout, dashboard mockup with glow underneath |
-| `features-bento.md` | Modern grid features | Mixed-size bento, rounded-3xl cards, color-matched shadows |
-| `features-3step.md` | "How it works" sections | 3 cards with sticky scroll-synced bracket tracker |
-| `features-tabs.md` | Product feature tour | Persistent stage tab system (image stays mounted, content swaps) |
-| `pricing-2col.md` | SaaS pricing | Basic vs Pro with "Currently Popular" pill + dot, gradient CTA |
-| `faq-pillrows.md` | FAQ section | Thin pill rows, never boxy accordions |
-| `footer-modern.md` | Site footer | Multi-column with giant ghost wordmark fade at bottom |
-| `dashboard-shell.md` | Admin dashboard | Page header + sidebar + content area, single-accent UI |
-| `mobile-onboarding.md` | Mobile flows | Single task per screen, vast whitespace, pill CTAs, cross-fade transitions |
-| `morphing-button.md` | Newsletter / signup CTA | Click-to-expand pill (200px → 420px) via Framer Motion `layout` |
-| `text-roll.md` | Brand-swap headline word | Vertical word-roll inside an inline pill that resizes per brand |
-| `mockups.md` | Product mockups in heroes (overview + decision tree) | Priority: bundled PNG > real screenshot > SVG frame > primitive |
-| `device-mockups-catalog.md` | **DEFAULT for product mockups** — 17 photoreal device PNGs | iPhone 16 Pro, MacBook Pro/Air, iPad Air, Apple Watch, iMac, Pixel 9, Dell XPS. Transparent WebP, ~14KB each. With screen-area coordinates. |
-| `backgrounds-catalog.md` | Hero backgrounds | 26 bundled WebP backgrounds with text-overlay strategy per category |
-| `animations.md` | **EVERY BUILD** — animation library | **41 CSS animations** (transitions.dev style). Hover, scroll-entrance, ambient, loading, text effects, toggle. Pull from this for every interactive moment. |
-| `visual-thinking.md` | EVERY BUILD — Step 1.6 forced reasoning | 5-phase Question Gate (composition / light / depth / materiality / polish), banned defaults, two-part shadow law, key-light inset, grain overlay, vignette, expensive-moment list, optical alignment notes, three pre-flight tests |
-
----
-
-## RED FLAGS — STOP and start over
-
-If you catch yourself doing any of these CATEGORIES, stop and re-open the referenced file for specifics.
-
-- ❌ **Skipping motion** — any section/button/page with zero animation. See Step 7 minimum motion floor + `recipes/animations.md`.
-- ❌ **AI-default visuals** — teal/purple accent, pure `#fff` background, purple→blue gradients, glassmorphism on cards. See `anti-slop.md` § COLOR + DECORATION.
-- ❌ **Default components** — `<Loader2 />`, "MOST POPULAR" pricing banner, checkmark feature lists, boxy `<Accordion>`, `rounded-md` shadcn buttons. See `anti-slop.md` § COMPONENT.
-- ❌ Faking a product dashboard / app screen inline with divs + gradients (use `recipes/mockups.md` device frames + primitives instead)
-- ❌ **Lazy composition** — building hero from scratch instead of adapting `recipes/hero-*.md`, centered everything, 3-equal-card features grid, empty/sparse "spacing" sections, mounting/unmounting instead of morphing.
-- ❌ **Mobile/perf killers** — `h-screen`, animating `top/left/width/height`, `useState` for continuous input, `cubic-bezier` for primary motion. See `anti-slop.md` § MOBILE + MOTION.
-- ❌ **Generic content** — emojis in UI, hero copy >8 words / >3 lines, "Jane Doe" names, "Acme" brands, filler verbs (Elevate/Unleash/Empower), round-fake numbers, Unsplash URLs. See `anti-slop.md` § CONTENT + TYPOGRAPHY.
-- ❌ **Stripping recipe motion** — removing `motion.div`, `whileHover`, `AnimatePresence`, `layout`/`layoutId`, or `t-*` classes from a recipe to "simplify".
-- ❌ **Floating decoration overlapping focal content** — sticker/note/badge `position: absolute` on top of H1/H2/big-number/CTA. See `anti-slop.md` § COMPONENT for SAFE-ZONE rule.
-- ❌ **Decorative stat-chip / metric-pill floats around mockups** — "P99 LATENCY · LIVE / 42ms" type chips dotted around the hero. Default = ZERO chips. Max 1 if it surfaces unique product info. See `anti-slop.md` § COMPONENT FLOATING-CHIP RULE.
-- ❌ **Marquee with visible loop seam (N-shape)** — items appear/restart mid-band. Track must duplicate content + animate `-50%` + use pixel-based edge mask. See `recipes/animations.md` § 25 Marquee + `anti-slop.md` § COMPONENT.
-- ❌ **Skipping responsive breakpoints** — desktop-only build that breaks at 375px / 390px / 768px. Test at all 5 breakpoints with Playwright `browser_resize`. See `tokens.md` § RESPONSIVE / FLUID SIZING.
-- ❌ **Skipping `review.md`** because "it looks fine".
-- ❌ **Skipping the `visual-thinking.md` Question Gate** (output ships visibly worse — flat depth, inconsistent light, no expensive moment).
-
-**All of these mean: STOP. Re-read the relevant rule. Adapt the right recipe.**
+| Thought | Reality |
+|---|---|
+| "Let me add a quick gradient..." | No new gradients. |
+| "I'll center this for balance..." | Vary alignment. |
+| "Loader2 is fine for now..." | Skeleton instead. |
+| "This looks empty, add a chip..." | Empty IS the design. |
+| "text-3xl seems readable..." | Bigger. |
+| "hover:scale-110 will feel snappy..." | Spring + 1.02. |
+| "VOL. 04 — FIELD NOTES eyebrow..." | Mini-pill ban. Delete. |
+| "Tiny pill above H1..." | Worst AI tell. Delete. |
+| "Floating chip near mockup..." | Decoration. Delete. |
+| "Three equal feature cards..." | Promote one, demote two. |
+| "h-screen for the hero..." | min-h-[100svh]. |
+| "useState for parallax..." | useMotionValue. |
+| "John Doe testimonial..." | Real names. |
+| "py-24 on every section..." | Asymmetric (pt-32 pb-20). |
+| "50/50 hero split..." | 5/7 or 7/5. |
+| "3 sentences explaining a feature..." | Cut to 1. |
+| "useScroll without target ref..." | Always pass target. |
 
 ---
 
-## COMMON MISTAKES
+## QUICK REFERENCE
 
-### "I'll just build the hero from scratch, the recipes are too restrictive."
-
-You will produce AI-generated output. The recipes are the discipline that prevents that. **Adapt them. Don't replace them.**
-
-### "The user wants more than 8 words in the headline."
-
-Push back. Suggest moving extra context to subtext. If they insist, log a comment in the code: `// HERO COPY EXCEEDS RULE 1 — explicit user request`. Then comply.
-
-### "I need three accent colors for this brand."
-
-You don't. Pick one. The other "colors" come from photography, gradients, and the off-white background — not flat color fills.
-
-### "I need to add a section to fill space."
-
-Empty space is the design. Don't fill it. If the page legitimately needs more content, add a *real* section (testimonials, integrations, FAQ) — not a decorative one.
-
-### "Animation feels janky."
-
-You used `cubic-bezier` or you're swapping components instead of morphing. Switch to spring + `layoutId`. See `recipes/morphing-button.md`. Also confirm you're animating ONLY `transform` and `opacity` — never `top/left/width/height`.
+- **Container:** `max-w-7xl 2xl:max-w-[1500px] [@media(min-width:1920px)]:max-w-[1760px]`
+- **Hero padding:** `pt-32 pb-20 md:pt-40 md:pb-24` (asymmetric)
+- **Section padding:** `py-14 md:py-20 lg:py-24` default; `py-10 md:py-14 lg:py-16` compact
+- **Hero columns:** `lg:col-span-5` text + `lg:col-span-7` mockup (NOT 50/50)
+- **Hero height:** `min-h-[100svh]` (NOT `100vh` — iOS Safari)
+- **Type scale:** display 96 / hero 72 / h1 48 / h2 32 / h3 24 / body-lg 20 / body 16 / caption 13. NO 18, NO 40.
+- **Body line-height:** 1.55 (NOT 1.75 — that's prose)
+- **Status badge:** `bg-{hue}-950 text-{hue}-400 border-{hue}-900` (NEVER solid fills)
+- **Dashboard density:** 12-13px body / 28-32px row / 12-16px card padding / 1px @ 6-10% borders / NO drop shadows / tabular-nums
 
 ---
 
-## WHY THIS WORKS
+## CROSS-REFERENCES
 
-The patterns in these recipes were extracted from analyzing 58 premium designs the owner curated personally — every Awwwards-tier site, every viral X design tweet, every fintech that doesn't look like a template. Every one followed the three rules. Every AI-generated landing page violates them.
-
-You do not have a creative choice here. You execute the discipline. The discipline is what looks expensive.
-
----
-
-## REFERENCE FILES
-
-- `tokens.md` — colors, fonts, spacing, motion presets (read every build)
-- `anti-slop.md` — the AI-tell patterns to avoid in detail (read every build)
-- `review.md` — pre-ship checklist (read in Step 4)
-- `recipes/` — 14 ready-to-adapt component blocks
-- `assets/backgrounds/` — 26 bundled WebP background images
+- `tokens.md` — palette, fonts, motion, atmosphere
+- `spacing.md` — sizing, composition, dashboard density
+- `scroll.md` — parallax, sticky, pinned, scroll-driven
+- `anti-slop.md` — patterns to NEVER use
+- `review.md` — 39-check pre-ship list
+- `recipes/` — copy-paste blocks

@@ -1,573 +1,223 @@
-# anti-slop.md — The patterns to NEVER use
+# anti-slop.md — Patterns to NEVER use (v3.0)
 
-**Read this every build. These are the patterns that make UI look AI-generated.**
-
-Each pattern below is a default that Claude (and other LLMs) gravitate toward when given a generic prompt. If you find yourself doing any of them — STOP and use the correction listed.
+**Read every build.** Each pattern is an AI default. Don't ship with any of these.
 
 ---
 
-## THE GSTACK BANNED-DEFAULT BLACKLIST
+## THE BLACKLIST (top tells)
 
-Hard rejection list — if any of these are in the output, it's slop. Mirrored in `visual-thinking.md`.
-
-### ❌ Purple/violet/indigo gradient backgrounds
-**Why it's slop:** The AI-defaults-here color. Every cookie-cutter LLM landing page lands here.
-**Fix:** No purple/violet/indigo as the bg gradient. Use one of the 4 palette presets in `tokens.md`. If you need depth, use a soft single-hue radial OR a warm-cool split (`tokens.md` § ATMOSPHERE).
-
-### ❌ Blue→purple color schemes
-**Why it's slop:** The default Tailwind+ChatGPT palette. Reads as "I picked the first two colors I thought of."
-**Fix:** ONE accent color from the four palettes. Neutral text + neutral bg + ONE accent.
-
-### ❌ 3-column feature grid with icon-in-circle + bold title + 2-line desc
-**Why it's slop:** The cardinal sin. Single most-recognized AI tell on the internet. The literal Bootstrap 4 SaaS template.
-**Fix:** Bento grid (`recipes/features-bento.md`) with mixed sizes. Or a sticky 3-step (`recipes/features-3step.md`). Or asymmetric split with one full-bleed feature + two small stacked.
-
-### ❌ Emoji used as design elements
-**Why it's slop:** Emojis are CONTENT, never decoration. Renders inconsistently across OS, instantly screams template.
-**Fix:** Phosphor or Radix icons. Or no icon at all — typography does the work.
-
-### ❌ Cookie-cutter section rhythm (hero → 3-features → testimonials → pricing → CTA)
-**Why it's slop:** Literal Vercel Geist template structure. Every AI landing page from 2023-2026.
-**Fix:** Vary the rhythm — Hero → Trust logos → Story → Demo → Pricing → FAQ → Footer, OR Hero → How-it-works → Features → Testimonials → Pricing → Footer. Mix it up section by section.
-
-### ❌ Default font stacks (Inter regular, Roboto, Arial, system) without intent
-**Why it's slop:** Picked the font because it's free, not because it serves the work.
-**Fix:** One of the three named pairings in `tokens.md` § FONT STACKS. Inter Tight + Instrument Serif, Geist + PP Editorial, or Uncut Sans + Reply.
-
-### ❌ Decorative blobs / SVG dividers as filler
-**Why it's slop:** Used to hide that there's no content in the section.
-**Fix:** If a section needs a divider, the section itself is wrong — either commit to real content or remove. Use bundled WebP backgrounds in `assets/backgrounds/` instead of SVG blob filler.
-
-### ❌ Glassmorphism + neon glow + blurred orbs combo
-**Why it's slop:** Peak 2021 AI aesthetic. Reads as "trying too hard."
-**Fix:** Liquid Glass spec only (`tokens.md`). Glass for sticky nav and floating overlays, never for cards/sections. No orb stack.
-
-### ❌ Monospace everywhere (the hackathon look)
-**Why it's slop:** Mono is for code, data, labels — not body. Mono everywhere = "I learned dev tools yesterday."
-**Fix:** Sans for body and headlines. Mono only for: code blocks, numeric data in dashboards, meta labels in corners, eyebrow kickers.
-
-### ❌ Generic SaaS card grid as first impression
-**Why it's slop:** Three identical rounded-2xl shadcn cards on white. Below-the-fold pattern shoved into the hero.
-**Fix:** Hero is for ONE focal moment — headline + product visual + dual CTA. Save the card grid for after the fold.
-
-### ❌ Beautiful imagery with weak brand presence
-**Why it's slop:** The photo overpowers the brand and the page becomes a stock-photo gallery. Visitor remembers the photo, not you.
-**Fix:** Brand wordmark / accent / type sits ON or IN the image. Photo serves the brand, not the other way around.
+- ❌ **Purple/violet/indigo gradient backgrounds.** Fix: ONE accent from `tokens.md` palettes.
+- ❌ **Blue→purple gradients.** Fix: solid color. No multi-color gradients.
+- ❌ **Gradient-text headlines (`bg-clip-text text-transparent`).** Universal v0/Lovable tell. Fix: solid color H1, italic-serif on ONE word.
+- ❌ **3-column feature grid w/ icon-circle + bold title + 2-line desc.** The cardinal sin. Fix: bento with mixed sizes, or asymmetric split.
+- ❌ **Equal-weight 3-card feature trio.** Fix: promote ONE, demote two.
+- ❌ **Cookie-cutter rhythm (hero→3-features→testimonials→pricing→CTA).** Fix: vary the order.
+- ❌ **Glassmorphism + neon glow + blurred orbs combo.** Fix: Liquid Glass spec only, sticky nav use only.
+- ❌ **Generic SaaS card grid as first impression.** Fix: hero is ONE focal moment.
+- ❌ **Tone-of-nothing brief ("modern, clean, minimal").** Fix: pick ONE named tone (editorial / brutalist / luxury / retro-futuristic / organic / playful / industrial / technical / monochrome-print).
+- ❌ **Default Tailwind palette unmodified (`indigo-500`, `slate-50`).** Fix: define brand tokens in `tailwind.config`.
+- ❌ **Default font stacks (Inter, Roboto, Arial, system).** Fix: see `tokens.md` § FONT STACKS.
 
 ---
 
-### ❌ Gradient-text headlines (`bg-clip-text text-transparent`)
-**Why it's slop:** The universal v0 / Lovable / Bolt tell. Every AI-generated SaaS hero has a purple→pink or indigo→cyan gradient sliced through the H1. Reads as "I let the model pick the color."
-**Fix:** Solid color headlines only. Use the palette accent for ONE emphasis word (italic serif), not a gradient across the whole line.
+## THE MINI-OVERHEAD-PILL FAMILY (worst AI tell)
 
-### ❌ Shared-shadow disease (`shadow-lg` on every elevated element)
-**Why it's slop:** Cards, buttons, modals, dropdowns, tooltips all wearing the same `shadow-lg`. Flat hierarchy disguised as depth.
-**Fix:** A 5-step elevation ladder. Resting cards = `shadow-sm` (or none + bg shift). Buttons = the two-part button shadow from `tokens.md`. Hovered cards = `shadow-md`. Floating panels (popover, dropdown) = `shadow-xl`. Modals = `shadow-2xl` + backdrop. Shadow scales with z-depth, never shared by default.
+**Ban: ANY small caps text element between nav and H1.** Whole family banned, all costumes:
 
-### ❌ Radius monoculture (`rounded-2xl` on everything)
-**Why it's slop:** Chips, buttons, cards, modals, inputs all sharing the same corner radius. The shadcn-default-untouched look.
-**Fix:** Radius scales with element size. Chips/pills = `rounded-full`. Buttons = `rounded-full` or `rounded-lg`. Inputs = `rounded-md`. Cards = `rounded-2xl`. Modals/sheets = `rounded-3xl`. Different sizes deserve different curvature.
+- ❌ Status pill: `● V3.4 — PAGED ROUTING LIVE`, `● NEW — AGENT MODE`, `● LIVE`
+- ❌ Editorial volume tag: `VOL. 04 — FIELD NOTES ──── OBSERVABILITY`, `ISSUE 12 / WINTER 2026`
+- ❌ Category eyebrow w/ divider: `OBSERVABILITY ─── PRODUCT`
+- ❌ Magazine masthead: `THE QUARTERLY — VOL. 03`
+- ❌ Section index: `01 / DESIGN — 02 / MOTION`
+- ❌ Plain monospace caps tag: `OBSERVABILITY` directly above H1
+- ❌ Anything with horizontal divider lines (────) flanking caps text
+- ❌ Any small monospace UPPERCASE caps tracking-wide thing between nav and H1
 
-### ❌ Default-state-only ship (no empty / loading / error / overflow states)
-**Why it's slop:** The deepest non-human tell. Real designers ship the 7 component states; AI ships only the happy path with mock data.
-**Fix:** Every list, table, card-grid, dashboard panel, and form MUST have: default, hover, active/pressed, focus-visible, loading (skeleton), empty (with CTA), error (with recovery). Block delivery without all 7.
+**Rule:** delete it. Keep subhead, dual CTA, and everything else. The H1 is the first thing on the page. Period.
 
-### ❌ Tone-of-nothing brief ("modern, clean, minimal")
-**Why it's slop:** "Clean" is not a brief — it's the absence of one. AI defaults to washed-out neutral when no tone is named.
-**Fix:** Pick ONE named tone before building: editorial, brutalist, luxury, retro-futuristic, organic, playful, industrial, technical, soft-feminine, sharp-masculine, monochrome-print. Every decision (type, color, motion, density) should be defensible from that tone.
-
-### ❌ Equal-weight 3-card feature trio
-**Why it's slop:** Three cards, identical size, identical weight, identical art direction. Schoger's rule: emphasize by de-emphasizing.
-**Fix:** Promote ONE card to 2x size with full art, demote the other two to text-only or thumbnail. Visual hierarchy beats parity.
-
-### ❌ Trust-signal slop bundle (avatar stacks + "10x faster" + grayscale logo bar)
-**Why it's slop:** The unsourced 99.9% / 50K+ / 10x trio with a `grayscale opacity-40` "Trusted by" logo bar above an avatar pile. Every metric round, every logo grayscale, every avatar generated.
-**Fix:** Use REAL specific numbers (`8,431`, not `10,000+`). Source the claim ("Per 2026 Q1 telemetry"). If you don't have real logos with permission, omit the band. Avatars must be real photos with real names — never gradient-initial circles.
-
-### ❌ Default Tailwind palette unmodified (`indigo-500`, `slate-50`, etc.)
-**Why it's slop:** Using `bg-indigo-500` / `text-slate-900` straight out of Tailwind = no design decisions made.
-**Fix:** Define palette tokens in `tailwind.config` from one of the 4 `tokens.md` palettes. Reference brand tokens (`bg-accent`, `text-ink`), never raw Tailwind hue scales in JSX.
-
-### ❌ Missing `prefers-reduced-motion` handling
-**Why it's slop:** Ships motion that ignores user accessibility settings. Real designers respect the OS preference; AI never adds the media query.
-**Fix:** Every keyframe and Framer Motion transition must check the `useReducedMotion()` hook (Framer) or wrap CSS in `@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }`.
-
-### ❌ Linear easing + single global transition duration
-**Why it's slop:** `transition-all duration-300 ease-linear` everywhere. Kowalski's rule: never linear, durations scale with element size, exits 20% faster than entrances.
-**Fix:** Small elements (chips, icons) = 120-160ms. Buttons/cards = 180-240ms. Panels/modals = 240-320ms. Page-scale transitions = 400-500ms ceiling. Easing = `ease-out-quint` `[0.16, 1, 0.3, 1]` for entrances, springs for interactive. Exits = entrance duration × 0.8.
-
-### ❌ Headline cadence templates ("Ship faster. Build better. Scale smarter.")
-**Why it's slop:** Triple-verb staccato is the ChatGPT marketing voice. Same goes for "The all-in-one platform for X", "Built for modern teams", "Powered by AI" as a feature.
-**Fix:** Write the headline as a single declarative sentence about what the product DOES for one specific person. "Plan your week without the spreadsheet." "Send invoices in three clicks." Specific verb + specific object.
+**Real announcement bars at the top of the page (above nav) with actual news are FINE.** Only the mini-pill-above-H1 is banned.
 
 ---
 
-## MOBILE / VIEWPORT ANTI-PATTERNS
+## THE FLOATING-CHIP FAMILY (delete every chip outside the mockup)
 
-### ❌ `h-screen` for full-height hero sections
-**Why it's slop:** Catastrophic iOS Safari bug. When the address bar collapses/expands, the layout JUMPS several hundred pixels mid-scroll. Looks broken.
-**Fix:** Use `min-h-[100dvh]` (dynamic viewport height) instead. Always.
+**Ban: ANY pill/chip/badge floating outside the mockup chrome.** All variants banned:
 
-### ❌ Asymmetric layouts that don't collapse on mobile
-**Why it's slop:** `md:col-span-2` patterns that stay broken at <768px. Forces horizontal scroll.
-**Fix:** Every asymmetric layout MUST have explicit mobile reset to single-column (`grid-cols-1 px-4 py-8`).
+- ❌ Stat chip: `P99 LATENCY · LIVE / 42ms ▼ 8.2%`
+- ❌ Editorial chip: `● root cause inferred — payments-redis pool`
+- ❌ Status flag below mockup: `● auto-scaling enabled`, `● synced — 3 services`
+- ❌ Floating verification badge: `✓ deployed`, `✓ caught`
+- ❌ "live" / "real-time" / "synced" indicators outside dashboard chrome
+- ❌ Any 2-3 chip stack around the mockup at varying corners
 
-### ❌ Backdrop-blur on scrolling content
-See `architecture.md` § Performance for the rationale. Rule: backdrop-blur ONLY on fixed/sticky elements.
+**Rule:** if the info matters, render it INSIDE the mockup as part of the dashboard. Outside the mockup = decoration = delete.
 
-### ❌ Z-index spam (`z-50`, `z-[9999]` everywhere)
-See `tokens.md` § Z-INDEX DISCIPLINE for the standard stack.
-
----
-
-## COLOR ANTI-PATTERNS
-
-### ❌ Teal `#14b8a6` as primary accent
-**Why it's slop:** Default Tailwind palette + Claude's training bias = teal lands first. It immediately signals "AI made this."
-**Fix:** Use one of the 4 palette presets in `tokens.md`. Warm coral, indigo-violet, amber, or burnt sienna.
-
-### ❌ `bg-gradient-to-br from-purple-500 to-blue-500`
-**Why it's slop:** The single most-recognized AI-generated gradient. Used by every cookie-cutter landing page.
-**Fix:** No multi-color gradients. If you need depth, use a soft single-hue radial: `radial-gradient(ellipse at top, oklch(95% 0.05 60), transparent)`. Or skip gradient entirely — bundled backgrounds in `assets/backgrounds/` are better.
-
-### ❌ Pure `#ffffff` background
-**Why it's slop:** Pure white is harsh and budget. Premium designs use off-white.
-**Fix:** `oklch(98% 0.005 90)` (warm) or `oklch(98% 0.002 250)` (cool).
-
-### ❌ Pure `#000000` text
-**Why it's slop:** Same reason — too clinical.
-**Fix:** Slightly tinted: `oklch(20% 0.01 90)` for warm, `oklch(22% 0.01 250)` for cool.
-
-### ❌ More than 3 colors total in the design
-**Fix:** ONE accent + neutral text + neutral background. That's it. Photography and gradients introduce other colors *in images*, not as flat fills.
-
-### ❌ Pure neutral grays (`gray-500`, `slate-500`, `zinc-500`)
-**Why it's slop:** Pure neutral grays are lifeless. Premium designs tint grays toward the brand hue at low chroma, so the gray belongs to the palette instead of fighting it.
-**Fix:** Use an HSL/OKLCH ramp where neutrals share the brand's hue at chroma 0.005-0.015. On a warm-coral-accent build, gray text becomes `oklch(45% 0.01 30)` — slightly warm. On a cool-indigo build, `oklch(45% 0.015 250)` — slightly cool. Same lightness, different micro-warmth.
+**Allowed exception:** ONE chip MAX, only if it surfaces a unique product truth the user CAN'T see otherwise. If you can't explain in 1 sentence what unique truth it reveals → delete it.
 
 ---
 
-## TYPOGRAPHY ANTI-PATTERNS
+## HERO ANTI-PATTERNS
 
-### ❌ Inter (without Tight) as headline font
-**Why it's slop:** Default Vercel template font. Used by every "next.js + tailwind" tutorial.
-**Fix:** Inter Tight, Geist, or Uncut Sans for headlines. Inter (regular) is fine for body if needed.
-
-### ❌ Space Grotesk
-**Why it's slop:** Specifically called out in research as "the AI defaults here" font.
-**Fix:** See above.
-
-### ❌ Headline + subhead in same font weight
-**Why it's slop:** Flat hierarchy = AI didn't think about typographic contrast.
-**Fix:** Headline `font-bold` (700) or `font-extrabold` (800). Subtext `font-normal` (400). Big jump.
-
-### ❌ ALL HEADLINES ARE ITALIC
-**Why it's slop:** The italic-serif move only works if used on ONE word per headline. All-italic = decorative.
-**Fix:** `<h1>Build something <em>beautiful</em>.</h1>` — only the emphasis word italic.
-
-### ❌ Headline with icons next to it
-**Why it's slop:** AI defaults to "let me add an icon to make it pop." Premium typography stands alone.
-**Fix:** No icon (and definitely no emoji) in or beside H1. Save icons for nav, buttons, feature cards.
-
-### ❌ Emojis in product UI
-**Why it's slop:** Renders inconsistently across OS. Reads as AI-generated content. Instantly unprofessional.
-**Fix:** NEVER use emojis in code/markup/text/alt-text/headings/buttons/labels. Use Phosphor or Radix icons instead.
-
-### ❌ `text-3xl` hero (or smaller)
-**Why it's slop:** Timid. Premium heroes are `text-5xl` to `text-6xl`.
-**Fix:** Always `text-5xl md:text-6xl` for primary hero. `text-4xl md:text-5xl` for section H2s.
+- ❌ **Hero centered everything** (text-center stacks). Fix: 5/7 or 7/5 split, H1 anchored upper third.
+- ❌ **50/50 column split** with both halves centered. Fix: asymmetric 5/7 or 7/5.
+- ❌ **`py-24` on hero** (symmetric). Fix: `pt-32 pb-20` or `pt-40 pb-24`.
+- ❌ **H1 vertically centered.** Fix: anchor at upper third (28-38% from top).
+- ❌ **H1 wraps 4+ lines.** Fix: cut words, widen column, OR drop size — in that priority.
+- ❌ **Two equal-weight CTAs side by side.** Fix: filled + ghost, ratio ≈ 3:1.
+- ❌ **Hero copy > 8 words.** Fix: cut.
+- ❌ **`text-3xl` hero or smaller.** Fix: 5xl-7xl.
+- ❌ **Hero with icons next to H1.** Fix: type stands alone.
+- ❌ **All-italic headline.** Fix: italic-serif on ONE word per headline only.
+- ❌ **Headline + subhead in same font weight.** Fix: 700/600 + 400.
+- ❌ **`min-h-[100svh]` with not enough content** = giant void below hero. Fix: drop the min-h, OR fill it, OR use `flex flex-col justify-between`.
 
 ---
 
 ## LAYOUT ANTI-PATTERNS
 
-### ❌ Three-column feature grid with identical card sizes
-**Why it's slop:** The single most generic SaaS landing page pattern. AI defaults here every time.
-**Fix:** Bento grid (`features-bento.md`) with mixed sizes. Or a single asymmetric split (text left, illustration right).
+- ❌ **Tiny island sections** — content < 60% of section width when bg has contrast. Fix: widen content ≥75%, drop the bg, OR switch to multi-col grid that fills.
+- ❌ **`py-24` on every section.** Fix: 3-tier rhythm — hero `py-32`, features `py-24`, transitions `py-12`.
+- ❌ **Symmetric padding everywhere.** Fix: asymmetric on illustration-ending sections (`pt-24 pb-32`).
+- ❌ **Mobile padding === desktop padding.** Fix: `py-14 md:py-20 lg:py-24` style triple.
+- ❌ **`max-w-4xl` containers without reason.** Fix: `max-w-7xl` default; narrow to `max-w-prose` only for actual prose.
+- ❌ **`max-w-7xl` capped on big monitors** = tiny island on 27". Fix: `max-w-7xl 2xl:max-w-[1500px] [@media(min-width:1920px)]:max-w-[1760px]`.
+- ❌ **Linear spacing (4/8/12/16 equal steps).** Fix: 4/8/12/16/24/32/48/64/96/128 (non-linear).
+- ❌ **Empty section w/ only heading.** Fix: real content, OR delete the section.
+- ❌ **Footer w/ 5 columns of mostly-empty links.** Fix: fewer denser columns, OR editorial ghost-wordmark.
+- ❌ **Asymmetric grids that don't collapse on mobile.** Fix: `grid-cols-1 md:grid-cols-2`.
 
-### ❌ "Hero → Features → Pricing → CTA → Footer" in that exact order
-**Why it's slop:** It's the literal Vercel Geist template structure.
-**Fix:** Vary the rhythm. Some premium sites: Hero → Trust logos → Story → Demo → Pricing → FAQ → Footer. Or Hero → "How it works" → Features → Testimonials → Pricing → Footer. Mix it up.
+---
 
-### ❌ Centered everything (text-center on every section)
-**Why it's slop:** Symmetric centering with no asymmetric tension reads as "I didn't think about composition."
-**Fix:** Center the hero. After that, ALTERNATE between left-aligned and split-layout sections.
+## TYPOGRAPHY ANTI-PATTERNS
 
-### ❌ Empty sections with only a heading and subtitle
-**Why it's slop:** AI generated the structure but ran out of content. Maximum dead-space crime.
-**Fix:** Every section must have meaningful content density. If you don't have content for a section, REMOVE the section. Don't ship a hollow shell.
+- ❌ **Inter (without Tight)** as headline. Fix: Inter Tight / Geist / Uncut Sans.
+- ❌ **Space Grotesk.** Specifically called out as the "AI defaults here" font.
+- ❌ **Headline + subhead same weight.** Fix: 700/600 + 400.
+- ❌ **Type sizes outside the 8 locked.** No 18px, no 40px. Use display/hero/h1/h2/h3/body-lg/body/caption only.
+- ❌ **No negative tracking on display/hero.** Fix: `-0.04em` / `-0.035em`. Single biggest premium-feel multiplier.
+- ❌ **Body line-height 1.75** (Tailwind prose default). That's for markdown. Fix: 1.55-1.6.
+- ❌ **Font weight 300.** Fix: 400 minimum (use color/size to de-emphasize, never light weights).
+- ❌ **800 + 300 weight pair.** Looks like 2014 WordPress. Fix: 700/600 + 400.
+- ❌ **More than 3 weights per page.** Pick 3, max.
 
-### ❌ Linear spacing scale (4 / 8 / 12 / 16 / 20 / 24 in equal steps)
-**Why it's slop:** Linear scales feel mechanical — every gap looks like the previous gap plus 4. Premium designs use NON-LINEAR scales where the gaps grow.
-**Fix:** Use the non-linear scale: `4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128`. Notice the jumps — 16→24 (1.5x), 24→32 (1.33x), 32→48 (1.5x), 48→64 (1.33x), 64→96 (1.5x). The growth produces visual rhythm; linear produces monotone.
+---
 
-### ❌ Footer with 5 columns of mostly-empty link lists
-**Why it's slop:** Default footer with placeholder columns ("Product / Company / Resources / Legal / Social") and 1-2 real links per column.
-**Fix:** Either fewer, denser columns, OR an editorial-style footer with the giant ghost wordmark + sparse, real links.
+## COLOR ANTI-PATTERNS
+
+- ❌ **Teal `#14b8a6`** as primary accent. Fix: warm coral / indigo-violet / amber / burnt sienna from `tokens.md`.
+- ❌ **`bg-gradient-to-br from-purple-500 to-blue-500`.** The single most-recognized AI tell.
+- ❌ **Pure `#fff` background.** Fix: off-white.
+- ❌ **Pure `#000` text.** Fix: tinted (`oklch(20% 0.01 90)` warm or `oklch(22% 0.01 250)` cool).
+- ❌ **>3 colors total.** Fix: 1 accent + neutral text + neutral bg.
+- ❌ **Pure neutral gray** (`gray-500`/`slate-500`). Fix: tint toward brand hue at chroma 0.005-0.015.
+- ❌ **80%+ saturation accents.** Fix: dial to 50-65% chroma.
 
 ---
 
 ## COMPONENT ANTI-PATTERNS
 
-### ❌ Storybook / state-picker / "default hover focus active loading empty error" row inside a hero mockup
-**Why it's slop:** The single most embarrassing AI tell in 2026. The hero MacBook contains a dev-only component-state previewer — a row of pills labeled `default | hover | focus | active | loading | empty | error` at the bottom of the dashboard, and the screen shows whatever state is "selected" (often `loading` = empty skeleton). This is dev tooling leaking into production. No real product shipped a state picker as part of its dashboard. Visitors see "loading" and assume the product is broken or empty.
+- ❌ **Faking dashboards inline w/ divs+gradients.** Fix: real screenshot, device frame + content primitives, OR single hero photo.
+- ❌ **State-picker / Storybook controls inside hero mockup.** Hero shows POPULATED default state with realistic data. NEVER `default | hover | focus | active | loading | empty | error` row inside the screen.
+- ❌ **Dashboard mockup using marketing density** (16px body, 56px rows, 24px padding). Fix: app density — 12-13px body, 28-32px rows, 12-16px padding, 1px @ 6-10% borders, NO drop shadows, tabular-nums.
+- ❌ **Status badges as solid fills** (`bg-red-500 text-white`). Fix: tinted bg + tinted text + tinted border on same hue: `bg-red-950 text-red-400 border-red-900`. 18-22px tall, 10-11px UPPERCASE, weight 600.
+- ❌ **Floating decoration overlapping H1/H2/CTA.** SAFE-ZONE rule: decorations live ONLY in margin safe zone (corners, edges), never inside focal content rectangle. Bounding-box check: zero intersection with `<h1>`, `<h2>`, `[data-stat]`, `button`. Max 4 decorations per section. Always rotate `±6deg` to `±15deg`.
+- ❌ **Marquee with visible loop seam (N-shape).** Fix: duplicate content INSIDE track, animate `translateX(-50%)` (NOT -100%), pixel mask 80px, ≥8 items per copy.
+- ❌ **`<Loader2 />` for every loading state.** Fix: skeleton screens / button ellipsis / optimistic update / branded progress bar.
+- ❌ **"MOST POPULAR" pricing banner.** Fix: subtle pill "Currently Popular" + green dot, OR slight bg tint.
+- ❌ **Feature lists w/ checkmark per row.** Fix: thin horizontal dividers, OR no separators.
+- ❌ **shadcn `<Accordion>` defaults for FAQ.** Fix: thin pill rows w/ hover hint (`recipes/faq-pillrows.md`).
+- ❌ **Borders as primary divider.** Fix: shadows (`tokens.md` § ATMOSPHERE), space, OR bg contrast. Borders only for inputs / active tabs / table row dividers.
+- ❌ **`rounded-md` shadcn buttons w/ chevron.** Fix: `rounded-full` pill buttons.
+- ❌ **Shared-shadow disease (`shadow-lg` on every elevated thing).** Fix: 5-step elevation ladder. Cards `shadow-sm`, popovers `shadow-xl`, modals `shadow-2xl`. Scale w/ z-depth.
+- ❌ **Radius monoculture (`rounded-2xl` everywhere).** Fix: chips `rounded-full`, buttons `rounded-full`/`lg`, inputs `rounded-md`, cards `rounded-2xl`, modals `rounded-3xl`. Scale w/ size.
+- ❌ **Default-state-only ship (no empty/loading/error states).** Block delivery without all 7: default / hover / active / focus-visible / loading / empty / error.
 
-**Two specific failures this rule covers:**
-1. The literal state-picker row visible inside the hero screen — DELETE the picker entirely from the hero render.
-2. The hero showing the `loading` / `empty` / `error` state of the dashboard — the hero MUST show the **populated, happy-path, real-data DEFAULT state**. Visitors need to see what "good" looks like.
+### Mockup compositing (chrome + screen content)
 
-**Fix — the HERO PRODUCT-RENDER LAW:**
+The dashboard MUST sit INSIDE the mockup chrome, not float beside it. 2-layer wrapper, screen content uses catalog coordinates:
 
-- The hero mockup shows the product's **populated default state with realistic data**. Real incident IDs, real service names, real timestamps, a real chart with a real spike, a real on-call person.
-- **NEVER render a component-state picker, debug toolbar, Storybook controls, dev-mode panel, or "select state" UI inside the hero.** Those exist in Storybook / a separate `/components` route, never in the live page.
-- **NEVER hero-render the loading, empty, or error state.** Loading = visitors think it's broken. Empty = visitors think there's no product. Error = visitors leave.
-- If the prompt says "7 component states on the dashboard primitive," that means: build the primitive so it CAN render 7 states (in Storybook / dev), and render the **populated default state in the hero**. It does NOT mean "show all 7 states stacked inside the hero MacBook."
-- The dashboard primitive should be defined as a component with a `state` prop (`'default' | 'loading' | 'empty' | 'error'`). The hero passes `state="default"`. Storybook stories cover the rest.
-
-```tsx
-// CORRECT
-<Mockup device="macbook-pro-14">
-  <IncidentDashboard state="default" data={realisticMockData} />
-</Mockup>
-
-// WRONG — DO NOT SHIP
-<Mockup device="macbook-pro-14">
-  <IncidentDashboard />
-  <StatePickerRow />  {/* never in hero */}
-</Mockup>
-```
-
-### ❌ Screen content not properly composited INSIDE the device mockup
-**Why it's slop:** The dashboard/screenshot floats next to the MacBook instead of sitting INSIDE the screen. Or it's positioned but bleeds past the bezel. Or unrelated debug UI (component state pickers, "default / hover / focus / active / loading / empty / error" rows) gets rendered on top of the screen area as if it's part of the product. All three failures look like "AI couldn't figure out the layer stack."
-
-**Fix — the MOCKUP COMPOSITING LAW:**
-
-A device mockup is TWO layers, in this exact order, in a SINGLE relative-positioned wrapper:
-
-```tsx
+```jsx
 <div className="relative inline-block w-full max-w-2xl">
-  {/* LAYER 1 — the screen content, positioned absolutely INSIDE the screen rectangle */}
-  <div
-    className="absolute overflow-hidden rounded-md"
-    style={{
-      // Coordinates from recipes/device-mockups-catalog.md — these are NOT optional.
-      // MacBook Pro 14: top 5.5%, left 12%, width 76%, height 82%
-      top: "5.5%", left: "12%", width: "76%", height: "82%",
-    }}
-  >
-    <YourDashboardScreenshot />   {/* fills 100% × 100% of this box */}
+  <div className="absolute overflow-hidden rounded-md"
+       style={{ top: "5.5%", left: "12%", width: "76%", height: "82%" }}>
+    <YourDashboardScreenshot />
   </div>
-
-  {/* LAYER 2 — the device chrome PNG, on TOP, pointer-events-none */}
-  <img
-    src="/mockups/macbook-pro-14.webp"
-    alt=""
-    aria-hidden
-    className="relative block w-full h-auto pointer-events-none select-none"
-  />
+  <img src="/mockups/macbook-pro-14.webp" alt="" aria-hidden
+       className="relative block w-full h-auto pointer-events-none select-none" />
 </div>
 ```
 
-**Mandatory rules:**
-1. **Use the coordinates from `recipes/device-mockups-catalog.md`** for the device you chose. Do not eyeball them. Each device has a different screen-area %.
-2. **The screen content is INSIDE the wrapper, BEHIND the chrome PNG** (z-order: chrome on top via DOM order — chrome is the LAST child so it stacks above).
-3. **`overflow: hidden` on the screen-content box** so anything that overflows the screen rect gets clipped at the bezel.
-4. **`pointer-events-none` on the chrome image** so clicks reach the screen content underneath.
-5. **The wrapper has `position: relative`** and a fixed `max-w-*` so percentages resolve correctly.
-6. **The screen content MUST be the actual product UI** — the dashboard mockup recipe (chart + sidebar + active-incident list). NEVER a "component states demo row" (default / hover / focus / etc), NEVER a placeholder, NEVER a screenshot of an unrelated page.
-7. **For phones (rounded screen corners)**: add `borderRadius: "8%"` to the screen-content box so the content respects the screen curvature.
-8. **Verify with a manual look:** before shipping, screenshot the hero and check that (a) the screen content fills the screen area edge-to-edge, (b) nothing pokes past the bezel, (c) the content is readable at hero size, (d) NO "state picker" debug UI is visible inside the screen.
-
-**Common failures and their fixes:**
-| Failure | Root cause | Fix |
-|---|---|---|
-| Dashboard shrunken in middle of screen, bezel of black around it | Forgot percentages, used `inset-0` | Use the device coordinates |
-| Dashboard pokes past the laptop edge | Forgot `overflow: hidden` on screen box | Add it |
-| "default / hover / focus" row visible at bottom of screen | Component-state preview leaked into the production hero | Render only the dashboard primitive's DEFAULT state inside the mockup. Component-state catalogues belong in Storybook, not the live page. |
-| Phone screenshot has hard square corners over rounded iPhone screen | Forgot `borderRadius: "8%"` on screen box | Add it |
-| Click goes to chrome image, not the product | Forgot `pointer-events-none` on chrome | Add it |
-
-### ❌ Faking a dashboard / app screenshot inline with divs + gradients
-**Why it's slop:** The single most-cited AI tell after `<Loader2 />`. Random rectangles labeled "Sales / Revenue / Activity" with chevron arrows and gradient backgrounds. Always looks worse than the actual product would.
-**Fix:** Three valid options (NEVER invent UI from scratch):
-1. Use a real screenshot of the product (`<img src="/dashboard.png" />`)
-2. Use a device frame + clean content primitives from `recipes/mockups.md`
-3. If product has no UI yet, use a single hero photo (no fake mockup at all)
-
-### ❌ Floating decoration cards that overlap text, numbers, or CTAs
-**Why it's slop:** The classic AI tell where a "playful" sticker/note/badge gets `position: absolute` placed without checking what's underneath. Result: the float lands on top of a stat number, a CTA button, or H1 — and it looks like a layout bug, not a deliberate composition. Owner saw this exact failure on a Vellum hero where a floating "notes/main" card sat on top of the "8,412" stat.
-
-**Fix — the SAFE-ZONE rule:**
-
-Floating decorative elements (stickers, note cards, badges, pills, accent shapes) are only allowed in the **margin safe zone** of the section, NEVER inside the focal content area.
-
-- **Section anatomy:** every section has (a) a focal content rectangle (where text + CTAs live, max-w-4xl roughly centered) and (b) a margin safe zone (the space outside that focal rectangle but inside the section padding).
-- **Decorations live ONLY in the safe zone.** Top-left corner, top-right corner, bottom-left corner, bottom-right corner. Or hugging the left/right edge mid-section. NEVER in the horizontal middle band where text lives.
-- **Set explicit z-index ONLY on the focal content** (`z-10`) and leave decorations at default (`z-0`). If a decoration must sit at a higher z to be visible, it shouldn't be there in the first place.
-- **Bounding-box check:** before placing any `absolute` decoration, mentally compute its bounding box. If that box intersects the bounding box of any H1, H2, big-number stat, or CTA button → move it. No exceptions.
-- **Max 4 floating decorations per section.** More than 4 is clutter, not composition.
-- **Asymmetric placement:** never place 2 decorations symmetrically (e.g. one top-left + one top-right at the same y). Vary y-offset and rotation per decoration.
-- **Always rotate decorations** by `±6deg` to `±15deg` so they don't read as accidental UI.
-
-**Verification (in `review.md` step):** at every section, run a Playwright `boundingBox()` overlap check between every `position: absolute` element and every `<h1>`, `<h2>`, `[data-stat]`, and `button` inside the section. Any intersection → flag and re-position.
-
-### ❌ Decorative pill floating below/beside the mockup (same family as stat chips, in editorial costume)
-**Why it's slop:** SAME pattern as the stat-chip ban below, just dressed up differently. A small pill-shaped element sitting just below or beside the MacBook/mockup with monospace-ish text like `● root cause inferred — payments-redis pool`, `● indexed — 12,847 events`, `● synced — 3 services`. Pretends to be product context. Is decoration.
-
-**The rule (broad):** if there is ANY pill/chip/badge/tag floating outside the mockup chrome — below it, beside it, overlapping its corner — DELETE IT. The mockup speaks for itself. The dual CTA + headline + subtext do the selling. This includes:
-- "● root cause inferred — payments-redis pool" type editorial chips
-- "● auto-scaling enabled" / "● synced" / "● live" status flags below mockups
-- Caption-style pills in monospace font hanging off the mockup
-- Floating badges with checkmarks ("✓ deployed", "✓ caught", "✓ verified")
-- "real-time" / "live data" / "synced" indicators outside the dashboard chrome
-- ANY decorative element below or beside the mockup that isn't the mockup itself
-
-If the information is important, it goes INSIDE the mockup as part of the dashboard. Outside = decoration = delete.
-
-### ❌ Decorative stat-chip / metric-pill / "live status" floating cards around a mockup
-**Why it's slop:** The "P99 LATENCY · LIVE / 42ms ▼ 8.2%" floating chip pattern. Looks impressive at first glance — until you realize every AI-generated SaaS hero has 2-4 of them dotted around the product mockup, all communicating fake-real-time stats nobody asked for. Pure decoration that screams "I'm trying to look like Linear/Vercel."
-
-**Fix — the FLOATING-CHIP RULE:**
-
-- **Hero default = ZERO floating chips.** The product mockup speaks for itself. The dual CTA + headline + subtext do the selling.
-- **Allowed: ONE chip MAX**, and only if it surfaces a critical product value the user CAN'T see otherwise (e.g. "Scanning… 247 services connected" because you literally couldn't tell that from the dashboard alone).
-- **Banned: stat chips that DUPLICATE info already visible** ("P99 latency 42ms" when the dashboard mockup already shows latency).
-- **Banned: stacks of 2-3 chips around the mockup** at varying corners. That's the literal AI tell.
-- **Banned: fake "LIVE" / "ONLINE" / "SYNCING" status badges** that imply real-time data without actually doing anything.
-- **Banned: chips with arrows + percentages** (`▼ 8.2%`, `▲ 12%`) unless they reflect actual product data the user is asking about.
-
-If you wrote a chip and can't explain in one sentence what unique product truth it reveals — DELETE IT.
-
-### ❌ Marquees / infinite-scroll bands with visible loop seam ("N-shaped" loop)
-**Why it's slop:** The single most-recognized "broken animation" AI tell. The loop point is visible inside the viewport — you can see logos / text mid-loop fading out and restarting. Owner literally sent a screenshot of this failure with "Outlier" appearing twice in the visible band.
-
-**Fix — the SEAMLESS LOOP RULES:**
-
-1. **Duplicate the content INSIDE the marquee track.** The animation translates `-50%` (not `-100%`), and the track contains TWO copies of the items. So as the first set scrolls off-screen, the second set is already there to take its place — invisible loop point.
-   ```jsx
-   <div className="t-marquee-track">
-     {items.map(...)}
-     {items.map(...)}  {/* DUPLICATE — required for seamless loop */}
-   </div>
-   ```
-   ```css
-   @keyframes scroll {
-     from { transform: translateX(0); }
-     to   { transform: translateX(-50%); }  /* NOT -100% */
-   }
-   ```
-
-2. **Edge mask gradient** that fully fades the leftmost and rightmost ~80px to the section background:
-   ```css
-   .t-marquee-container {
-     mask-image: linear-gradient(90deg, transparent 0%, black 80px, black calc(100% - 80px), transparent 100%);
-   }
-   ```
-   Without this mask, the entry/exit of items is visible — looks janky.
-
-3. **Use `transform: translateX()` only** — never animate `left` or `margin-left` (layout reflow per frame, kills mobile fps).
-
-4. **Speed:** 30-60 seconds for ONE full loop is the readable range. Faster = nausea, slower = nobody notices the motion.
-
-5. **Pause on hover (optional)** if items are clickable — but never pause an ambient logo wall.
-
-6. **No fewer than 8 items per copy** — if you have 4 logos, duplicate to 8 inside ONE copy, then the track has 16 total. Too few items = the seam is unavoidable.
-
-7. **Width math:** the track must be wider than 200% of the visible container so there's always content to scroll into view. `width: max-content` + duplicated items handles this automatically.
-
-See `recipes/animations.md` § Marquee for the canonical implementation.
-
-### ❌ Mini overhead status-pill / version-tag / eyebrow-with-divider bars above the headline
-**Why it's slop:** The single most-recognized "AI-generated landing page" tell of 2025-2026. ANY tiny element sitting just above an H1 with monospace caps + (colored dot OR divider lines OR volume number OR category tag) — every variant is the same slop in a different costume. Every Claude/v0/Lovable hero defaults to this. Owner flagged this as "literally the most sloppiest thing... the worst AI slop." It is decoration pretending to be product news.
-
-**SCOPE — this ban removes the ENTIRE FAMILY of "tiny monospace-caps thing above H1" patterns. It does NOT shrink the rest of the hero.**
-
-The banned FAMILY (same shape, different costumes):
-- **Status pill:** `● V3.4 — PAGED ROUTING LIVE`, `● NEW — AGENT MODE`, `● LIVE`
-- **Editorial volume tag:** `VOL. 04 — FIELD NOTES ──── OBSERVABILITY`, `ISSUE 12 / WINTER 2026`
-- **Category eyebrow with divider:** `OBSERVABILITY ─── PRODUCT`, `── INTRODUCING ──`
-- **Magazine masthead:** `THE QUARTERLY — VOL. 03 — 2026`
-- **Section index:** `01 / DESIGN — 02 / MOTION — 03 / SHIP`
-- **Plain monospace tag:** `OBSERVABILITY` in 11px UPPERCASE caps directly above H1
-- **Anything with horizontal divider lines (────) flanking caps text** above the headline
-- **Any small text element in monospace UPPERCASE caps tracking-wide** sitting between nav and H1
-
-**The rule (broader than literal):** if there is ANY small decorative text element (monospace caps OR small caps OR tracking-wide caps) sitting between the nav bar and the H1 — DELETE IT. The H1 is the first thing on the page. Period.
-
-**What is NOT banned (and is still REQUIRED in a hero):**
-- ✅ The H1 headline itself
-- ✅ A subhead paragraph BELOW the headline (1-2 sentences explaining what the product does — this is mandatory, not optional)
-- ✅ The dual CTA (primary + secondary button) below the subhead — MANDATORY
-- ✅ A real announcement bar across the very top of the page (above nav) if there's actual news to announce
-- ✅ The nav bar
-- ✅ Real header sections elsewhere on the page
-- ✅ A trust strip / stat row below the CTAs
-
-**Fix for the banned mini-pill specifically:**
-- **Remove the pill.** Do NOT remove the subhead, CTAs, or anything else. The hero still has: H1 → subhead paragraph → dual CTA → optional stat row. You are deleting ONE small element above the H1, not minimizing the whole composition.
-- **If you genuinely have news** (a real launch, a real version, a real changelog item the visitor would care about), use it as a clickable announcement bar at the very top of the page (above nav OR as the first nav item) — NOT as a decorative pill stacked over the H1.
-- **Never use these copy patterns:** `V{n.n} — {ALL CAPS THING}`, `● LIVE`, `● NEW`, `NOW SHIPPING`, `JUST LAUNCHED`, `INTRODUCING {X}` in monospace caps with a colored dot.
-- **Never pair monospace caps + colored dot + tiny pill shape** as a hero overhead. That trio IS the AI tell.
-- **Never stack two overhead elements** (eyebrow tag + status pill) — pick one or, better, neither.
-
-If the only purpose of the overhead pill is to "make the hero feel more complete" — DELETE IT. Whitespace above the headline is the design.
-
-### ❌ `<Loader2 className="animate-spin" />` for every loading state
-**Why it's slop:** The most-cited AI tell. Recognized instantly by any designer.
-**Fix:**
-- Initial page/section load → skeleton screens (gray placeholder shapes matching content layout)
-- Button submit → button text fades to ellipsis "..." or progress bar inside button
-- Optimistic update → show the result immediately, mark with subtle pulse if not yet confirmed
-- Long process → branded progress bar with stepped milestones
-
-### ❌ "MOST POPULAR" pricing banner across the middle card
-**Why it's slop:** Used by literally every Bootstrap pricing template since 2014.
-**Fix:** Subtle indicator: small pill "Currently Popular" with a green dot, OR a slightly different background tint on the recommended card.
-
-### ❌ Feature lists with checkmark icons (`<Check />` per row)
-**Why it's slop:** The default shadcn/ui pricing template look.
-**Fix:** Thin horizontal divider lines between features. Or no separators, just spacing.
-
-### ❌ Modal accordions for FAQ (`<Accordion>` from shadcn defaults)
-**Why it's slop:** Boxy borders, default chevron rotation, no design opinion.
-**Fix:** Thin pill rows with hover hint, expanding inline. See `recipes/faq-pillrows.md`.
-
-### ❌ Borders as the primary visual divider
-**Why it's slop:** A 1px border around every card is the laziest divider. Refactoring UI rule: borders are the LAST resort. The default LLM move is `border border-gray-200` everywhere.
-**Fix:** Banish borders. Use SHADOW (the two-part stack from `tokens.md` § ATMOSPHERE), SPACE (extra gap between groups), or BG CONTRAST (slight bg-color shift between sections) instead. Borders allowed only for: input fields, accent strips on active tabs, hairline dividers between table rows.
-
-### ❌ Buttons with `rounded-md` and a chevron `<ArrowRight />`
-**Why it's slop:** The most basic shadcn button pattern.
-**Fix:** `rounded-full` pill buttons. Arrow optional, but if used, it should be a small circle-arrow that animates on hover (translates a few px right).
+- Use coordinates from `recipes/device-mockups-catalog.md`
+- `overflow:hidden` on screen-content box
+- `pointer-events-none` on chrome
+- Phone screens: add `borderRadius: "8%"` for screen curvature
+- NO state-picker debug row in the screen
+- Hero shows POPULATED default state with realistic data
 
 ---
 
 ## MOTION ANTI-PATTERNS
 
-### ❌ Animating `top`, `left`, `width`, `height` (Hardware-acceleration rule)
-**Why it's slop:** Triggers layout reflow on every frame. ~5fps on mobile.
-**Fix:** Animate ONLY `transform` and `opacity`. Use `transform: translate()` instead of `top:`, `transform: scale()` instead of `width:`. The compositor handles transform/opacity on the GPU; layout properties force the main thread to recalculate every frame.
+- ❌ **Animating `top`/`left`/`width`/`height`.** Layout reflow per frame = 5fps mobile. Fix: `transform` + `opacity` only.
+- ❌ **`transition: all 0.3s ease`.** Fix: Framer Motion `layout` + spring, OR explicit (`transition-colors duration-200`).
+- ❌ **`hover:scale-105` w/ no easing.** Fix: `<motion.div whileHover={{ scale: 1.02 }} transition={SPRING_SNAPPY}>`.
+- ❌ **`cubic-bezier(0.68, -0.55, 0.265, 1.55)` (back-out / overshoot).** 2017 bouncy. Fix: spring (200-400 stiffness, 20-30 damping) OR `ease-out-quint` `[0.16, 1, 0.3, 1]`.
+- ❌ **`animate-bounce` / `animate-pulse` for important UI.** Fix: entrance fade-up via stagger.
+- ❌ **Mounting/unmounting w/ `{condition && <Card />}`.** Fix: `<AnimatePresence mode="popLayout">` + `motion.div` + `layout`.
+- ❌ **`useState` for parallax/cursor/continuous-input.** Fix: `useMotionValue` + `useTransform`.
+- ❌ **Linear easing + single global duration.** Fix: scale duration w/ element size (chip 120ms / button 200ms / panel 300ms / page 400-500ms ceiling). Exits 20% faster than entrances.
+- ❌ **Missing `prefers-reduced-motion` handling.** Fix: `useReducedMotion()` hook OR `@media (prefers-reduced-motion: reduce)` block.
+- ❌ **Page-load entrance with EVERY element fading.** Fix: stagger only the hero (3-5 elements). Below fold, scroll-triggered subtle reveals only.
+- ❌ **`useScroll` without `target: ref`.** Single biggest scroll bug. Fix: always pass target unless intentionally window-relative.
+- ❌ **`useMotionValueEvent` for derived UI values.** 60fps re-render storm. Fix: `useTransform`. `useMotionValueEvent` only for canvas/external side-effects.
 
-### ❌ `transition: all 0.3s ease`
-**Why it's slop:** Vague generic CSS transition fights with Framer Motion and produces janky results.
-**Fix:** Use Framer Motion `layout` + spring preset. Or specify explicit properties: `transition-colors duration-200`.
+---
 
-### ❌ Hover: `hover:scale-105` with no easing
-**Why it's slop:** Snaps instantly, feels cheap. Default Tailwind hover.
-**Fix:** Wrap in `<motion.div whileHover={{ scale: 1.02 }} transition={SPRING_SNAPPY}>` — softer, springy.
+## SCROLL / PARALLAX ANTI-PATTERNS
 
-### ❌ `cubic-bezier(0.68, -0.55, 0.265, 1.55)` (back-out / overshoot)
-**Why it's slop:** The "bouncy" easing that designers laughed at in 2017.
-**Fix:** Springs (stiffness 200-400, damping 20-30) or `ease-out-quint` `[0.16, 1, 0.3, 1]`.
+- ❌ **`transform: translateY()` on foreground content** = void below the section. Fix: only parallax BACKGROUNDS inside bounded `overflow:hidden` containers.
+- ❌ **Pinned section parent === pinned section height** = no scroll distance, void below. Fix: parent_height = pinned_height + scroll_distance.
+- ❌ **`overflow: hidden` on sticky ancestor** = sticky silently dies. Fix: `overflow: clip`.
+- ❌ **`100vh` on hero pins** (iOS Safari address-bar jitter). Fix: `100svh`.
+- ❌ **Parallax shipped on touch devices** (vestibular nausea). Fix: `(hover: none) and (pointer: coarse)` disables parallax.
+- ❌ **`<video>.currentTime` scrubbing for hero** (breaks on iOS Safari). Fix: canvas image sequence (Apple's actual technique).
+- ❌ **Parallax translation > 150px or > 30%** (nausea). Fix: 50-150px / 15-30% max, bg speed 0.3-0.5× foreground.
+- ❌ **Animating `width` for scroll progress bar.** Reflow per frame. Fix: `scaleX` + `transform-origin: 0%`.
+- ❌ **Parallax on text content.** Reading speed killer. Fix: only on backgrounds.
 
-### ❌ `animate-bounce` or `animate-pulse` for important UI
-**Why it's slop:** Tailwind defaults, both look cheap. Pulse for skeletons is OK; pulse for "look at this!" is not.
-**Fix:** Use entrance animations (fade + 12px slide-up via stagger). Use shared-element morph for state changes.
-
-### ❌ Mounting/unmounting cards with `{condition && <Card />}`
-**Why it's slop:** Hard cuts feel broken. Premium = morph one container.
-**Fix:** Wrap in `<AnimatePresence mode="popLayout">` and use `motion.div` with `layout`. Same surface, different content.
-
-### ❌ `useState` for cursor-tracking, magnetic, parallax, continuous-input animations
-See `architecture.md` § Continuous-input animations. Rule: use `useMotionValue` + `useTransform`, never `useState`.
+See `scroll.md` for the canonical scroll/pinned/parallax law.
 
 ---
 
 ## CONTENT ANTI-PATTERNS
 
-### ❌ "Empower your team to..."  /  "Unlock the power of..."  /  "Revolutionize..."
-**Why it's slop:** ChatGPT marketing voice. Every AI-generated landing page.
-**Fix:** Use the actual product's verb. "Move money across borders." "Ship code faster." "Plan your week." Direct, specific, declarative.
-
-### ❌ AI marketing filler words
-Banned phrases: "Elevate", "Seamless", "Unleash", "Next-Gen", "Revolutionize", "Game-changer", "Delve", "Tapestry", "In the world of...", "Empower your team", "Unlock the power of".
-**Fix:** Use the actual product's verb. "Move money." "Ship code faster." "Plan your week."
-
-### ❌ Hero subtext that explains the headline
-**Why it's slop:** "Move money. (Subtext: We help you move money internationally with low fees and great rates.)" Redundant.
-**Fix:** Subtext adds NEW info — quantification, audience, distinction. "Move money. (Subtext: 0.5% fee, 60+ currencies, settled in 24h.)"
-
-### ❌ Feature card titles like "Powerful Features", "Built for Speed", "Designed for You"
-**Why it's slop:** Empty marketing words.
-**Fix:** Concrete promises. "Live exchange rates", "Scheduled transfers", "Bank-level security" — or specific to the product.
-
-### ❌ Pricing tiers named "Basic / Pro / Enterprise"
-**Why it's slop:** Default. Lazy.
-**Fix:** Name tiers based on the product or audience. "Solo / Team / Studio" for design tools. "Starter / Growth / Scale" for SaaS.
-
-### ❌ Generic placeholder names ("John Doe", "Sarah Chan", "Jack Su")
-**Why it's slop:** Reads as a Lorem-Ipsum dump. Instantly screams template.
-**Fix:** Use creative, realistic, diverse names. "Maya Okafor", "Ezra Singh", "Lucia Marchetti", "Tomas Brandt".
-
-### ❌ Generic avatars (SVG-egg, Lucide user icon, gradient initials)
-**Why it's slop:** "JD" in a colored circle is the laziest possible avatar.
-**Fix:** Use believable photo placeholders via `https://picsum.photos/seed/{unique-id}/100/100` or styled SVG portraits. NEVER initials.
-
-### ❌ Fake suspiciously-round numbers (99.99%, 50%, 1234567)
-**Why it's slop:** Round numbers = invented. Real data has texture.
-**Fix:** Use organic data: `47.2%`, `+1 (312) 847-1928`, `$3,481`, `1,247 active users`.
-
-### ❌ Startup slop names ("Acme", "Nexus", "SmartFlow", "Flowbit", "NovaCore")
-**Why it's slop:** Pattern-matched template fillers.
-**Fix:** Invent contextual brand names that sound real. Two-syllable favored. Avoid `-ly`, `-fy`, `-hub` suffixes.
-
-### ❌ Unsplash placeholder URLs
-**Why it's slop:** Often broken (slug changes, rate limits, 404s in a week).
-**Fix:** Use `https://picsum.photos/seed/{unique-string}/{width}/{height}` (deterministic per-seed, reliable).
+- ❌ **AI marketing voice:** "Empower", "Unlock", "Elevate", "Seamless", "Unleash", "Next-Gen", "Revolutionize", "Game-changer", "Delve", "Tapestry", "In the world of...". Fix: actual product verb. "Move money." "Ship code faster." "Plan your week."
+- ❌ **Subtext that explains the headline.** Fix: subtext adds NEW info — quantification, audience, distinction.
+- ❌ **Feature titles:** "Powerful Features", "Built for Speed", "Designed for You". Fix: concrete promises ("Live exchange rates", "Bank-level security").
+- ❌ **Pricing tiers "Basic / Pro / Enterprise".** Fix: name from product/audience. "Solo / Team / Studio."
+- ❌ **Generic placeholder names** ("John Doe", "Sarah Chan"). Fix: realistic diverse names. "Maya Okafor", "Ezra Singh", "Lucia Marchetti".
+- ❌ **Generic avatars** (SVG-egg, Lucide user, gradient initials). Fix: `picsum.photos/seed/{id}/100/100` OR styled SVG portraits.
+- ❌ **Round numbers** (99.99%, 50%, 1234567, 10x faster). Fix: organic data — `47.2%`, `+1 (312) 847-1928`, `$3,481`, `8,431 active users` (NOT "10,000+").
+- ❌ **Startup slop names** ("Acme", "Nexus", "SmartFlow", "Flowbit"). Fix: invent contextual names. Two-syllable favored. No `-ly`, `-fy`, `-hub`.
+- ❌ **Trust-signal bundle:** unsourced 99.9% / 50K+ / 10x stat trio + grayscale-40 logo bar + avatar pile. Fix: real specific numbers, source the claim, real photos with permission.
+- ❌ **Unsplash placeholder URLs.** Often broken. Fix: `picsum.photos/seed/{id}/{w}/{h}` (deterministic).
+- ❌ **Headline cadence templates:** "Ship faster. Build better. Scale smarter." / "The all-in-one platform for X" / "Built for modern teams" / "Powered by AI". Fix: single declarative sentence about what the product DOES for one specific person.
+- ❌ **Emojis in product UI.** Renders inconsistently. Fix: Phosphor / Radix icons.
 
 ---
 
-## DECORATION ANTI-PATTERNS
+## MOBILE / VIEWPORT ANTI-PATTERNS
 
-### ❌ Plain glassmorphism (`backdrop-filter: blur()` semi-transparent panels)
-**Why it's slop:** Peak 2021 AI aesthetic. Reads as "trying too hard" without refinement.
-**Fix:** If you need glass, use **Liquid Glass** = backdrop-blur + 1px inner border + inner shadow. See `tokens.md` Liquid Glass spec. Use ONLY for sticky nav and floating overlays — never for cards/sections.
-
-### ❌ Random `<div>` blobs in pastel gradients as background "decoration"
-**Why it's slop:** The "Apple keynote rip-off" gradient blob. Used by every fintech bootstrap site.
-**Fix:** Use bundled WebP backgrounds in `assets/backgrounds/` (see `recipes/backgrounds-catalog.md`). Or one single contained accent — like a small gradient under a product mockup, not floating in negative space.
-
-### ❌ Custom cursor (giant circle that scales on hover)
-**Why it's slop:** Awwwards-2020 trend that aged poorly. Hurts accessibility.
-**Fix:** Default cursor. If you must, do a subtle 4px dot follower with `mix-blend-mode: difference`.
-
-### ❌ Page-load entrance with EVERY element fading in
-**Why it's slop:** "I learned Framer Motion yesterday." Fatiguing.
-**Fix:** Stagger only the hero (3-5 elements: pill, headline, subtext, CTA, mockup). Below the fold, use scroll-triggered subtle reveals — and sparingly.
+- ❌ **`h-screen`** for full-height hero. Fix: `min-h-[100dvh]`.
+- ❌ **Backdrop-blur on scrolling content.** Fix: only on fixed/sticky.
+- ❌ **Z-index spam (`z-50`, `z-[9999]`).** Fix: `tokens.md` § Z-INDEX standard stack.
+- ❌ **Body text < 16px.** iOS auto-zooms inputs. Fix: 16px minimum.
+- ❌ **Tap targets < 44×44px** OR < 8px gap (16px on mobile). Fix: WCAG 2.5.5.
 
 ---
 
-## RED FLAGS — STOP IF YOU CATCH YOURSELF
+## TEST
 
-```
-"Let me just add a quick gradient..."           → STOP. No new gradients.
-"I'll center this for balance..."               → STOP. Vary alignment.
-"Loader2 is fine for now..."                    → STOP. Skeleton instead.
-"This looks empty, let me add..."               → STOP. Empty is the design.
-"text-3xl seems readable..."                    → STOP. Bigger.
-"I'll just write a hero from scratch..."        → STOP. Open hero recipe.
-"hover:scale-110 will feel snappy..."           → STOP. Spring + 1.02.
-"The user said make it pop, so neon..."         → STOP. Pop = restraint + one accent.
-"Three columns of features should work..."      → STOP. Bento or split.
-"h-screen for the hero..."                      → STOP. min-h-[100dvh].
-"Just a small emoji in the heading..."          → STOP. No emojis ever.
-"useState for the parallax..."                  → STOP. useMotionValue.
-"John Doe is fine for the testimonial..."       → STOP. Real names.
-"A little ● V3.4 LIVE pill above the H1..."     → STOP. Worst AI tell. Delete.
-"bg-clip-text gradient on the headline..."      → STOP. Solid color.
-"Three equal feature cards..."                  → STOP. Promote one, demote two.
-"shadow-lg on every card..."                    → STOP. Elevation ladder.
-"rounded-2xl on chips and modals both..."       → STOP. Radius scales w/ size.
-"Just the happy path for now..."                → STOP. 7 states or no ship.
-```
+After building: "Side-by-side with an Awwwards-tier site, would the difference be obvious?"
 
-**All of these mean: re-read the rule, open the recipe, follow the discipline.**
-
----
-
-## THE TEST
-
-After building, ask: "If I showed this side-by-side with an Awwwards-tier site, would the difference be obvious?"
-
-If yes → restart with the recipes.
-If no → you've shipped premium.
+Yes → restart with the recipes. No → shipped premium.

@@ -44,7 +44,7 @@ console.log("");
 console.log("  ╔═══════════════════════════════════════════╗");
 console.log("  ║   /ui skill installer                     ║");
 console.log("  ║   Premium UI for Claude Code              ║");
-console.log("  ║   v2.4.0 — anti-slop sweep + mini-pill ban       ║");
+console.log("  ║   v3.0.0 — clean rewrite, less reading more shipping       ║");
 console.log("  ╚═══════════════════════════════════════════╝");
 console.log("");
 
