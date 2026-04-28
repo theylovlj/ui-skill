@@ -126,6 +126,7 @@ Read recipes/faq-pillrows.md    # if FAQ needed
 Read recipes/footer-modern.md   # always
 Read tokens.md                  # always — don't invent colors/fonts
 Read spacing.md                 # always — the complete spacing/sizing/composition law
+Read scroll.md                  # if any scroll/parallax/sticky/pinned motion — the layout-collapse fix lives here
 Read anti-slop.md               # always — the patterns to NEVER use
 ```
 
