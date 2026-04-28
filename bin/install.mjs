@@ -9,7 +9,7 @@ const PACKAGE_ROOT = join(__dirname, "..");
 
 const TARGET = join(homedir(), ".claude", "skills", "ui");
 
-const FILES_TO_COPY = ["SKILL.md", "tokens.md", "anti-slop.md", "review.md", "architecture.md", "redesign.md", "image-generation.md", "visual-thinking.md"];
+const FILES_TO_COPY = ["SKILL.md", "tokens.md", "spacing.md", "anti-slop.md", "review.md", "architecture.md", "redesign.md", "image-generation.md", "visual-thinking.md"];
 const DIRS_TO_COPY = ["recipes", "assets"];
 
 function copyDir(src, dest) {

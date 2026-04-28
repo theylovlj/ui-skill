@@ -125,6 +125,7 @@ Read recipes/pricing-2col.md    # if pricing needed
 Read recipes/faq-pillrows.md    # if FAQ needed
 Read recipes/footer-modern.md   # always
 Read tokens.md                  # always — don't invent colors/fonts
+Read spacing.md                 # always — the complete spacing/sizing/composition law
 Read anti-slop.md               # always — the patterns to NEVER use
 ```
 
