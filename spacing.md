@@ -270,6 +270,54 @@ H1+subhead+CTA = a unit (small gaps inside: 24px, 40px). Then BIG gap (96px) bef
 
 ## 5. HERO COMPOSITION — The 5/7 Split + Asymmetric Anchor
 
+### HERO H1 LINE-COUNT LAW (the "wraps to 4 lines" fix)
+
+**The recurring failure:** col-span-5 is too narrow at 1280px viewport for a 7-word H1 at 72px → text wraps to 4 lines, hero column becomes a tall narrow column, dead space accumulates around it. THIS IS A SIZING BUG, not a content bug.
+
+**The rule:** the H1 must fit in **2-3 lines max** in the hero column at desktop (1280px+). If it wraps to 4+ lines, ONE of these is wrong:
+- The H1 column is too narrow (widen to col-span-6, or use 6/6 split with mockup bleeding right)
+- The H1 size is too large for the column width (drop one tier, e.g. hero 72 → h1 48)
+- The H1 has too many words (cut to ≤7 words)
+- The italic-serif accent word is too long and forcing a line break (pick a shorter word)
+
+**Hard rule:** if H1 wraps 4+ lines on desktop, the hero is broken. Re-balance immediately. The fix in priority order:
+1. Cut H1 word count first (best — copy improves)
+2. Widen the H1 column second (col-span-5 → col-span-6, mockup bleeds)
+3. Drop H1 size third (last resort — premium feel weakens)
+
+**Width math:**
+- col-span-5 at 1280px = ~520px column width → H1 at 72px fits ~5-6 words per line
+- col-span-6 at 1280px = ~624px → fits ~6-7 words per line
+- col-span-7 at 1280px = ~728px → fits ~7-9 words per line
+
+If your H1 is "Catch every incident before it cascades" (6 words), col-span-5 is too narrow. Use col-span-6 or shorten to "Catch every cascade" (3 words) and widen the subhead.
+
+### POST-HERO SPACING LAW (the void between hero and next section)
+
+**The recurring failure:** the hero ends, then there's 200-400px of empty page before the next section (logo strip / stats / etc). Looks like a layout bug.
+
+**Why it happens:** hero uses `pt-32 pb-20`, next section uses `py-16` — but the hero column is much TALLER than its content because the H1 wrapped to 4 lines, pushing the section to extend down. The mockup column ends at 600px from top, the H1 column at 700px from top (because it has CTAs + stat row below), but the section is `min-h-[100svh]` = 832px on a 1080p screen — leaving 130px of empty hero section before the logo strip starts.
+
+**The fix — pick ONE:**
+1. **Drop `min-h-[100svh]` from the hero.** Let the hero be its content's natural height. If natural height is 700px, the hero is 700px. NO forced viewport-filling.
+2. **OR fill the hero with content.** Add a stat row, social proof line, or feature highlights inside the hero so it actually fills 100svh.
+3. **OR if you keep `min-h-[100svh]`, use `flex flex-col justify-between`** so the bottom-of-hero content (CTAs, social proof) sticks to the bottom, removing the dead space.
+
+**The post-hero gap rule:**
+- Bottom of hero CONTENT to top of next section CONTENT = `pb-20 + py-16` to `pb-32 + py-24` MAX (= 144-224px total).
+- If actual gap > 250px when measured in browser → bug.
+- Logo strip / social proof immediately after hero should hug close (`py-10 md:py-14`), NOT `py-24`.
+
+**Playwright self-check:**
+```js
+const hero = await page.$('section:first-of-type');
+const heroBox = await hero.boundingBox();
+const heroContent = await hero.$('h1');
+const contentBox = await heroContent.boundingBox();
+const heroBottomPadding = heroBox.height - (contentBox.y + contentBox.height + 200); // 200px for CTAs+stats
+if (heroBottomPadding > 200) flag(`Hero has ${heroBottomPadding}px of dead space at bottom — drop min-h-[100svh] or fill it`);
+```
+
 ### The default template (use unless you have a reason not to)
 
 **Editorial Left** — the Stripe / Linear / Vercel / Mercury workhorse:

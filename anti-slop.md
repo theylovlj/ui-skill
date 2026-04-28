@@ -311,6 +311,19 @@ Floating decorative elements (stickers, note cards, badges, pills, accent shapes
 
 **Verification (in `review.md` step):** at every section, run a Playwright `boundingBox()` overlap check between every `position: absolute` element and every `<h1>`, `<h2>`, `[data-stat]`, and `button` inside the section. Any intersection → flag and re-position.
 
+### ❌ Decorative pill floating below/beside the mockup (same family as stat chips, in editorial costume)
+**Why it's slop:** SAME pattern as the stat-chip ban below, just dressed up differently. A small pill-shaped element sitting just below or beside the MacBook/mockup with monospace-ish text like `● root cause inferred — payments-redis pool`, `● indexed — 12,847 events`, `● synced — 3 services`. Pretends to be product context. Is decoration.
+
+**The rule (broad):** if there is ANY pill/chip/badge/tag floating outside the mockup chrome — below it, beside it, overlapping its corner — DELETE IT. The mockup speaks for itself. The dual CTA + headline + subtext do the selling. This includes:
+- "● root cause inferred — payments-redis pool" type editorial chips
+- "● auto-scaling enabled" / "● synced" / "● live" status flags below mockups
+- Caption-style pills in monospace font hanging off the mockup
+- Floating badges with checkmarks ("✓ deployed", "✓ caught", "✓ verified")
+- "real-time" / "live data" / "synced" indicators outside the dashboard chrome
+- ANY decorative element below or beside the mockup that isn't the mockup itself
+
+If the information is important, it goes INSIDE the mockup as part of the dashboard. Outside = decoration = delete.
+
 ### ❌ Decorative stat-chip / metric-pill / "live status" floating cards around a mockup
 **Why it's slop:** The "P99 LATENCY · LIVE / 42ms ▼ 8.2%" floating chip pattern. Looks impressive at first glance — until you realize every AI-generated SaaS hero has 2-4 of them dotted around the product mockup, all communicating fake-real-time stats nobody asked for. Pure decoration that screams "I'm trying to look like Linear/Vercel."
 
@@ -364,12 +377,22 @@ If you wrote a chip and can't explain in one sentence what unique product truth 
 
 See `recipes/animations.md` § Marquee for the canonical implementation.
 
-### ❌ Mini overhead status-pill / version-tag bars above the headline
-**Why it's slop:** The single most-recognized "AI-generated landing page" tell of 2025-2026. The tiny pill-shaped element sitting just above an H1 with monospace caps + colored dot + version/status copy — `● V3.4 — PAGED ROUTING LIVE`, `● NEW — AGENT MODE`, `● LIVE — 2.1k SHIPPING NOW`. Every Claude/v0/Lovable hero defaults to this. Owner flagged this as "literally the most sloppiest thing... the worst AI slop." It is decoration pretending to be product news.
+### ❌ Mini overhead status-pill / version-tag / eyebrow-with-divider bars above the headline
+**Why it's slop:** The single most-recognized "AI-generated landing page" tell of 2025-2026. ANY tiny element sitting just above an H1 with monospace caps + (colored dot OR divider lines OR volume number OR category tag) — every variant is the same slop in a different costume. Every Claude/v0/Lovable hero defaults to this. Owner flagged this as "literally the most sloppiest thing... the worst AI slop." It is decoration pretending to be product news.
 
-**SCOPE — read carefully. This ban removes ONE element. It does NOT shrink the rest of the hero.**
+**SCOPE — this ban removes the ENTIRE FAMILY of "tiny monospace-caps thing above H1" patterns. It does NOT shrink the rest of the hero.**
 
-The banned element: a small pill-shaped tag (rounded-full, ~24-32px tall, ~150-300px wide) sitting above the H1, containing monospace caps text + a colored dot. Examples: `● V3.4 — PAGED ROUTING LIVE`, `● NEW — AGENT MODE`, `● LIVE`.
+The banned FAMILY (same shape, different costumes):
+- **Status pill:** `● V3.4 — PAGED ROUTING LIVE`, `● NEW — AGENT MODE`, `● LIVE`
+- **Editorial volume tag:** `VOL. 04 — FIELD NOTES ──── OBSERVABILITY`, `ISSUE 12 / WINTER 2026`
+- **Category eyebrow with divider:** `OBSERVABILITY ─── PRODUCT`, `── INTRODUCING ──`
+- **Magazine masthead:** `THE QUARTERLY — VOL. 03 — 2026`
+- **Section index:** `01 / DESIGN — 02 / MOTION — 03 / SHIP`
+- **Plain monospace tag:** `OBSERVABILITY` in 11px UPPERCASE caps directly above H1
+- **Anything with horizontal divider lines (────) flanking caps text** above the headline
+- **Any small text element in monospace UPPERCASE caps tracking-wide** sitting between nav and H1
+
+**The rule (broader than literal):** if there is ANY small decorative text element (monospace caps OR small caps OR tracking-wide caps) sitting between the nav bar and the H1 — DELETE IT. The H1 is the first thing on the page. Period.
 
 **What is NOT banned (and is still REQUIRED in a hero):**
 - ✅ The H1 headline itself

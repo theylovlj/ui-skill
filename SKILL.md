@@ -28,11 +28,37 @@ These dials override individual rules where conflicts arise. The user can overri
 
 ---
 
-## THE THREE RULES (non-negotiable)
+## THE FOUR RULES (non-negotiable)
 
-These came from analyzing 58 premium designs the owner manually curated. Every premium reference follows all three. Every AI-generated landing page violates them.
+These came from analyzing 58 premium designs the owner manually curated. Every premium reference follows all four. Every AI-generated landing page violates them.
 
-### Rule 1 — RESTRAINT IS THE SIGNAL
+### Rule 1 — LESS WORDS = MORE PREMIUM (the most important rule)
+
+**This is the rule that matters above all others.** Less reading = better. Less writing = better. Premium sites are NOT read — they are SCANNED. A visitor decides "is this for me?" in under 5 seconds, and they decide based on **how little they have to read**, not how much information you crammed in.
+
+Hard limits — every section on the page must obey:
+
+- **Hero H1: ≤ 8 words** (≤ 5 ideal). "Catch every incident before it cascades." (6 words) is the ceiling. NOT "The complete observability platform for engineering teams that catches every production incident before it cascades into an outage."
+- **Hero subhead: ≤ 20 words across ≤ 2 lines.** One sentence. NOT three.
+- **Section H2: ≤ 6 words.** "How it catches it." (4 words). NOT "Here's how Stratus catches every incident across your stack."
+- **Feature card title: ≤ 4 words.** Concrete verb-noun. "Auto-paged in 12s." NOT "Intelligent automated paging system with smart routing."
+- **Feature card body: ≤ 18 words / 1 sentence.** If you need two sentences, you need a different feature.
+- **Bullet list: ≤ 4 items.** ≤ 5 words each.
+- **Testimonial: ≤ 25 words.** One quote. Not a paragraph.
+- **CTA button: ≤ 3 words.** "Start free." "Book demo." "See it live." NOT "Get started with Stratus today, no credit card required."
+- **Eyebrow / kicker / label: ≤ 4 words.** And usually: don't even add it.
+
+**Total page word count target:** under 600 words for a SaaS landing page (between 500-900 hits the conversion sweet spot per CXL data — see `spacing.md` § 7).
+
+**Krug's law (memorize):** *"Get rid of half the words on each page, then half of what's left."* — Steve Krug, *Don't Make Me Think*. Most landing pages have 3× the copy they need.
+
+**The cut test:** for every sentence on the page, ask "if I deleted this sentence, would the visitor be unable to evaluate the product?" If they could still evaluate it without that sentence — DELETE the sentence. Most sentences fail this test.
+
+**The visitor doesn't owe you their time.** Every word is a tax on attention. Cut, cut, cut.
+
+> **Red flag:** if you wrote 3 sentences explaining a feature, you don't understand the feature well enough to ship it. Find the ONE sentence that names the value and delete the others.
+
+### Rule 2 — RESTRAINT IS THE SIGNAL
 
 The most consistent finding across every premium reference. AI piles on; premium designers strip away.
 
@@ -44,7 +70,7 @@ The most consistent finding across every premium reference. AI piles on; premium
 
 > **Red flag:** If you're adding more, you're going wrong direction. Discipline is what you cut.
 
-### Rule 2 — TYPOGRAPHY IS THE DESIGN
+### Rule 3 — TYPOGRAPHY IS THE DESIGN
 
 Headlines are the primary visual element. Build the page around them, not vice versa.
 
@@ -56,7 +82,7 @@ Headlines are the primary visual element. Build the page around them, not vice v
 
 See `tokens.md` for exact font stacks, sizes, and weights.
 
-### Rule 3 — MOTION VIA SHARED ELEMENTS
+### Rule 4 — MOTION VIA SHARED ELEMENTS
 
 Same surface morphs between states. Never hard cuts. Never separate components mounted/unmounted.
 
